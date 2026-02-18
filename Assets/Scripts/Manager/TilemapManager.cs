@@ -38,7 +38,11 @@ public class TilemapManager : MonoSingleton<TilemapManager>
         go.AddComponent<PathRequestController>();
         
     }
-    private void InitBuildingCounter()//未验证
+    public PathFinding GetPathFinding()
+    {
+        return PathFinding;
+    }
+    private void InitBuildingCounter()
     {
         int sideNum = SideBuildingArea.Length;
 
@@ -103,29 +107,6 @@ public class TilemapManager : MonoSingleton<TilemapManager>
         int extendX = buildingSize.x * 3;
         int extendY = buildingSize.y * 3;
         int extend = Mathf.Min(extendX, extendY);
-
-        /*for (int i = -extend; i <= extend; i++) 
-        {
-            for(int j = -extend; j <= extend; j++)
-            {
-
-                Vector3Int pos = new Vector3Int(buildingCenter.x + i, buildingCenter.y + j, 0);
-                if (UnreachaableTilemap.HasTile(pos)) break;
-                if(WalkableTilemap.HasTile(pos))
-                {
-                    int ix = pos.x + buildingOffset.x;
-                    int iy = pos.y + buildingOffset.y;
-
-                    int w = buildingAreaCounter[side].GetLength(0);
-                    int h = buildingAreaCounter[side].GetLength(1);
-
-                    if (ix >= 0 && ix < w && iy >= 0 && iy < h)
-                    {
-                        UpdateSideTilemap(side, pos, ix, iy, delta);
-                    }
-                }
-            }
-        }*/
         Queue<Vector2Int> queue = new Queue<Vector2Int>();
         HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
 
@@ -173,7 +154,7 @@ public class TilemapManager : MonoSingleton<TilemapManager>
 
     }
     
-    private void UpdateSideTilemap(UnitSide side,Vector3Int pos, int arryX, int arryY, int x)//未验证
+    private void UpdateSideTilemap(UnitSide side,Vector3Int pos, int arryX, int arryY, int x)
     {
         int[,] counter = buildingAreaCounter[side];
         Tilemap Tm = SideBuildingArea[(int)side];

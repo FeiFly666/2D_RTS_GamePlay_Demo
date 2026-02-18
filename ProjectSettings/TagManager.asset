@@ -14,8 +14,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Fog
+  - Vision
   - 
   - 
   - 
@@ -46,4 +46,7 @@ TagManager:
     locked: 0
   - name: Unit
     uniqueID: 2566831203
+    locked: 0
+  - name: Fog
+    uniqueID: 541587617
     locked: 0

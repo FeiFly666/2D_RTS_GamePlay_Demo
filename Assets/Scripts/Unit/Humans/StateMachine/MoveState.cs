@@ -18,6 +18,7 @@ public class MoveState : IUnitState
     }
     public void Update()
     {
+        
         if (u.ai.isForcingMoving)
         {
             if (Vector2.Distance(u.transform.position, u.ai.GetDestination()) < 0.1f)

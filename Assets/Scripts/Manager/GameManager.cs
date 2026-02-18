@@ -10,6 +10,8 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField]public Arrow arrowPrefab;
     public static int[] EnemyMasks = new int[5];
 
+    public bool isNeedFog = false;
+
     private int availableID = 0;
 
     [SerializeField] public List<HumanUnit> liveHumanUnits = new List<HumanUnit>(100);
@@ -28,6 +30,10 @@ public class GameManager : MonoSingleton<GameManager>
     private void Start()
     {
         PoolManager.Instance.CreatePool("Arrow", arrowPrefab, 300);
+        if(isNeedFog)
+        {
+            FogManager.Instance.InitFOW();
+        }
     }
 
     private void Update()

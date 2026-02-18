@@ -18,6 +18,8 @@ public class Node
     public int fCost;//gCost + fCost
     public bool isTouched;//只要这个点被改过成本就true,方便重置
 
+    public bool isChecked;//迷雾用
+
     public Node parentNode;
 
     public GameObject occupant;

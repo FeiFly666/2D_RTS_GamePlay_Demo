@@ -58,6 +58,8 @@ public abstract class HumanUnit : Unit
     public ICombatBehaviour combatBehaviour;
 
     public UnitStateMachine stateMachine;
+
+    [SerializeField] private GameObject visionIndicator;
     protected override void Awake()
     {
         base.Awake();
@@ -70,6 +72,12 @@ public abstract class HumanUnit : Unit
     protected override void Start()
     {
         base.Start();
+        if (visionIndicator != null)
+            visionIndicator.SetActive(this.unitSide == GameManager.Instance.playerSide);
+
+        // 根据 dectectRadius 设置圆圈大小
+        if (visionIndicator != null)
+            visionIndicator.transform.localScale = Vector3.one * (dectectRadius * 2.2f);
         //stateMachine.Change(new IdleState(this));
 
         HomePosition = this.transform.position;
