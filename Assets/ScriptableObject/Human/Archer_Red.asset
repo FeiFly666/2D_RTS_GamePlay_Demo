@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 446a286638c36d043ae179430cf1868b, type: 3}
+  m_Name: Archer_Red
+  m_EditorClassIdentifier: 
+  Icon: {fileID: 140532602, guid: 03489e5174f70b34291cd16aac0b2c82, type: 3}
+  ID: 98fb2d56-804d-40d3-8410-5a46707e6891
+  HumanSprite: {fileID: 140532602, guid: 03489e5174f70b34291cd16aac0b2c82, type: 3}
+  HumanPrefab: {fileID: 4630554780076159179, guid: 5ac05da86494e5a48aa51ce096ded570, type: 3}
+  HumanData: {fileID: 11400000, guid: abf6c524433146441ab2fe85afea7d2b, type: 2}

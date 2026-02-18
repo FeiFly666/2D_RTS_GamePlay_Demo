@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 446a286638c36d043ae179430cf1868b, type: 3}
+  m_Name: Archer_Blue
+  m_EditorClassIdentifier: 
+  Icon: {fileID: -1045739906, guid: bb0f8ec6cd4eaf345a760547d596d85d, type: 3}
+  ID: a8d84252-c4c9-43be-9275-7fa02615233a
+  HumanSprite: {fileID: -1045739906, guid: bb0f8ec6cd4eaf345a760547d596d85d, type: 3}
+  HumanPrefab: {fileID: 7993594877614732815, guid: c91859b3959fafe4ca00a9df7fdd10bf, type: 3}
+  HumanData: {fileID: 11400000, guid: abf6c524433146441ab2fe85afea7d2b, type: 2}

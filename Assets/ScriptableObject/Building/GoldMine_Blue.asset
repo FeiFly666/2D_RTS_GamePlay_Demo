@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7c47958a4ea4bc4589e0886d60aad86, type: 3}
+  m_Name: GoldMine_Blue
+  m_EditorClassIdentifier: 
+  Icon: {fileID: 21300000, guid: 86b80a67008e67f44b08c1c43cad6e93, type: 3}
+  ID: 02fd9caa-c3ea-4531-adfe-bc05f00b0f73
+  FoundationSprite: {fileID: 0}
+  CompleteSprite: {fileID: 0}
+  StructurePrefab: {fileID: 0}
+  BuildingName: "\u77FF\u573A"
+  BuildingDescription: "\u6301\u7EED\u4E0D\u65AD\u91C7\u96C6\u91D1\u77FF\u8D44\u6E90"
+  GoldCost: 0
+  WoodCost: 0
+  BuildingSize: {x: 2, y: 2, z: 0}
+  BuildingOffset: {x: -1, y: -1, z: 0}
+  FinishValue: 3

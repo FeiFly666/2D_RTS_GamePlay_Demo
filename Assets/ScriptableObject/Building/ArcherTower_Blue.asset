@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7c47958a4ea4bc4589e0886d60aad86, type: 3}
+  m_Name: ArcherTower_Blue
+  m_EditorClassIdentifier: 
+  Icon: {fileID: 21300000, guid: af1d73a33c0d93541858c1f3cb5241d5, type: 3}
+  ID: 9582c8f1-cdba-44af-b8b6-a2174f7c1353
+  FoundationSprite: {fileID: 21300000, guid: 4d73b9dfafb31484d91116bf6221b9f3, type: 3}
+  CompleteSprite: {fileID: 21300000, guid: af1d73a33c0d93541858c1f3cb5241d5, type: 3}
+  DestroyedSprite: {fileID: 21300000, guid: af0d019cbb7723d499cc7f0637b38cad, type: 3}
+  StructurePrefab: {fileID: 875613800031663354, guid: 5e2f4ccc79c62264d840f39db827a57d, type: 3}
+  buildingDataOS: {fileID: 11400000, guid: 4a8dc5a8bdacc64469624945ee8c38e4, type: 2}

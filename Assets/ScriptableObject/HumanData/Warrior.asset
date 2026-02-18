@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec5ccf9040a2b8d488130509bb083d36, type: 3}
+  m_Name: Warrior
+  m_EditorClassIdentifier: 
+  HumanName: "\u5251\u58EB"
+  HumanDescription: "\u6807\u51C6\u8FD1\u6218\u5355\u4F4D"
+  GoldCost: 5
+  WoodCost: 5
+  DetectRadius: 7.5
+  AttackRadius: 2
+  TrainingTime: 10
+  FullHP: 120
+  Attack: 10
+  Armor: 3
+  CritChance: 2
+  CritMutiple: 0.2
+  MoveSpeed: 4
+  IsAOE: 0
+  MaxHoldResourceNum: 0
+  GatherNum: 0

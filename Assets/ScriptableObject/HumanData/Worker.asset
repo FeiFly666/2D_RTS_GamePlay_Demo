@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec5ccf9040a2b8d488130509bb083d36, type: 3}
+  m_Name: Worker
+  m_EditorClassIdentifier: 
+  HumanName: "\u5DE5\u4EBA"
+  HumanDescription: "\u91C7\u96C6\u8D44\u6E90\u3001\u5EFA\u9020\u6216\u4FEE\u8865\u5EFA\u7B51"
+  GoldCost: 10
+  WoodCost: 10
+  DetectRadius: 18
+  AttackRadius: 1.8
+  TrainingTime: 10
+  FullHP: 120
+  Attack: 6
+  Armor: 2
+  CritChance: 2
+  CritMutiple: 0.3
+  MoveSpeed: 5
+  IsAOE: 0
+  MaxHoldResourceNum: 10
+  ChopNum: 3
