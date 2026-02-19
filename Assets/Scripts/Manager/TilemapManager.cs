@@ -25,6 +25,7 @@ public class TilemapManager : MonoSingleton<TilemapManager>
 
     public bool isLoading = false;
     private PathFinding PathFinding;
+    public PathShare pathShare;
     private Dictionary<UnitSide, int[,]> buildingAreaCounter = new Dictionary<UnitSide, int[,]>();
 
     protected override void OnStart()
@@ -32,6 +33,8 @@ public class TilemapManager : MonoSingleton<TilemapManager>
         base.OnStart();
         InitPathfing();
         InitBuildingCounter();
+
+        pathShare = new PathShare();
 
         GameObject go = new GameObject("PathFindingController");
         go.transform.parent = transform;

@@ -7,17 +7,20 @@ public class UnitAnimTrigger : MonoBehaviour
     protected Unit owner => GetComponentInParent<Unit>();
     public void AnimCounterRandomAdd() => (owner as HumanUnit).AnimationCounterRandomAdd();
 
+    private static Collider2D[] scanBuffer = new Collider2D[40];
 
     private void AttackTrigger()
     {
         HumanUnit owner = this.owner as HumanUnit;
         if (owner == null) return;
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(owner.detectPosition, owner.attackRadius);
+
+        int num = Physics2D.OverlapCircleNonAlloc(owner.detectPosition, owner.attackRadius, scanBuffer, GameManager.EnemyMasks[(int)owner.unitSide]);
 
         if (owner.target is ResourceUnit) return;
 
-        foreach(var hit in colliders)
+        for (int i = 0; i < num; i++)
         {
+            Collider2D hit = scanBuffer[i];
             if(hit.TryGetComponent(out Unit enemy) && enemy.unitSide != owner.unitSide)
             {
                 if(enemy.isDead) { return; }

@@ -261,11 +261,19 @@ public class AI : MonoBehaviour
         {
             FinalTargetPosition = this.transform.position;
         }
-        unit.lastPathRequestTargetPos = FinalTargetPosition;
+        //unit.lastPathRequestTargetPos = FinalTargetPosition;
+    }
+    public void RegisterPath(List<Node> path)
+    {
+        currentPath = path;
+        currentNodeIndex = 0;
+        ReleaseTargetNode();
+
+        FinalTargetPosition = path[path.Count - 1].GetNodePosition();
     }
     public void RegisterDestinationFrame(Vector3 destination)
     {
-        unit.lastPathRequestTargetPos = destination;
+        //unit.lastPathRequestTargetPos = destination;
         isWaitingPath = true;
         FinalTargetPosition = destination;
         LeaveGroup();
@@ -297,6 +305,10 @@ public class AI : MonoBehaviour
             {
                 FinalTargetPosition = this.transform.position;
                 ClearPath();
+            }
+            if(currentGroup == null && unit.target != null)
+            {
+                TilemapManager.Instance.pathShare.BoardcastPath(unit.target, currentPath);
             }
         }
         else

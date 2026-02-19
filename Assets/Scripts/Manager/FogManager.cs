@@ -18,6 +18,10 @@ public class FogManager : MonoSingleton<FogManager>
     void Start()
     {
         PathFinding = TilemapManager.Instance.GetPathFinding();
+        if(GameManager.Instance.isNeedFog)
+        {
+            InitFOW();
+        }
     }
     private Vector2Int[] GetCircularOffsets(int r)
     {
@@ -42,6 +46,8 @@ public class FogManager : MonoSingleton<FogManager>
     public void InitFOW()
     {
         fogMap.ClearAllTiles();
+        HashSet<Vector3Int>  toShow = new HashSet<Vector3Int>();
+        HashSet<Vector3Int>  toHide = new HashSet<Vector3Int>();
 
         foreach (var node in PathFinding.grid)
         {
@@ -50,13 +56,15 @@ public class FogManager : MonoSingleton<FogManager>
 
             if (!node.isChecked)
             {
-                fogMap.SetTile(tilePos, blackTile);
+                toHide.Add(tilePos);
             }
             else
             {
-                fogMap.SetTile(tilePos, null);
+                toShow.Add(tilePos);
             }
         }
+        ExecuteUpdate(toShow);
+        ExecuteUpdate(toHide, blackTile);
     }
     private void Update()
     {
@@ -79,11 +87,15 @@ public class FogManager : MonoSingleton<FogManager>
         HashSet<Vector3Int> tilesToClear = new HashSet<Vector3Int>();
 
         var units = GameManager.Instance.liveHumanUnits;
-        float nodeSize = TilemapManager.Instance.GetNodeSize().x;
 
         foreach(var unit in units)
         {
+            if (unit.unitSide != GameManager.Instance.playerSide) continue;
             Node centerNode = TilemapManager.Instance.FindNode(unit.detectPosition);
+
+            int width = PathFinding.grid.GetLength(0);
+            int height = PathFinding.grid.GetLength(1);
+
             if (centerNode == null) continue;
 
             int r = Mathf.CeilToInt(unit.dectectRadius / TilemapManager.Instance.GetNodeSize().x);
@@ -94,8 +106,7 @@ public class FogManager : MonoSingleton<FogManager>
                 int gx = centerNode.GridX + offset.x;
                 int gy = centerNode.GridY + offset.y;
 
-                if (gx >= 0 && gx < PathFinding.grid.GetLength(0) &&
-                    gy >= 0 && gy < PathFinding.grid.GetLength(1))
+                if (gx >= 0 && gx < width && gy >= 0 && gy < height)
                 {
                     Node node = PathFinding.grid[gx, gy];
 
@@ -111,23 +122,23 @@ public class FogManager : MonoSingleton<FogManager>
         }
         if(tilesToClear.Count > 0) 
         {
-            ExecuteBulkUpdate(tilesToClear);
+            ExecuteUpdate(tilesToClear);
         }
         
     }
-    private void ExecuteBulkUpdate(HashSet<Vector3Int> posSet)
+    private void ExecuteUpdate(HashSet<Vector3Int> posSet, TileBase tile = null)
     {
         int count = posSet.Count;
         Vector3Int[] positions = new Vector3Int[count];
-        TileBase[] nullTiles = new TileBase[count];
+        TileBase[] tiles = new TileBase[count];
 
         int i = 0;
         foreach (var pos in posSet)
         {
             positions[i] = pos;
-            nullTiles[i] = null;
+            tiles[i] = tile;
             i++;
         }
-        fogMap.SetTiles(positions, nullTiles);
+        fogMap.SetTiles(positions, tiles);
     }
 }

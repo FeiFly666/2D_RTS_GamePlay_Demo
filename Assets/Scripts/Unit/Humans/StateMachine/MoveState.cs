@@ -97,6 +97,15 @@ public class MoveState : IUnitState
                         u.ai.currentGroup.UpdateGroupChase();
                     return;
                 }
+
+                List<Node> borrowedPath = TilemapManager.Instance.pathShare.TryBorrowPath(u, u.target);
+
+                if (borrowedPath != null && borrowedPath.Count > 5)
+                {
+                    u.ai.RegisterPath(borrowedPath);
+                    return;
+                }
+
                 Vector3 currentTargetPos = u.target.transform.position;
                 if (u.ai.IsPathVaild())
                 {

@@ -27,18 +27,40 @@ internal class RangeTargetSelector : ITargetSelector
 
         Unit closestEnemy = null;
         float closestEnemyDistance = Mathf.Infinity;
-        //优先找兵(非工人)
+
+        BuildingUnit closestStaticEnemyBuilding = null;
+        float closestStaticBuildingDistance = Mathf.Infinity;
+
         for (int i = 0; i < num; i++)
         {
-            HumanUnit enemy = scanBuffer[i].GetComponent<HumanUnit>();
-            if (enemy == null || enemy.isDead || enemy.unitSide == self.unitSide || enemy.isBuildingUnit || enemy.role == UnitRole.Worker) continue;
-            if (!IsTargetReachable(self, enemy)) { continue; }
+            Unit unit = scanBuffer[i].GetComponent<Unit>();
+            if (unit == null || unit.isDead || unit.unitSide == self.unitSide) continue;
 
-            float distance = (enemy.transform.position - self.transform.position).sqrMagnitude;
+            if (unit is ResourceUnit) continue;
+
+            if (unit is HumanUnit human)
+            {
+                if (human.isBuildingUnit) continue;
+            }
+
+            float distance = (unit.transform.position - self.transform.position).sqrMagnitude;
+
+            if (unit is BuildingUnit building && building.buildingType == BuildingType.Static)
+            {
+                if (distance < closestStaticBuildingDistance)
+                {
+                    if (!IsTargetReachable(self, unit)) continue;
+                    closestStaticEnemyBuilding = building;
+                    closestStaticBuildingDistance = distance;
+
+                }
+                continue;
+            }
 
             if (distance < closestEnemyDistance)
             {
-                closestEnemy = enemy;
+                if (!IsTargetReachable(self, unit)) { continue; }
+                closestEnemy = unit;
                 closestEnemyDistance = distance;
             }
         }
@@ -47,71 +69,16 @@ internal class RangeTargetSelector : ITargetSelector
             return closestEnemy;
         }
 
-        //寻找建筑
-        Unit closestBuilding = null;
-        float closestDistance = Mathf.Infinity;
-        List<Unit> staticBuildings = new List<Unit>();
-
-        for (int i = 0; i < num; i++)
-        {
-            BuildingUnit building = scanBuffer[i].GetComponent<BuildingUnit>();
-            if (building == null || building.isDead || building.unitSide == self.unitSide) continue;
-            if (!IsTargetReachable(self, building)) continue;
-            if (building.buildingType == BuildingType.Static)
-            {
-                staticBuildings.Add(building); continue;
-            }
-
-            float distance = (building.transform.position - self.transform.position).sqrMagnitude;
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closestBuilding = building;
-            }
-        }
-        if (closestBuilding != null)
-        {
-            return closestBuilding;
-        }
-        //没找到看看有没有工人打
-
-        for (int i = 0; i < num; i++)
-        {
-            HumanUnit enemy = scanBuffer[i].GetComponent<HumanUnit>();
-            if (enemy == null || enemy.isDead || enemy.unitSide == self.unitSide || enemy.isBuildingUnit || enemy.role != UnitRole.Worker) continue;
-            if (!IsTargetReachable(self, enemy)) { continue; }
-
-            float distance = (enemy.transform.position - self.transform.position).sqrMagnitude;
-
-            if (distance < closestEnemyDistance)
-            {
-                closestEnemy = enemy;
-                closestEnemyDistance = distance;
-            }
-        }
-        if (closestEnemy != null)
-        {
-            return closestEnemy;
-        }
 
         //非玩家操控方可以自主锁定静态建筑
-        if (self.unitSide != GameManager.Instance.playerSide)
+
+        if (self.unitSide != GameManager.Instance.playerSide && closestStaticEnemyBuilding != null)
         {
-            foreach (var building in staticBuildings)
-            {
-                float distance = (building.transform.position - self.transform.position).sqrMagnitude;
-                if (distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    closestBuilding = building;
-                }
-            }
-            if (closestBuilding != null)
-            {
-                return closestBuilding;
-            }
+            return closestStaticEnemyBuilding;
         }
+
         return null;
+
     }
     public bool IsTargetReachable(HumanUnit self, Unit targetUnit, bool isForced = false)
     {

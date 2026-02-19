@@ -68,6 +68,8 @@ public class Unit : MonoBehaviour
             this.detectPosition = transform.position;
             this.detectPosition.y += 1;
         }
+
+        GameManager.Instance.RegisterSideUnit(this);
     }
 
     // Update is called once per frame
@@ -110,6 +112,7 @@ public class Unit : MonoBehaviour
             HpBar.SetActive(false);
             HpBar.GetComponent<UIHealthBar>().OnUnitDestroy();
         }
+        GameManager.Instance.UnregisterSideUnit(this);
     }
 
     public void DestroyUnit() => Destroy(this.gameObject);

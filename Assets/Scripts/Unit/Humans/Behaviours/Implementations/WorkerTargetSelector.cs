@@ -8,7 +8,6 @@ using static HumanBehaviourInterface;
 
 public class WorkerTargetSelector : ITargetSelector
 {
-    private static Collider2D[] scanBuffer = new Collider2D[100];
     public Unit SetNewTarget(HumanUnit self)
     {
         if (self.lastAttacker != null)
@@ -25,13 +24,11 @@ public class WorkerTargetSelector : ITargetSelector
         }
 
         Worker worker = self as Worker;
-        int num = Physics2D.OverlapCircleNonAlloc(self.detectPosition, self.dectectRadius, scanBuffer, 1 << self.gameObject.layer);
-
 
         //资源区域ID不为-1说明worker已经被指定去采集物资，故只判断区域内附近的资源，资源为空时ID调回-1
         if (worker.ResourceAreaID != -1)
         {
-            List<ResourceUnit> areaResources = GameManager.Instance.resources.FindAll(r => r.resourceAreaID == worker.ResourceAreaID);
+            List<ResourceUnit> areaResources = GameManager.Instance.areaResources[worker.ResourceAreaID];
 
             ResourceUnit resource = null;
             int resourceID = -1;
@@ -41,6 +38,9 @@ public class WorkerTargetSelector : ITargetSelector
             {
                 if (currentResource == null || !IsTargetReachable(self, currentResource)) continue;
                 if (!currentResource.CanAddWorker) continue;
+
+                if (!IsTargetReachable(self, currentResource)) continue;
+
                 float distance = Vector2.Distance(self.transform.position, currentResource.transform.position);
                 if (distance < closestDis)
                 {
@@ -58,14 +58,18 @@ public class WorkerTargetSelector : ITargetSelector
         }
         else//资源区域ID为-1，说明worker没有被派去采集物资，此时worker会自动选择未建造完成的建筑，如无未建造完成的则选择非满血状态的建筑进行回血
         {
+            List<BuildingUnit> allyBuildings = GameManager.Instance.sideBuilding[worker.unitSide];
+
             BuildingUnit building = null;
             float closestDis = Mathf.Infinity;
+
             //找未完成的建筑
-            for (int i = 0; i < num; i++) 
+            foreach (var currentBuilding in allyBuildings)
             {
-                BuildingUnit currentBuilding = scanBuffer[i].GetComponent<BuildingUnit>();
-                if (currentBuilding == null || !IsTargetReachable(self,currentBuilding)) continue;
+                if (currentBuilding == null) continue;
                 if (currentBuilding.buildingState == BuildingState.ConstructionFinished) continue;
+
+                if (!IsTargetReachable(self, currentBuilding)) continue;
 
                 float distance = Vector2.Distance(self.transform.position, currentBuilding.transform.position);
                 if (distance < closestDis)
@@ -74,17 +78,20 @@ public class WorkerTargetSelector : ITargetSelector
                     closestDis = distance;
                 }
             }
+
             if(building != null)
             {
                 return building;
             }
+
             //找未满血的建筑
-            for (int i = 0; i < num; i++)
+            foreach (var currentBuilding in allyBuildings)
             {
-                BuildingUnit currentBuilding = scanBuffer[i].GetComponent<BuildingUnit>();
-                if (currentBuilding == null || !IsTargetReachable(self, currentBuilding)) continue;
+                if (currentBuilding == null) continue;
                 if (currentBuilding.buildingState != BuildingState.ConstructionFinished) continue;
                 if (currentBuilding.stats.IsFullHP) continue;
+
+                if (!IsTargetReachable(self, currentBuilding)) continue;
 
                 float distance = Vector2.Distance(self.transform.position, currentBuilding.transform.position);
                 if (distance < closestDis)
@@ -92,7 +99,9 @@ public class WorkerTargetSelector : ITargetSelector
                     building = currentBuilding;
                     closestDis = distance;
                 }
+
             }
+
             if (building != null)
             {
                 return building;

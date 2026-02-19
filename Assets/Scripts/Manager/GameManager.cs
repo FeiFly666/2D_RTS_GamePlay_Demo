@@ -19,6 +19,10 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] public List<UnitGroup> groups = new List<UnitGroup>(10);
     [SerializeField] public List<ResourceUnit> resources = new List<ResourceUnit>(100);
 
+    public Dictionary<UnitSide, List<HumanUnit>> sideHuman = new Dictionary<UnitSide, List< HumanUnit>>();
+    public Dictionary<UnitSide, List<BuildingUnit>> sideBuilding = new Dictionary<UnitSide, List<BuildingUnit>>();
+    public Dictionary<int, List<ResourceUnit>> areaResources = new Dictionary<int, List<ResourceUnit>>();
+
     protected override void OnStart()
     {
         FilePath.Init();
@@ -30,10 +34,7 @@ public class GameManager : MonoSingleton<GameManager>
     private void Start()
     {
         PoolManager.Instance.CreatePool("Arrow", arrowPrefab, 300);
-        if(isNeedFog)
-        {
-            FogManager.Instance.InitFOW();
-        }
+        
     }
 
     private void Update()
@@ -74,6 +75,49 @@ public class GameManager : MonoSingleton<GameManager>
             a.x -= 10 * Time.deltaTime;
 
             Camera.main.transform.position = a;
+        }
+    }
+
+    public void RegisterSideUnit(Unit unit)
+    {
+        if(unit is HumanUnit human)
+        {
+            if(!sideHuman.ContainsKey(human.unitSide))
+            {
+                sideHuman[human.unitSide] = new List<HumanUnit>();
+            }
+            sideHuman[human.unitSide].Add(human);
+        }
+        else if(unit is BuildingUnit building)
+        {
+            if (!sideBuilding.ContainsKey(building.unitSide))
+            {
+                sideBuilding[building.unitSide] = new List<BuildingUnit>();
+            }
+            sideBuilding[building.unitSide].Add(building);
+        }
+        else if(unit is ResourceUnit resource)
+        {
+            if(!areaResources.ContainsKey(resource.resourceAreaID))
+            {
+                areaResources[resource.resourceAreaID] = new List<ResourceUnit>();
+            }
+            areaResources[resource.resourceAreaID].Add(resource);
+        }
+    }
+    public void UnregisterSideUnit(Unit unit)
+    {
+        if(unit is HumanUnit human)
+        {
+            sideHuman[human.unitSide].Remove(human);
+        }
+        else if (unit is BuildingUnit building)
+        {
+            sideBuilding[building.unitSide].Remove(building);
+        }
+        else if(unit is ResourceUnit resource)
+        {
+            areaResources[resource.resourceAreaID].Remove(resource);
         }
     }
 
