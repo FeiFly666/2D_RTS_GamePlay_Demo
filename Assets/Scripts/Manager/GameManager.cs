@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class GameManager : MonoSingleton<GameManager>
 {
     public UnitSide playerSide = UnitSide.A;
+    public int sideNum;
     [SerializeField]public Arrow arrowPrefab;
     public static int[] EnemyMasks = new int[5];
 
@@ -23,6 +24,8 @@ public class GameManager : MonoSingleton<GameManager>
     public Dictionary<UnitSide, List<BuildingUnit>> sideBuilding = new Dictionary<UnitSide, List<BuildingUnit>>();
     public Dictionary<int, List<ResourceUnit>> areaResources = new Dictionary<int, List<ResourceUnit>>();
 
+    public List<FactionData> factions = new List<FactionData>();
+
     protected override void OnStart()
     {
         FilePath.Init();
@@ -30,6 +33,8 @@ public class GameManager : MonoSingleton<GameManager>
         MyInputsystem.Instance.inputState = InputState.None;
 
         InitEnemyLayers();
+
+        InitFactions();
     }
     private void Start()
     {
@@ -78,6 +83,13 @@ public class GameManager : MonoSingleton<GameManager>
         }
     }
 
+    private void InitFactions()
+    {
+        for (int i = 0; i < sideNum; i++)
+        {
+            factions.Add(new FactionData((UnitSide)i));
+        }
+    }
     public void RegisterSideUnit(Unit unit)
     {
         if(unit is HumanUnit human)

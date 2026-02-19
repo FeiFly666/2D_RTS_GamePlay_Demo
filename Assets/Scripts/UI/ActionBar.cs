@@ -1,3 +1,4 @@
+using Assets.Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,8 @@ public class ActionBar : MonoBehaviour
     [SerializeField] private GameObject actionButtonPPrefab;
 
     [SerializeField]private List<ActionButton> actionButtons = new List<ActionButton>();
+    [Header("ÑµÁ·Ãæ°å")]
+    [SerializeField] private UITrainningProcess trainingProcess;
 
     private void Start()
     {
@@ -26,7 +29,12 @@ public class ActionBar : MonoBehaviour
         ClearAllActionButtons();
     }
 
-    public void RegisterActionButton(BuildingBaseData buildingData, Sprite icon, UnityAction action)
+    public void UpdateTrainingProcess()
+    {
+        this.trainingProcess.UpdateUI();
+    }
+
+    public void RegisterActionButton(UIDescriptionBaseData buildingData, Sprite icon, UnityAction action)
     {
         GameObject newButton = Instantiate(actionButtonPPrefab,this.transform);
 
@@ -53,15 +61,17 @@ public class ActionBar : MonoBehaviour
         {
             foreach(var action in  unit.Actions)
             {
-                if (action is BuildingAction)
+                if (action is BuildingAction buildAction)
                 {
-                    BuildingAction buildAction = action as BuildingAction;
-
                     RegisterActionButton(buildAction.GetBuildingBaseData(), action.Icon, () => action.ExecuteAction(unit.unitSide));
                 }
-                else
+                else if(action is HumanAction humanAction)
                 {
-                    RegisterActionButton(action.Icon, () => action.ExecuteAction(unit.unitSide));
+                    RegisterActionButton(humanAction.GetHumanBaseData(),action.Icon, () => action.ExecuteAction(unit));
+                    if(unit is TrainingBuilding trainingBuilding)
+                    {
+                        trainingProcess.Show(trainingBuilding);
+                    }
                 }
             }
             ShowActionBar();
@@ -78,5 +88,7 @@ public class ActionBar : MonoBehaviour
             }
         }
         actionButtons.Clear();
+
+        trainingProcess.Hide();
     }
 }

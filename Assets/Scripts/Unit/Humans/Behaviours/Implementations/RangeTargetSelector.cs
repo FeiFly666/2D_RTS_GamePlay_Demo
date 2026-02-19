@@ -8,7 +8,7 @@ using static HumanBehaviourInterface;
 
 internal class RangeTargetSelector : ITargetSelector
 {
-    private static Collider2D[] scanBuffer = new Collider2D[40];
+    private static Collider2D[] scanBuffer = new Collider2D[80];
     public Unit SetNewTarget(HumanUnit self)
     {
         if (self.lastAttacker != null)

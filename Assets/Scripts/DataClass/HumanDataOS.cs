@@ -10,6 +10,7 @@ public class HumanDataOS : ScriptableObject
     [SerializeField] private string HumanDescription;
     [SerializeField] private int GoldCost;
     [SerializeField] private int WoodCost;
+    [SerializeField] private int PopWeight;
     [SerializeField] private float DetectRadius;
     [SerializeField] private float AttackRadius;
     [SerializeField] private float TrainingTime;
@@ -27,6 +28,7 @@ public class HumanDataOS : ScriptableObject
     public string humanDescription => HumanDescription;
     public int goldCost => GoldCost;
     public int woodCost => WoodCost;
+    public int popWeight => PopWeight;
     public float detectRadius => DetectRadius;
     public float attackRadius => AttackRadius;
     public float trainingTime => TrainingTime;

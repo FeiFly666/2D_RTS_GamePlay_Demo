@@ -21,6 +21,7 @@ public class HumanAction : Action
     public string humanDescription => HumanData.humanDescription;
     public int goldCost => HumanData.goldCost;
     public int woodCost => HumanData.woodCost;
+    public int popWeight => HumanData.popWeight;
     public float detectRadius => HumanData.detectRadius;
     public float attackRadius => HumanData.attackRadius;
     public float trainingTime => HumanData.trainingTime;
@@ -37,6 +38,16 @@ public class HumanAction : Action
     {
 
     }
-
+    public override void ExecuteAction(Unit invoker)
+    {
+        if(invoker is TrainingBuilding trainBuilding)
+        {
+            trainBuilding.AddTrainingTask(this);
+        }
+    }
+    public UIDescriptionBaseData GetHumanBaseData()
+    {
+        return new UIDescriptionBaseData(this.humanName, this.humanDescription, this.goldCost, this.woodCost, this.trainingTime);
+    }
 }
 

@@ -4923,7 +4923,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6119428816527292848}
-  - component: {fileID: 8044954087600122636}
+  - component: {fileID: 1928895061689367637}
   - component: {fileID: 5892695170300105976}
   - component: {fileID: 2259884596319830781}
   - component: {fileID: 891174909548087611}
@@ -4953,7 +4953,7 @@ Transform:
   - {fileID: 7542484733252653286}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8044954087600122636
+--- !u!114 &1928895061689367637
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4962,10 +4962,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 4138364534806795627}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d29431e2ca42c94fa4a2fdd365040d4, type: 3}
+  m_Script: {fileID: 11500000, guid: f4048795e7cae064eafa79744ee1ad50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Actions: []
+  Actions:
+  - {fileID: 11400000, guid: 3f769e8f6f50a444685bc983a6c85921, type: 2}
+  - {fileID: 11400000, guid: 6688a2344f868894f94b42a5a8f2743b, type: 2}
+  - {fileID: 11400000, guid: 8a4449462276cd041a49513b87fa6764, type: 2}
   uniqueID: 0
   unitType: 0
   unitSide: 0
@@ -4984,6 +4987,10 @@ MonoBehaviour:
   buildingUnit: {fileID: 0}
   data: {fileID: 11400000, guid: 3b42009af2e121946a9a05d5d28b592f, type: 2}
   isStartGenerate: 0
+  maxTrainingNum: 9
+  trainingQueue: []
+  spawnPosition: {x: 0, y: -1.12}
+  queuePopWeight: 0
 --- !u!210 &5892695170300105976
 SortingGroup:
   m_ObjectHideFlags: 0

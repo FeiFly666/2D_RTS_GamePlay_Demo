@@ -9,7 +9,7 @@ public class UIManager : MonoSingleton<UIManager>
     [SerializeField] public Text inputState;
     [SerializeField] public UIBuildingInfo buildingInfo;
 
-    public void SetCurrentBuildingInfo(BuildingBaseData buildingData)
+    public void SetCurrentBuildingInfo(UIDescriptionBaseData buildingData)
     {
         if(buildingData == null)
         {

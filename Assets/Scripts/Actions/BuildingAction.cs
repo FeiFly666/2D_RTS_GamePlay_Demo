@@ -36,8 +36,8 @@ public class BuildingAction : Action
         BuildingManager.Instance.StartPlacement(this, unitSide);
     }
 
-    public BuildingBaseData GetBuildingBaseData()
+    public UIDescriptionBaseData GetBuildingBaseData()
     {
-        return new BuildingBaseData(this.buildingName, this.buildingDescription, this.goldCost, this.woodCost, this.finishValue);
+        return new UIDescriptionBaseData(this.buildingName, this.buildingDescription, this.goldCost, this.woodCost, this.finishValue);
     }
 }

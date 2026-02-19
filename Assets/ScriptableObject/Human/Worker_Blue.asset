@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 446a286638c36d043ae179430cf1868b, type: 3}
   m_Name: Worker_Blue
   m_EditorClassIdentifier: 
-  Icon: {fileID: 0}
+  Icon: {fileID: 1299961047, guid: 1fca15d0bb5c1b14d9eea5992bbb138c, type: 3}
   ID: a933b161-c64d-46c5-b856-705100afcde4
   HumanSprite: {fileID: 0}
   HumanPrefab: {fileID: 6633542312422591476, guid: d82cda47099e6304a90336492eb48000, type: 3}

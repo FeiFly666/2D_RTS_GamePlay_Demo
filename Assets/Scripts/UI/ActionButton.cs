@@ -8,10 +8,10 @@ public class ActionButton : MonoBehaviour
 {
     private Button button => GetComponent<Button>();
     [SerializeField] private Image buttonIcon;
-    [SerializeField]private BuildingBaseData buildingBaseData;
-    public void InitButton(BuildingBaseData buildingData, Sprite icon, UnityAction action)
+    [SerializeField] private UIDescriptionBaseData unitData;
+    public void InitButton(UIDescriptionBaseData unitData, Sprite icon, UnityAction action)
     {
-        this.buildingBaseData = buildingData;
+        this.unitData = unitData;
 
         button.onClick.AddListener(action);
 
@@ -30,9 +30,9 @@ public class ActionButton : MonoBehaviour
 
     public void ShowButtonInfo()
     {
-        if(this.buildingBaseData != null)
+        if(this.unitData != null)
         {
-            UIManager.Instance.SetCurrentBuildingInfo(this.buildingBaseData);
+            UIManager.Instance.SetCurrentBuildingInfo(this.unitData);
         }
         else
         {
@@ -41,7 +41,7 @@ public class ActionButton : MonoBehaviour
     }
     public void CloseButtonInfo()
     {
-        if (this.buildingBaseData != null)
+        if (this.unitData != null)
         {
             UIManager.Instance.SetCurrentBuildingInfo(null);
 

@@ -11,13 +11,13 @@ public class UIBuildingInfo : MonoBehaviour
     [SerializeField]public Text finishValue;
     [SerializeField]public Text buildingDescription;
 
-    public void ShowBuildingInfo(BuildingBaseData data)
+    public void ShowBuildingInfo(UIDescriptionBaseData data)
     {
-        this.titleName.text = data.buildingName;
+        this.titleName.text = data.Name;
         this.goldCost.text = data.goldCost.ToString();
         this.woodCost.text = data.woodCost.ToString();
         this.finishValue.text = data.finishValue.ToString();
-        this.buildingDescription.text = data.buildingDesciption;
+        this.buildingDescription.text = data.Desciption;
         ShowUI();
     }
     public void CloseBuildingInfo()

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 446a286638c36d043ae179430cf1868b, type: 3}
   m_Name: Warrior_Blue
   m_EditorClassIdentifier: 
-  Icon: {fileID: -1699058313357763219, guid: 385d83dfcc1b5be40974efbde1366e6b, type: 3}
+  Icon: {fileID: 1462027104, guid: 0a2125e0a4124b246869bbd4fa03fa5c, type: 3}
   ID: 1aecd331-7516-4025-8b3b-5c5c99ad3222
   HumanSprite: {fileID: 0}
   HumanPrefab: {fileID: 4492471976043256435, guid: 354a923b6df0d3a4dba46f57384b5451, type: 3}
