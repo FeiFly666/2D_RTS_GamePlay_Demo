@@ -291,7 +291,7 @@ public class AI : MonoBehaviour
     }
     private void OnPathFound(List<Node> newPath, bool success)
     {
-        //if (this == null) return;
+        if (this == null) return;//防止异步结果到达时ai由于某些原因被销毁
         isWaitingPath = false;
         if(success)
         {

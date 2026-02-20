@@ -17,6 +17,10 @@ public class BuildingSaveData
 
     public float currentHP;
 
+    //训练建筑信息
+    public List<TrainTaskSaveData> tasks = new List<TrainTaskSaveData>();
+    public SerializableVector3 gatherPosition;
+
     public BuildingSaveData()
     {
 
@@ -37,6 +41,17 @@ public class BuildingSaveData
         }
 
         this.currentHP = unit.stats.currentHP;
+
+        if(unit is TrainingBuilding t)
+        {
+            foreach(var task in t.trainingQueue)
+            {
+                TrainTaskSaveData data = task.ToSaveData();
+                tasks.Add(data);
+            }
+
+            this.gatherPosition = new SerializableVector3(t.gatherPosition);
+        }
     }
 
 }

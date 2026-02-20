@@ -16,5 +16,18 @@ public class TrainTask
         this.totalTime = this.remainTime = humanData.trainingTime;
 
     }
+
+    public TrainTask(TrainTaskSaveData data)
+    {
+        this.humanData = SaveManager.Instance.dataCatalog.GetHumanByID(data.HumanDataOS);
+        this.remainTime = data.remainTime;
+        this.totalTime = this.humanData.trainingTime;
+    }
+
+
+    public TrainTaskSaveData ToSaveData()
+    {
+        return new TrainTaskSaveData(this);
+    }
 }
 

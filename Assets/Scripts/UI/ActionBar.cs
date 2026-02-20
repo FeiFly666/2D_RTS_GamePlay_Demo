@@ -15,7 +15,8 @@ public class ActionBar : MonoBehaviour
     [SerializeField]private List<ActionButton> actionButtons = new List<ActionButton>();
     [Header("ÑµÁ·Ãæ°å")]
     [SerializeField] private UITrainningProcess trainingProcess;
-    private ObjectPool<ActionButton> actionPool;
+
+    private Unit currentUnit;
 
     private void Start()
     {
@@ -30,6 +31,13 @@ public class ActionBar : MonoBehaviour
     public void CloseActionBar()
     {
         this.gameObject.SetActive(false);
+
+        if(currentUnit != null)
+        {
+            currentUnit.OnUnitDead -= CloseActionBar;
+            currentUnit = null;
+        }
+
         ClearAllActionButtons();
     }
 
@@ -40,28 +48,32 @@ public class ActionBar : MonoBehaviour
 
     public void RegisterActionButton(UIDescriptionBaseData buildingData, Sprite icon, UnityAction action)
     {
-       // GameObject newButton = Instantiate(actionButtonPPrefab,this.transform);
-
         ActionButton button = PoolManager.Instance.Spawn<ActionButton>("ActionButton");
 
         actionButtons.Add(button);
 
         button.InitButton(buildingData, icon, action);
     }
-    public void RegisterActionButton(Sprite icon, UnityAction action)
+
+    private void ChangeCurrentUnit(Unit newUnit)
     {
-        GameObject newButton = Instantiate(actionButtonPPrefab, this.transform);
+        if (currentUnit != null) 
+        {
+            currentUnit.OnUnitDead -= CloseActionBar;
+        }
+        currentUnit = newUnit;
 
-        ActionButton button = newButton.GetComponent<ActionButton>();
-
-        actionButtons.Add(button);
-
-        button.InitButton(icon, action);
+        if(currentUnit != null)
+        {
+            newUnit.OnUnitDead += CloseActionBar;
+        }
     }
-
     public void ShowActionBarForUnit(Unit unit)
     {
         ClearAllActionButtons();
+
+        ChangeCurrentUnit(unit);
+
         if(unit.Actions.Count > 0)
         {
             Unit invoker = unit;
@@ -98,16 +110,11 @@ public class ActionBar : MonoBehaviour
                 ActionButton target = actionButtons[i];
 
                 PoolManager.Instance.Despawn("ActionButton",target);
-
-                /*targetGo.SetActive(false);
-
-                targetGo.transform.SetParent(null);
-
-                Destroy(targetGo);*/
             }
         }
         actionButtons.Clear();
 
         trainingProcess.Hide();
+
     }
 }

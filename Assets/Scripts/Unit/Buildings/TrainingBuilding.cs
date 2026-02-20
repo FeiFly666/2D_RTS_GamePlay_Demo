@@ -17,6 +17,8 @@ public class TrainingBuilding : BuildingUnit
 
     public Vector2 spawnPosition;
 
+    public Vector2 gatherPosition;
+
     public int queuePopWeight;//给AI用防止AI一直训练兵种
 
 
@@ -79,9 +81,6 @@ public class TrainingBuilding : BuildingUnit
         if (trainingQueue.Count >= maxTrainingNum) return;
         if (!faction.CanAfford(humanData.goldCost, humanData.woodCost)) return;
         if (!faction.HasPeopleSpace(0)) return;
-        //Debug.Log($"生产建筑{this.gameObject.name} 生成兵种 {humanData.humanName}");
-
-        //Debug.Log("当前队列：");
 
         faction.WoodNum -= humanData.woodCost;
         faction.GoldNum -= humanData.goldCost;
@@ -90,10 +89,6 @@ public class TrainingBuilding : BuildingUnit
 
         trainingQueue.Add(new TrainTask(humanData));
 
-        /*foreach (var t in trainingQueue)
-        {
-            Debug.Log(" - " + t.humanData.humanName);
-        }*/
     }
 
     public void CancleTrainingTask(int index)
@@ -111,5 +106,18 @@ public class TrainingBuilding : BuildingUnit
         faction.GoldNum += data.goldCost;
 
         trainingQueue.Remove(cancleTask);
+    }
+    public void RemoveAllTrainingTask()
+    {
+        trainingQueue.Clear();
+    }
+
+    public void ResumeTrainingTask(BuildingSaveData data)
+    {
+        foreach(var taskData in data.tasks)
+        {
+            TrainTask resumeTask = new TrainTask(taskData);
+            this.trainingQueue.Add(resumeTask);
+        }
     }
 }

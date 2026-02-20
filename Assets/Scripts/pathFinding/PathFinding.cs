@@ -113,6 +113,30 @@ public class PathFinding
         }
     }
 
+    public byte[] GetNodeCheckStatus()
+    {
+        int Width = grid.GetLength(0);
+        int Height = grid.GetLength(1);
+        byte[] status = new byte[Width * Height];
+
+        for(int i = 0;i< Width; i++)
+            for(int j = 0; j<Height; j++)
+            {
+                status[j*Width + i] = (byte)(grid[i,j].isChecked ? 1 : 0);
+            }
+        return status;
+    }
+    public void LoadNodeCheckStatus(byte[] status)
+    {
+        int Width = grid.GetLength(0);
+        int Height = grid.GetLength(1);
+        for (int i = 0; i < Width; i++)
+            for (int j = 0; j < Height; j++)
+            {
+                grid[i, j].isChecked = status[j * Width + i] == 1;
+            }
+    }
+
     public Node FindNode(Vector3 position)
     {
         float offsetX = position.x - worldOrigin.x;

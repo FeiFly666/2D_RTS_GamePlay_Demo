@@ -386,7 +386,7 @@ Transform:
   m_GameObject: {fileID: 7993594877614732815}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 14.63, y: -8.66, z: 0}
+  m_LocalPosition: {x: -1500, y: -1500, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -416,20 +416,29 @@ MonoBehaviour:
   sg: {fileID: 0}
   isDead: 0
   data: {fileID: 11400000, guid: 3f769e8f6f50a444685bc983a6c85921, type: 2}
-  State: 0
+  role: 0
   CurrentVelocity: {x: 0, y: 0, z: 0}
   HomePosition: {x: 0, y: 0, z: 0}
+  lastPathRequestTargetPos: {x: -1500, y: -1500, z: -1500}
+  lastEnemyPos: {x: 0, y: 0, z: 0}
   isBuildingUnit: 0
   isRemote: 0
   ai: {fileID: 0}
   checkFrequency: 0.1
   pathFoundFrequency: 0.2
+  pathFoundTimer: 0
   dectectRadius: 12
   attackRadius: 9.5
   isAOE: 1
   target: {fileID: 0}
   targetID: 0
+  lastAttacker: {fileID: 0}
+  lastAttackTime: 0
+  lastTargetInDetectionTime: 0
   isForcingTarget: 0
+  isReturningHome: 0
+  isNeedInitPosition: 1
+  visionIndicator: {fileID: 0}
   arrowPrefab: {fileID: 4043484535273606681, guid: aef66551d8045854d8053b71eb1c7a34, type: 3}
   arrowFlySpeed: 15
 --- !u!114 &3213199921842040903
@@ -467,7 +476,9 @@ MonoBehaviour:
   nodeNum: 0
   isForcingMoving: 0
   needSpace: 0
+  isWaitingPath: 0
   isInGroup: 0
+  targetNodePos: {x: 0, y: 0}
 --- !u!70 &4706921253509882004
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

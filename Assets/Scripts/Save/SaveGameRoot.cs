@@ -17,6 +17,7 @@ public class SaveGameRoot
     public List<BuildingSaveData> allBuildings = new List<BuildingSaveData>();
     public List<GroupSaveData> allGroups = new List<GroupSaveData>();
     public List<ResourceSaveData> allResources = new List<ResourceSaveData>();
+    public byte[] fogData;
 
     public int nextAvailableID;// GameManager全局 ID 计数器
 

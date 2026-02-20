@@ -125,10 +125,8 @@ public class BuildingUnit : Unit
     protected void CompleteConstruction()
     {
         sr.sprite = data.completeSprite;
-        if(buildingProcess != null)
-        {
-            buildingProcess.RemoveAllWorkers();
-        }
+
+        buildingProcess?.RemoveAllWorkers();
 
         buildingProcess = null;
 
@@ -175,13 +173,18 @@ public class BuildingUnit : Unit
 
         this.buildingType = BuildingType.Static;
 
+        if(this is TrainingBuilding t)
+        {
+            t.RemoveAllTrainingTask();
+        }
+
         GameManager.Instance.buildings.Remove(this);
 
         DeathParticalSystem.Play();
 
         StartCoroutine(AfterDeath());
     }
-    void ApplyArea(int delta) // delta: 1增加, -1移除
+    public void ApplyArea(int delta) // delta: 1增加, -1移除
     {
         if(delta > 0)
         {
@@ -226,6 +229,17 @@ public class BuildingUnit : Unit
         this.stats.currentHP = data.currentHP;
 
         ResumeProcess(data);
+
+        if(this is TrainingBuilding t)
+        {
+            t.gatherPosition = new Vector2(data.gatherPosition.x, data.gatherPosition.y);
+
+            if(this.buildingState == BuildingState.ConstructionFinished && data.tasks.Count > 0)
+            {
+                t.ResumeTrainingTask(data);
+            }
+
+        }
     }
 
     public void ResumeProcess(BuildingSaveData data)

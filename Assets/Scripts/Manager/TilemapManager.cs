@@ -10,6 +10,7 @@ public class TilemapManager : MonoSingleton<TilemapManager>
     public Tilemap WalkableTilemap;
     public Tilemap PlacementTilemap;
     public Tilemap UnreachaableTilemap;
+    public Tilemap boundTilemap;
 
     public Tilemap BuildinfAreaTilemap;
 
@@ -418,7 +419,7 @@ public class TilemapManager : MonoSingleton<TilemapManager>
     }
     public bool CanPlaceBuilding(Vector3Int position,UnitSide side)
     {
-        return SideBuildingArea[(int)side].HasTile(position) && !IsPlaceOverUnreachableArea(position);
+        return SideBuildingArea[(int)side].HasTile(position) && !IsPlaceOverUnreachableArea(position) && !boundTilemap.HasTile(position);
     }
 
     public bool IsNodeAndNeighborsFree(Node targetNode, GameObject requester, bool checkNeighbors)
@@ -493,6 +494,10 @@ public class TilemapManager : MonoSingleton<TilemapManager>
         }
         return true;
     }
+
+    public byte[] SaveCheckStatus() => PathFinding.GetNodeCheckStatus();
+
+    public void LoadCheckStatus(byte[] data) => PathFinding.LoadNodeCheckStatus(data);
 
     private void OnDrawGizmos()
     {

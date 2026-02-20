@@ -10,7 +10,7 @@ using UnityEngine;
 public class SaveManager : MonoSingleton<SaveManager>
 {
     private string SavePath;
-    [SerializeField] private DataCatalog dataCatalog;
+    [SerializeField] public DataCatalog dataCatalog;
     private int SaveVersion = 1;
     private void Start()
     {
@@ -50,6 +50,8 @@ public class SaveManager : MonoSingleton<SaveManager>
             root.allResources.Add(resource.ToSaveData());
         }
 
+        root.fogData = TilemapManager.Instance.SaveCheckStatus();
+
         var json = JsonConvert.SerializeObject(root,Formatting.Indented);
 
         File.WriteAllText(SavePath, json);
@@ -70,8 +72,17 @@ public class SaveManager : MonoSingleton<SaveManager>
             Destroy(human.gameObject);
         }
 
+        for (int i = 0; i < GameManager.Instance.sideNum; i++)
+        {
+            FactionData currentFaction = GameManager.Instance.factions[i];
+            currentFaction.humans.Clear();
+            currentFaction.buildings.Clear();
+        }
+
+
         foreach(var builidng in GameManager.Instance.buildings)
         {
+            builidng.ApplyArea(-1);
             Destroy(builidng.gameObject);
         }
 
@@ -80,17 +91,17 @@ public class SaveManager : MonoSingleton<SaveManager>
             Destroy(resource.gameObject);
         }
         PoolManager.Instance.ReturnAllToPool<Arrow>("Arrow");
-        TilemapManager.Instance.isLoading = true;
+
+        TilemapManager.Instance.isLoading = true;;
+
         TilemapManager.Instance.InitPathfing();
 
-        GameManager.Instance.groups.Clear();
+        UIManager.Instance.actionBar.CloseActionBar();
 
         GameManager.Instance.liveHumanUnits.Clear();
         GameManager.Instance.buildings.Clear();
         GameManager.Instance.groups.Clear();
         GameManager.Instance.resources.Clear();
-
-
 
         
         SaveGameRoot root = JsonConvert.DeserializeObject<SaveGameRoot>(json);
@@ -152,6 +163,9 @@ public class SaveManager : MonoSingleton<SaveManager>
         GameManager.Instance.InitID(root.nextAvailableID);
 
         TilemapManager.Instance.isLoading = false;
+        TilemapManager.Instance.LoadCheckStatus(root.fogData);
+        FogManager.Instance.InitFOW();
+
         TilemapManager.Instance.UpdateAllNodes();
 
         //ø™ º∏≥”Ë¡ÈªÍ

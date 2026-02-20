@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static UnityEditor.PlayerSettings;
 
 public class FogManager : MonoSingleton<FogManager>
 {
@@ -15,6 +16,7 @@ public class FogManager : MonoSingleton<FogManager>
     private PathFinding PathFinding;
 
     private Dictionary<int, Vector2Int[]> circularOffsetsCache = new Dictionary<int, Vector2Int[]>();
+
     void Start()
     {
         PathFinding = TilemapManager.Instance.GetPathFinding();
@@ -76,14 +78,12 @@ public class FogManager : MonoSingleton<FogManager>
     }
     private void BatchRevealFog()
     {
-        if (PathFinding == null) return;
-
-        RevealFogInRadius();
+        if (PathFinding == null || TilemapManager.Instance.isLoading) return;
+            RevealFogInRadius();
     }
 
     public void RevealFogInRadius()
     {
-
         HashSet<Vector3Int> tilesToClear = new HashSet<Vector3Int>();
 
         var units = GameManager.Instance.liveHumanUnits;
@@ -91,6 +91,8 @@ public class FogManager : MonoSingleton<FogManager>
         foreach(var unit in units)
         {
             if (unit.unitSide != GameManager.Instance.playerSide) continue;
+            //防止读档出现虚空圈
+            if (unit.detectPosition.sqrMagnitude < 0.2f) continue;
             Node centerNode = TilemapManager.Instance.FindNode(unit.detectPosition);
 
             int width = PathFinding.grid.GetLength(0);

@@ -49,6 +49,7 @@ public class Unit : MonoBehaviour
     public System.Action OnFlipped;
     public System.Action OnSelected;
     public System.Action OnDeselected;
+    public System.Action OnUnitDead;
 
     protected virtual void Awake()
     {
@@ -107,6 +108,10 @@ public class Unit : MonoBehaviour
     public virtual void Death()
     {
         isDead = true;
+        OnUnitDead?.Invoke();
+
+
+
         if(HpBar != null)
         {
             HpBar.SetActive(false);
