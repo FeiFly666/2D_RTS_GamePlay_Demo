@@ -20,8 +20,8 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] public List<UnitGroup> groups = new List<UnitGroup>(10);
     [SerializeField] public List<ResourceUnit> resources = new List<ResourceUnit>(100);
 
-    public Dictionary<UnitSide, List<HumanUnit>> sideHuman = new Dictionary<UnitSide, List< HumanUnit>>();
-    public Dictionary<UnitSide, List<BuildingUnit>> sideBuilding = new Dictionary<UnitSide, List<BuildingUnit>>();
+/*    public Dictionary<UnitSide, List<HumanUnit>> sideHuman = new Dictionary<UnitSide, List< HumanUnit>>();
+    public Dictionary<UnitSide, List<BuildingUnit>> sideBuilding = new Dictionary<UnitSide, List<BuildingUnit>>();*/
     public Dictionary<int, List<ResourceUnit>> areaResources = new Dictionary<int, List<ResourceUnit>>();
 
     public List<FactionData> factions = new List<FactionData>();
@@ -94,19 +94,21 @@ public class GameManager : MonoSingleton<GameManager>
     {
         if(unit is HumanUnit human)
         {
-            if(!sideHuman.ContainsKey(human.unitSide))
+            /*if(!sideHuman.ContainsKey(human.unitSide))
             {
                 sideHuman[human.unitSide] = new List<HumanUnit>();
             }
-            sideHuman[human.unitSide].Add(human);
+            sideHuman[human.unitSide].Add(human);*/
+            factions[(int)unit.unitSide].humans.Add(human);
         }
         else if(unit is BuildingUnit building)
         {
-            if (!sideBuilding.ContainsKey(building.unitSide))
+            /*if (!sideBuilding.ContainsKey(building.unitSide))
             {
                 sideBuilding[building.unitSide] = new List<BuildingUnit>();
             }
-            sideBuilding[building.unitSide].Add(building);
+            sideBuilding[building.unitSide].Add(building);*/
+            factions[(int)unit.unitSide].buildings.Add(building);
         }
         else if(unit is ResourceUnit resource)
         {
@@ -121,11 +123,13 @@ public class GameManager : MonoSingleton<GameManager>
     {
         if(unit is HumanUnit human)
         {
-            sideHuman[human.unitSide].Remove(human);
+            /*sideHuman[human.unitSide].Remove(human);*/
+            factions[(int)unit.unitSide].humans.Remove(human);
         }
         else if (unit is BuildingUnit building)
         {
-            sideBuilding[building.unitSide].Remove(building);
+            /*sideBuilding[building.unitSide].Remove(building);*/
+            factions[(int)unit.unitSide].buildings.Remove(building);
         }
         else if(unit is ResourceUnit resource)
         {

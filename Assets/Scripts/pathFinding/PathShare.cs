@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 public class TargethPathRecord
 {
@@ -36,24 +37,46 @@ public class PathShare
 
     }
 
-    public List<Node> TryBorrowPath(Unit requester, Unit target)
+    public List<Node> TryBorrowPath(Unit requester, Unit target, out int index)
     {
         int targetID = target.uniqueID;
+        index = 0;
         if (!records.ContainsKey(targetID)) return null;
 
         TargethPathRecord record = records[targetID];
 
-        if (Time.time - record.timeRecord > 0.15f) return null;
+        if (Time.time - record.timeRecord > 0.1f) return null;
 
         if ((requester.transform.position - record.sourcePosition).sqrMagnitude < 4f)
         {
             if (TilemapManager.Instance.CheckBlockBetween2Nodes(requester.transform.position, record.sourcePosition))
             {
+                index = GetAnIndex(requester, record.path);
                 return record.path;
             }
             
         }
 
         return null;
+    }
+    public int GetAnIndex(Unit member, List<Node>sharedPath)
+    {
+        float minDistance = float.MaxValue;
+        int closestIndex = 0;
+
+        for (int i = 1; i < Mathf.Min(sharedPath.Count, 20); i++)
+        {
+            if (!TilemapManager.Instance.CheckBlockBetween2Nodes(member.transform.position, sharedPath[i].GetNodePosition()))
+            {
+                continue;
+            }
+            float dist = Vector2.Distance(member.transform.position, sharedPath[i].GetNodePosition());
+            if (dist < minDistance)
+            {
+                minDistance = dist;
+                closestIndex = i;
+            }
+        }
+        return closestIndex;
     }
 }

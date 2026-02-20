@@ -98,11 +98,14 @@ public class MoveState : IUnitState
                     return;
                 }
 
-                List<Node> borrowedPath = TilemapManager.Instance.pathShare.TryBorrowPath(u, u.target);
+                int pathIndex = -1;
+
+                List<Node> borrowedPath = TilemapManager.Instance.pathShare.TryBorrowPath(u, u.target, out pathIndex);
 
                 if (borrowedPath != null && borrowedPath.Count > 5)
                 {
-                    u.ai.RegisterPath(borrowedPath);
+                    //Debug.LogError("借路中");
+                    u.ai.RegisterPath(borrowedPath, pathIndex);
                     return;
                 }
 

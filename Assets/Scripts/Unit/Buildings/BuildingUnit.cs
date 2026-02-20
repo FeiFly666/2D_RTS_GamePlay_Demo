@@ -30,6 +30,7 @@ public class BuildingUnit : Unit
     [SerializeField] private GameObject UnitPrefab;
     [Header("兵种生成位置")]
     [SerializeField] private Vector2[] spawnPositions;
+    private Vector2Int cacheCenterPosition;
     private List<HumanUnit> spawnUnits = new List<HumanUnit>();
 
     [SerializeField] public BuildingType buildingType;
@@ -182,12 +183,16 @@ public class BuildingUnit : Unit
     }
     void ApplyArea(int delta) // delta: 1增加, -1移除
     {
-        Vector3Int cellPos = TilemapManager.Instance.WalkableTilemap.WorldToCell(this.transform.position);
+        if(delta > 0)
+        {
+            Vector3Int cellPos = TilemapManager.Instance.WalkableTilemap.WorldToCell(this.transform.position);
 
-        Vector2Int logicalBase = new Vector2Int(cellPos.x + data.buildingOffset.x, cellPos.y + data.buildingOffset.y);
+            Vector2Int logicalBase = new Vector2Int(cellPos.x + data.buildingOffset.x, cellPos.y + data.buildingOffset.y);
 
-        // 3. 调用更新逻辑
-        TilemapManager.Instance.AddBuildingArea(logicalBase, data.buildingSize, this.unitSide, delta);
+            cacheCenterPosition = logicalBase;
+        }
+
+        TilemapManager.Instance.AddBuildingArea(cacheCenterPosition, data.buildingSize, this.unitSide, delta, this);
     }
     private bool DeathParticalFinished()
     {

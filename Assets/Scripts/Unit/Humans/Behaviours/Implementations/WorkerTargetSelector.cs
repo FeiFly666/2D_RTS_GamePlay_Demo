@@ -58,7 +58,7 @@ public class WorkerTargetSelector : ITargetSelector
         }
         else//资源区域ID为-1，说明worker没有被派去采集物资，此时worker会自动选择未建造完成的建筑，如无未建造完成的则选择非满血状态的建筑进行回血
         {
-            List<BuildingUnit> allyBuildings = GameManager.Instance.sideBuilding[worker.unitSide];
+            List<BuildingUnit> allyBuildings = GameManager.Instance.factions[(int)worker.unitSide].buildings;
 
             BuildingUnit building = null;
             float closestDis = Mathf.Infinity;

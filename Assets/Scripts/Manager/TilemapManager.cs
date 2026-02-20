@@ -26,6 +26,7 @@ public class TilemapManager : MonoSingleton<TilemapManager>
     public bool isLoading = false;
     private PathFinding PathFinding;
     public PathShare pathShare;
+    private Dictionary<BuildingUnit, List<Vector2Int>> cachebuilidngArea = new Dictionary<BuildingUnit, List<Vector2Int>>();
     private Dictionary<UnitSide, int[,]> buildingAreaCounter = new Dictionary<UnitSide, int[,]>();
 
     protected override void OnStart()
@@ -105,7 +106,7 @@ public class TilemapManager : MonoSingleton<TilemapManager>
 
     public Node FindNode(int x, int y) => PathFinding.FindNode(x, y);
 
-    public void AddBuildingArea(Vector2Int buildingCenter,Vector3Int buildingSize,UnitSide side, int delta)//未验证
+    public void AddBuildingArea(Vector2Int buildingCenter,Vector3Int buildingSize,UnitSide side, int delta, BuildingUnit builiding)//未验证
     {
         int extendX = buildingSize.x * 3;
         int extendY = buildingSize.y * 3;
@@ -116,6 +117,23 @@ public class TilemapManager : MonoSingleton<TilemapManager>
         Vector2Int startPos = buildingCenter;
         queue.Enqueue(startPos);
         visited.Add(startPos);
+
+        if(delta < 0)
+        {
+            if (cachebuilidngArea[builiding] != null)
+            {
+                foreach (var pos in cachebuilidngArea[builiding])
+                {
+                    int ix = pos.x + buildingOffset.x;
+                    int iy = pos.y + buildingOffset.y;
+                    UpdateSideTilemap(side, (Vector3Int)pos, ix, iy, delta);
+                }
+                return;
+            }
+           
+        }
+        cachebuilidngArea[builiding] = new List<Vector2Int>();
+        cachebuilidngArea[builiding].Add(startPos);
 
         int width = buildingAreaCounter[side].GetLength(0);
         int height = buildingAreaCounter[side].GetLength(1);
@@ -149,8 +167,24 @@ public class TilemapManager : MonoSingleton<TilemapManager>
             {
                 if (!visited.Contains(next))
                 {
+                    if (visited.Contains(next))
+                        continue;
+
+                    if (Mathf.Abs(next.x - buildingCenter.x) > extend ||
+                        Mathf.Abs(next.y - buildingCenter.y) > extend)
+                        continue;
+
+                    Vector3Int nextTile = new Vector3Int(next.x, next.y, 0);
+
+                    if (!WalkableTilemap.HasTile(nextTile))
+                        continue;
+
+                    if (UnreachaableTilemap.HasTile(nextTile))
+                        continue;
+
                     visited.Add(next);
                     queue.Enqueue(next);
+                    cachebuilidngArea[builiding].Add(next);
                 }
             }
         }

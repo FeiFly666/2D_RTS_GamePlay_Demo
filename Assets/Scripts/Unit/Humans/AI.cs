@@ -263,10 +263,10 @@ public class AI : MonoBehaviour
         }
         //unit.lastPathRequestTargetPos = FinalTargetPosition;
     }
-    public void RegisterPath(List<Node> path)
+    public void RegisterPath(List<Node> path, int index)
     {
         currentPath = path;
-        currentNodeIndex = 0;
+        currentNodeIndex = index;
         ReleaseTargetNode();
 
         FinalTargetPosition = path[path.Count - 1].GetNodePosition();
