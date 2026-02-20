@@ -1,14 +1,25 @@
+using Assets.Scripts.ObjectPool;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class ActionButton : MonoBehaviour
+public class ActionButton : MonoBehaviour,IPoolable
 {
     private Button button => GetComponent<Button>();
     [SerializeField] private Image buttonIcon;
     [SerializeField] private UIDescriptionBaseData unitData;
+
+    public void OnSpawn()
+    {
+        gameObject.SetActive(true);
+    }
+    public void OnDespawn()
+    {
+        button.onClick.RemoveAllListeners();
+        gameObject.SetActive(false);
+    }
     public void InitButton(UIDescriptionBaseData unitData, Sprite icon, UnityAction action)
     {
         this.unitData = unitData;
@@ -22,10 +33,6 @@ public class ActionButton : MonoBehaviour
         button.onClick.AddListener(action);
 
         buttonIcon.overrideSprite = icon;
-    }
-    private void OnDestroy()
-    {
-        button.onClick.RemoveAllListeners();
     }
 
     public void ShowButtonInfo()

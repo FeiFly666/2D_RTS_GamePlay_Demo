@@ -9,11 +9,11 @@ public class PoolManager : MonoSingleton<PoolManager>
 {
     private Dictionary<string, object> pools = new Dictionary<string, object>();
 
-    public void CreatePool<T>(string key, T prefab, int size) where T : Component
+    public void CreatePool<T>(string key, T prefab, int size, Transform transform) where T : Component
     {
         if (pools.ContainsKey(key)) return;
 
-        ObjectPool<T> pool = new ObjectPool<T>(prefab, size, this.transform);
+        ObjectPool<T> pool = new ObjectPool<T>(prefab, size, transform);
         pools.Add(key, pool);
     }
 
@@ -25,7 +25,7 @@ public class PoolManager : MonoSingleton<PoolManager>
             return pool.Get();
         }
 
-        Debug.LogError($"为找到对象池: {key}");
+        Debug.LogError($"未找到对象池: {key}");
         return null;
     }
 

@@ -38,7 +38,7 @@ public class GameManager : MonoSingleton<GameManager>
     }
     private void Start()
     {
-        PoolManager.Instance.CreatePool("Arrow", arrowPrefab, 300);
+        PoolManager.Instance.CreatePool("Arrow", arrowPrefab, 300,this.transform);
         
     }
 

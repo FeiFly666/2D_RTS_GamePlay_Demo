@@ -42,6 +42,7 @@ public class HumanAction : Action
     {
         if(invoker is TrainingBuilding trainBuilding)
         {
+            //Debug.Log($"Action[{this.humanName}] 正在执行指令。调用者：{invoker.gameObject.name}");
             trainBuilding.AddTrainingTask(this);
         }
     }

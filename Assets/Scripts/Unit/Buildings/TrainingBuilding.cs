@@ -79,6 +79,9 @@ public class TrainingBuilding : BuildingUnit
         if (trainingQueue.Count >= maxTrainingNum) return;
         if (!faction.CanAfford(humanData.goldCost, humanData.woodCost)) return;
         if (!faction.HasPeopleSpace(0)) return;
+        //Debug.Log($"生产建筑{this.gameObject.name} 生成兵种 {humanData.humanName}");
+
+        //Debug.Log("当前队列：");
 
         faction.WoodNum -= humanData.woodCost;
         faction.GoldNum -= humanData.goldCost;
@@ -86,6 +89,11 @@ public class TrainingBuilding : BuildingUnit
         queuePopWeight += humanData.popWeight;
 
         trainingQueue.Add(new TrainTask(humanData));
+
+        /*foreach (var t in trainingQueue)
+        {
+            Debug.Log(" - " + t.humanData.humanName);
+        }*/
     }
 
     public void CancleTrainingTask(int index)

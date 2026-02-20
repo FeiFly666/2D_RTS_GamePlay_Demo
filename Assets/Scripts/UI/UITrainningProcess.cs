@@ -1,13 +1,14 @@
-﻿using System.Collections;
+﻿using JetBrains.Annotations;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UITrainningProcess : MonoBehaviour
 {
 
-    [SerializeField] private Image currentIcon;
+    [SerializeField] private UIProcessItem currentSlot;
     [SerializeField] private Image currentProcess;
-    [SerializeField] private Image[] queueSlots;
+    [SerializeField] private UIProcessItem[] queueSlots;
 
     private TrainingBuilding trainingBuilding;
 
@@ -32,15 +33,18 @@ public class UITrainningProcess : MonoBehaviour
         var queue = trainingBuilding.trainingQueue;
         if(queue.Count > 0)
         {
-            currentIcon.gameObject.SetActive (true);
-            currentIcon.sprite = queue[0].humanData.Icon;
+            currentSlot.icon.gameObject.SetActive (true);
+            currentSlot.icon.sprite = queue[0].humanData.Icon;
+
+            currentSlot.GetIdx(trainingBuilding, 0);
 
             float percent = trainingBuilding.GetCurrentTrainingTaskProcess();
             currentProcess.fillAmount = 1 - percent;
         }
         else
         {
-            currentIcon.gameObject.SetActive(false);
+            currentSlot.ResetIdx();
+            currentSlot.icon.gameObject.SetActive(false);
             currentProcess.fillAmount = 0;
         }
 
@@ -49,13 +53,16 @@ public class UITrainningProcess : MonoBehaviour
             int queueIdx = i + 1;
             if(queueIdx < queue.Count)
             {
-                queueSlots[i].gameObject.SetActive(true);
-                queueSlots[i].sprite = queue[i].humanData.Icon;
+                queueSlots[i].GetIdx(trainingBuilding, queueIdx);
+                queueSlots[i].icon.gameObject.SetActive(true);
+                queueSlots[i].icon.sprite = queue[queueIdx].humanData.Icon;
             }
             else
             {
-                queueSlots[i].gameObject.SetActive(false);
+                queueSlots[i].ResetIdx();
+                queueSlots[i].icon.gameObject.SetActive(false);
             }
         }
+        
     }
 }
