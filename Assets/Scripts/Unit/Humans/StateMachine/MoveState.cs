@@ -21,7 +21,7 @@ public class MoveState : IUnitState
         
         if (u.ai.isForcingMoving)
         {
-            if (Vector2.Distance(u.transform.position, u.ai.GetDestination()) < 0.1f)
+            if ((u.transform.position - u.ai.GetDestination()).sqrMagnitude < 0.01f)
             {
                 u.ai.isForcingMoving = false;
                 u.TransitionTo(UnitStateType.Idle);
@@ -112,7 +112,7 @@ public class MoveState : IUnitState
                 Vector3 currentTargetPos = u.target.transform.position;
                 if (u.ai.IsPathVaild())
                 {
-                    if (Vector2.Distance(currentTargetPos, u.lastEnemyPos) > .2f)
+                    if ((currentTargetPos -u.lastEnemyPos).sqrMagnitude > 0.04f)
                     {
                         u.RequestNewPath(currentTargetPos);
                     }

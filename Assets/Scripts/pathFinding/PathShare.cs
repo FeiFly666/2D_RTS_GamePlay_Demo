@@ -70,7 +70,7 @@ public class PathShare
             {
                 continue;
             }
-            float dist = Vector2.Distance(member.transform.position, sharedPath[i].GetNodePosition());
+            float dist = (member.transform.position - sharedPath[i].GetNodePosition()).sqrMagnitude;
             if (dist < minDistance)
             {
                 minDistance = dist;

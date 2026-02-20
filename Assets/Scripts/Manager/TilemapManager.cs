@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using static UnityEngine.RuleTile.TilingRuleOutput;
+using static CommonUtils;
 
 public class TilemapManager : MonoSingleton<TilemapManager>
 {
@@ -251,7 +252,7 @@ public class TilemapManager : MonoSingleton<TilemapManager>
                     {
                         float attackRange = human.attackRadius;
 
-                        if (Vector2.Distance(currentNode.GetNodePosition(), targetWorldPos) > attackRange)
+                        if (!IsInRange(currentNode.GetNodePosition(), targetWorldPos, attackRange))
                             continue;
                     }
                     candidates.Add(currentNode);

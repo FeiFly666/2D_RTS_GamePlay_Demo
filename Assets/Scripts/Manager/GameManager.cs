@@ -167,7 +167,7 @@ public class GameManager : MonoSingleton<GameManager>
         {
             if (b.unitSide != unit.unitSide || b.buildingState == BuildingState.InConstruction || b.buildingType == BuildingType.Attack) continue;
 
-            float distance = Vector2.Distance(unit.transform.position, b.transform.position);
+            float distance = (unit.transform.position - b.transform.position).sqrMagnitude;
             if(distance < nearestDistance)
             {
                 nearestDistance = distance;

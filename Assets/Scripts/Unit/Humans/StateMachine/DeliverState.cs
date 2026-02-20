@@ -34,7 +34,7 @@ public class DeliverState :IUnitState
 
         Vector3 targetPos = targetNode.GetNodePosition();
 
-        float dis = Vector2.Distance(targetPos, u.transform.position);
+        float dis = (targetPos - u.transform.position).sqrMagnitude;
 
         if (dis > 1f)
         {

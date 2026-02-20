@@ -77,7 +77,7 @@ public class Pointer : MonoBehaviour
             }
             if(owner != null)
             {
-                if (Vector2.Distance(owner.transform.position, this.transform.position) < 0.1f)
+                if ((owner.transform.position - this.transform.position).sqrMagnitude < 0.01f)
                 {
                     ClosePointer();
                 }

@@ -180,7 +180,7 @@ public class UnitGroup
             {
                 continue;
             }
-            float dist = Vector2.Distance(member.transform.position, sharedPath[i].GetNodePosition());
+            float dist = (member.transform.position - sharedPath[i].GetNodePosition()).sqrMagnitude;
             if (dist < minDistance)
             {
                 minDistance = dist;
@@ -196,7 +196,7 @@ public class UnitGroup
         foreach(HumanUnit member in members)
         {
             if (member == null) continue;
-            float distance = Vector2.Distance(member.transform.position, targertPos);
+            float distance = (member.transform.position - targertPos).sqrMagnitude;
             if(distance < closestDistance)
             {
                 closest = member;
@@ -212,7 +212,7 @@ public class UnitGroup
         foreach (HumanUnit member in members)
         {
             if (member == null) continue;
-            float distance = Vector2.Distance(member.transform.position, targertPos);
+            float distance = (member.transform.position - targertPos).sqrMagnitude;
             if (distance > closestDistance)
             {
                 closest = member;
@@ -244,7 +244,7 @@ public class UnitGroup
         //FormGroupTarget(targetUnit);
         if (Time.time - lastChaseUpdateTime > chaseUpdateFrequency)
         {
-            if (Vector2.Distance(targetUnit.transform.position, lastTargetPos) > 3f || (leader != null && leader.ai.nodeNum <= 7))
+            if ((targetUnit.transform.position - lastTargetPos).sqrMagnitude > 9f || (leader != null && leader.ai.nodeNum <= 7))
             {
                 lastChaseUpdateTime = Time.time;
                 lastTargetPos = targetUnit.transform.position;

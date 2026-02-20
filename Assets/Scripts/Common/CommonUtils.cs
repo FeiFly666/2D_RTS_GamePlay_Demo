@@ -13,4 +13,8 @@ public class CommonUtils
     {
         return EventSystem.current.IsPointerOverGameObject();
     }
+    public static bool IsInRange(Vector3 A, Vector3 B, float range)
+    {
+        return (A - B).sqrMagnitude <= range * range;
+    }
 }

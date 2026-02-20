@@ -10,7 +10,7 @@ public class PathFinding
     public Node[,] grid => Grid;
 
     public int MainWeight = 14;
-    public int SecondaryWeight = 11;
+    public int SecondaryWeight = 10;
 
     public int resolutionScale = 2;
     
@@ -23,7 +23,8 @@ public class PathFinding
 
     private Vector3 worldOrigin;
 
-    private GenericPriorityQueue<Node> OpenNodes;
+    //private GenericPriorityQueue<Node> OpenNodes;
+    private FastPriorityQueue<Node> OpenNodes;
     private HashSet<Node> CloseNodes = new HashSet<Node>();
     private HashSet<Node> touchedNodes = new HashSet<Node>();
 
@@ -33,12 +34,17 @@ public class PathFinding
 
     public PathFinding(int resolutionScale)
     {
-        OpenNodes = new GenericPriorityQueue<Node>((a, b) => {
+        /* OpenNodes = new GenericPriorityQueue<Node>((a, b) => {
+             int res = a.fCost.CompareTo(b.fCost);
+             if (res == 0) res = a.hCost.CompareTo(b.hCost);
+             return res;
+         });*/
+        OpenNodes = new FastPriorityQueue<Node>((a, b) =>
+        {
             int res = a.fCost.CompareTo(b.fCost);
             if (res == 0) res = a.hCost.CompareTo(b.hCost);
             return res;
         });
-
         this.resolutionScale = resolutionScale;
         var bounds = TilemapManager.Instance.WalkableTilemap.cellBounds;
 
@@ -175,9 +181,18 @@ public class PathFinding
             return null;
         }
 
-        OpenNodes.Push(startNode);
+        //OpenNodes.Push(startNode);
+        if (!startNode.isInOpen)
+        {
+            OpenNodes.Enqueue(startNode);
+            startNode.isInOpen = true;
+        }
+        else
+        {
+            OpenNodes.UpdateItem(startNode);
+        }
 
-        while(OpenNodes.Count > 0)
+        while (OpenNodes.Count > 0)
         {
             iterations++;
             if(iterations > maxIterations)
@@ -187,7 +202,9 @@ public class PathFinding
                 return null;
             }
 
-            Node currentNode = OpenNodes.Pop();
+            //Node currentNode = OpenNodes.Pop();
+            Node currentNode = OpenNodes.Dequeue();
+            currentNode.isInOpen = false;
 
             if(currentNode == endNode)
             {
@@ -225,7 +242,17 @@ public class PathFinding
                                 touchedNodes.Add(node); // 记下来，后面重置用
                             }
 
-                            OpenNodes.Push(node);
+                            //OpenNodes.Push(node);
+                            if (!node.isInOpen)
+                            {
+                                OpenNodes.Enqueue(node);
+                                node.isInOpen = true;
+                            }
+                            else
+                            {
+                                OpenNodes.UpdateItem(node);
+                            }
+
                         }
 
                     }
@@ -261,11 +288,21 @@ public class PathFinding
             yield break;
         }
 
-        OpenNodes.Push(startNode);
+        //OpenNodes.Push(startNode);
+        if (!startNode.isInOpen)
+        {
+            OpenNodes.Enqueue(startNode);
+            startNode.isInOpen = true;
+        }
+        else
+        {
+            OpenNodes.UpdateItem(startNode);
+        }
 
         while (OpenNodes.Count > 0)
         {
-            Node currentNode = OpenNodes.Pop();
+            Node currentNode = OpenNodes.Dequeue();
+            currentNode.isInOpen = false;
 
             if (currentNode == endNode)
             {
@@ -324,7 +361,16 @@ public class PathFinding
                                             touchedNodes.Add(theNeighborNode);
                                         }
 
-                                        OpenNodes.Push(theNeighborNode);
+                                        //OpenNodes.Push(theNeighborNode);
+                                        if (!theNeighborNode.isInOpen)
+                                        {
+                                            OpenNodes.Enqueue(theNeighborNode);
+                                            theNeighborNode.isInOpen = true;
+                                        }
+                                        else
+                                        {
+                                            OpenNodes.UpdateItem(theNeighborNode);
+                                        }
                                     }
 
                                 }
@@ -348,11 +394,13 @@ public class PathFinding
     {
         foreach (var node in touchedNodes)
         {
-            node.gCost = 0;
+            node.gCost = int.MaxValue;
             node.hCost = 0;
             node.fCost = 0;
             node.isTouched = false;
             node.parentNode = null;
+            node.HeapIndex = -1;
+            node.isInOpen = false;
         }
         touchedNodes.Clear();
         OpenNodes.Clear();

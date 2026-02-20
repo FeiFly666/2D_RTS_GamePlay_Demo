@@ -191,14 +191,15 @@ public class SelectionManager : MonoSingleton<SelectionManager>
 
         foreach (var unit in humans)
         {
+            Vector3 unitPos = unit.transform.position;
             if (unit is not HumanUnit human || unit == null) continue;
             bool findCloseGroup = false;
             foreach (var group in groups)
             {
-                if (Vector2.Distance(group.leader.transform.position, unit.transform.position) < 5)
+                if ((group.leader.transform.position - unit.transform.position).sqrMagnitude < 25)
                 {
                     //TODO:查看unit和leader间是否隔墙然进行操作
-                    if (TilemapManager.Instance.CheckBlockBetween2Nodes(group.leader.transform.position, unit.transform.position))
+                    if (TilemapManager.Instance.CheckBlockBetween2Nodes(group.leader.transform.position, unitPos))
                     {
                         group.AddNewMember(human);
                         findCloseGroup = true;

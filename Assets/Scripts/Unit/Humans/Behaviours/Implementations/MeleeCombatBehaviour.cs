@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using static HumanBehaviourInterface;
+using static CommonUtils;
 public class MeleeCombatBehaviour : ICombatBehaviour
 {
     public bool CanAttack(HumanUnit self, Unit target)
@@ -14,19 +15,19 @@ public class MeleeCombatBehaviour : ICombatBehaviour
         IUnitState currentState = self.stateMachine.CurrentState;
         if (target is HumanUnit)
         {
-            float distance = Vector2.Distance(target.detectPosition, self.detectPosition);
+            //float distance = Vector2.Distance(target.detectPosition, self.detectPosition);
 
             float enterRange = self.attackRadius - 0.5f;
             float exitRange = self.attackRadius;
 
-            return (currentState is AttackState) ? distance <= exitRange : distance <= enterRange;
+            return (currentState is AttackState) ? IsInRange(target.detectPosition, self.detectPosition, exitRange) : IsInRange(target.detectPosition, self.detectPosition, enterRange);
         }
         else
         {
-            float dist = Vector2.Distance(self.GetTargetAimPoint(), self.detectPosition);
+            //float dist = Vector2.Distance(self.GetTargetAimPoint(), self.detectPosition);
             float enterRange = self.attackRadius - 0.5f;
             float exitRange = self.attackRadius;
-            return (currentState is AttackState) ? dist <= exitRange : dist <= enterRange;
+            return (currentState is AttackState) ? IsInRange(self.GetTargetAimPoint(), self.detectPosition, exitRange) : IsInRange(self.GetTargetAimPoint(), self.detectPosition, enterRange);
         }
     }
     public void ExecuteAttack(HumanUnit self, Unit target)

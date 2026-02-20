@@ -109,7 +109,7 @@ public class AI : MonoBehaviour
         unit.FlipController(CurrentTargetPosition);
 
         transform.position += direction * movesSpeed * Time.deltaTime;
-        if (Vector2.Distance(CurrentTargetPosition, transform.position) < 0.1f)
+        if ((CurrentTargetPosition - transform.position).sqrMagnitude < 0.04f)
         {
             currentNodeIndex++;
             if (currentNodeIndex >= currentPath.Count)

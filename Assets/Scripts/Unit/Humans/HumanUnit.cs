@@ -1,4 +1,5 @@
 using static HumanBehaviourInterface;
+using static CommonUtils;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Data;
@@ -417,9 +418,9 @@ public abstract class HumanUnit : Unit
                 enemyPosition = enemy.transform.position;
         }
 
-        var distance = Vector2.Distance(enemyPosition, detectPosition);
+        //var distance = Vector2.Distance(enemyPosition, detectPosition);
 
-        return distance < dectectRadius;
+        return IsInRange(enemyPosition, detectPosition, dectectRadius);
     }
     public bool IsTargetNoBlock()
     {

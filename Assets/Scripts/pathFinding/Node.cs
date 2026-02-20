@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Node
+public class Node : IHeapItem<Node>
 {
     public int GridX, GridY;
     public int ButtomX, ButtomY;
@@ -13,9 +13,13 @@ public class Node
 
     public float CenterX,CenterY;
 
+    public int HeapIndex { get; set; }
+
     public int gCost;//该格到起点格的距离
     public int hCost;//该格到终点格的距离
     public int fCost;//gCost + fCost
+
+    public bool isInOpen;
     public bool isTouched;//只要这个点被改过成本就true,方便重置
 
     public bool isChecked;//迷雾用
@@ -35,8 +39,9 @@ public class Node
         CenterY = centerY;
 
         IsWalkable = isWalkable;
+        isInOpen = false;
 
-        gCost = 0;
+        gCost = int.MaxValue;
         hCost = 0;
         fCost = 0;
 

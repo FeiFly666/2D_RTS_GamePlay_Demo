@@ -58,7 +58,7 @@ public class WorkState :IUnitState
         }
         if (u.currentWorkBuilidng != null && u.currentWorkBuilidng.buildingState == BuildingState.ConstructionFinished && !u.currentWorkBuilidng.stats.IsFullHP)
         {
-            float repairAmount = 10f * u.checkFrequency;
+            float repairAmount = 2f * u.checkFrequency;
             building.stats.IncreaseHP(repairAmount);
         }
         u.FlipController(building.transform.position);
@@ -90,7 +90,7 @@ public class WorkState :IUnitState
             u.mySlot = newSlot;
         }
 
-        if (Vector2.Distance(u.transform.position, u.mySlot.GetNodePosition()) < 0.4f)
+        if ((u.transform.position - u.mySlot.GetNodePosition()).sqrMagnitude < 0.016f)
         {
             u.FlipController(u.target.transform.position);
             u.anim.SetBool("Chop", true);

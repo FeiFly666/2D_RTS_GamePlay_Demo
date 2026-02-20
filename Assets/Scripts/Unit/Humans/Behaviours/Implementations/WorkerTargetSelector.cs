@@ -41,7 +41,7 @@ public class WorkerTargetSelector : ITargetSelector
 
                 if (!IsTargetReachable(self, currentResource)) continue;
 
-                float distance = Vector2.Distance(self.transform.position, currentResource.transform.position);
+                float distance = (self.transform.position - currentResource.transform.position).sqrMagnitude;
                 if (distance < closestDis)
                 {
                     resource = currentResource;
@@ -71,7 +71,7 @@ public class WorkerTargetSelector : ITargetSelector
 
                 if (!IsTargetReachable(self, currentBuilding)) continue;
 
-                float distance = Vector2.Distance(self.transform.position, currentBuilding.transform.position);
+                float distance = (self.transform.position - currentBuilding.transform.position).sqrMagnitude;
                 if (distance < closestDis)
                 {
                     building = currentBuilding;
@@ -93,7 +93,7 @@ public class WorkerTargetSelector : ITargetSelector
 
                 if (!IsTargetReachable(self, currentBuilding)) continue;
 
-                float distance = Vector2.Distance(self.transform.position, currentBuilding.transform.position);
+                float distance = (self.transform.position - currentBuilding.transform.position).sqrMagnitude;
                 if (distance < closestDis)
                 {
                     building = currentBuilding;
