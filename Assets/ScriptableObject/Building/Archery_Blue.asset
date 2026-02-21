@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7c47958a4ea4bc4589e0886d60aad86, type: 3}
+  m_Name: Archery_Blue
+  m_EditorClassIdentifier: 
+  Icon: {fileID: 21300000, guid: 2bb7266a2b9e4494db34c60ba04a19a4, type: 3}
+  ID: 0221af9b-c47c-4173-849f-d03c1e445b0b
+  FoundationSprite: {fileID: 21300000, guid: 280941e1e5f52574f812ae718f49766e, type: 3}
+  CompleteSprite: {fileID: 21300000, guid: 2bb7266a2b9e4494db34c60ba04a19a4, type: 3}
+  DestroyedSprite: {fileID: 21300000, guid: af0d019cbb7723d499cc7f0637b38cad, type: 3}
+  StructurePrefab: {fileID: 7933440593282294370, guid: cf2aaaba5eb11ee4e9f833376e6d04cc, type: 3}
+  buildingDataOS: {fileID: 11400000, guid: f1edcee74a5ed4b4fb356b020a2f5f8b, type: 2}

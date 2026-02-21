@@ -538,8 +538,6 @@ public abstract class HumanUnit : Unit
 
         this.isReturningHome = data.isReturningHome;
 
-        this.stats.OnHealthChanged?.Invoke();
-
         if(this is Worker worker)
         {
             worker.holdResourceNum = data.holdResourceNum;

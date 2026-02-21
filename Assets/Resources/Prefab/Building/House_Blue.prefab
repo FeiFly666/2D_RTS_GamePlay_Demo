@@ -58,7 +58,7 @@ MonoBehaviour:
   sortingYOffset: 0
   hpBarOffset: 2.8
   HpBar: {fileID: 0}
-  hpbarType: 0
+  hpbarType: 1
   sg: {fileID: 0}
   isDead: 0
   buildingState: 0

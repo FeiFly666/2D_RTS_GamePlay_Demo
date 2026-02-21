@@ -4895,7 +4895,7 @@ MonoBehaviour:
   unitSide: 0
   detectPosition: {x: 0, y: 0, z: 0}
   sortingYOffset: -0.5
-  hpBarOffset: 2.4
+  hpBarOffset: 3.6
   HpBar: {fileID: 0}
   hpbarType: 1
   sg: {fileID: 0}

@@ -181,8 +181,6 @@ public class BuildingUnit : Unit
             unit.stats.DecreaseHP(null, 1000000000);
         }
 
-        ApplyArea(-1);
-
         this.buildingType = BuildingType.Static;
 
         if(this is TrainingBuilding t)
@@ -190,10 +188,15 @@ public class BuildingUnit : Unit
             t.RemoveAllTrainingTask();
         }
 
-        FactionData faction = GameManager.Instance.factions[(int)unitSide];
-        if (faction != null)
+        if(this.buildingState == BuildingState.ConstructionFinished)
         {
-            faction.TotalPeopleNum -= data.peopleAddNum;
+            FactionData faction = GameManager.Instance.factions[(int)unitSide];
+            if (faction != null)
+            {
+                faction.TotalPeopleNum -= data.peopleAddNum;
+            }
+
+            ApplyArea(-1);
         }
 
         GameManager.Instance.buildings.Remove(this);

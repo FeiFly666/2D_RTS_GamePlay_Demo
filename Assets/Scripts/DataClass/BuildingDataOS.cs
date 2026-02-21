@@ -20,6 +20,7 @@ public class BuildingDataOS : ScriptableObject
     [SerializeField] private Vector3Int BuildingOffset;
     [SerializeField] private float FinishValue;
     [SerializeField] private bool IsStartGenerate;
+    [SerializeField] public BuildingType[] conditions;
 
     public GameObject structurePrefab => StructurePrefab;
     public int peopleAddNum => PeopleAddNum;
