@@ -110,8 +110,8 @@ public class TilemapManager : MonoSingleton<TilemapManager>
 
     public void AddBuildingArea(Vector2Int buildingCenter,Vector3Int buildingSize,UnitSide side, int delta, BuildingUnit builiding)//Œ¥—È÷§
     {
-        int extendX = buildingSize.x * 3;
-        int extendY = buildingSize.y * 3;
+        int extendX = (buildingSize.x - 1) * 3;
+        int extendY = (buildingSize.y - 1) * 3;
         int extend = Mathf.Min(extendX, extendY);
         Queue<Vector2Int> queue = new Queue<Vector2Int>();
         HashSet<Vector2Int> visited = new HashSet<Vector2Int>();

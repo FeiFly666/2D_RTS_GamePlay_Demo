@@ -6,7 +6,10 @@ using static UnityEngine.UI.CanvasScaler;
 public enum BuildingType
 {
     Static,
-    Attack
+    Attack,
+    Train,
+    Ranged,
+    Goblin
 }
 public enum BuildingState
 {
@@ -31,6 +34,7 @@ public class BuildingUnit : Unit
     [Header("兵种生成位置")]
     [SerializeField] private Vector2[] spawnPositions;
     private Vector2Int cacheCenterPosition;
+    private Vector3 centerPos;
     private List<HumanUnit> spawnUnits = new List<HumanUnit>();
 
     [SerializeField] public BuildingType buildingType;
@@ -46,6 +50,7 @@ public class BuildingUnit : Unit
     {
         base.Awake();
         InitData();
+        centerPos = sr.gameObject.transform.position;
     }
 
     protected override void Start()
@@ -133,6 +138,13 @@ public class BuildingUnit : Unit
         this.buildingState = BuildingState.ConstructionFinished;
         ApplyArea(1);
 
+        FactionData faction = GameManager.Instance.factions[(int)unitSide];
+        if(faction != null)
+        {
+            faction.TotalPeopleNum += data.peopleAddNum;
+        }
+
+
         for (int i = 0; i < spawnPositions.Length; i++) 
         {
             SpawnBuildingUnit(spawnPositions[i],i);
@@ -143,7 +155,7 @@ public class BuildingUnit : Unit
         GameObject go = Instantiate(UnitPrefab,this.transform);
 
         go.transform.localPosition = position;
-        go.transform.localScale = new Vector3(0.7903888f, 0.7903888f, 0.7903888f);
+        go.transform.localScale = new Vector3(0.68f, 0.68f, 0.68f);
 
         HumanUnit humanUnit = go.GetComponent<HumanUnit>();
         if (humanUnit != null)
@@ -178,6 +190,12 @@ public class BuildingUnit : Unit
             t.RemoveAllTrainingTask();
         }
 
+        FactionData faction = GameManager.Instance.factions[(int)unitSide];
+        if (faction != null)
+        {
+            faction.TotalPeopleNum -= data.peopleAddNum;
+        }
+
         GameManager.Instance.buildings.Remove(this);
 
         DeathParticalSystem.Play();
@@ -188,9 +206,9 @@ public class BuildingUnit : Unit
     {
         if(delta > 0)
         {
-            Vector3Int cellPos = TilemapManager.Instance.WalkableTilemap.WorldToCell(this.transform.position);
+            Vector3Int cellPos = TilemapManager.Instance.WalkableTilemap.WorldToCell(centerPos);
 
-            Vector2Int logicalBase = new Vector2Int(cellPos.x + data.buildingOffset.x, cellPos.y + data.buildingOffset.y);
+            Vector2Int logicalBase = new Vector2Int(cellPos.x + data.buildingOffset.x + 1, cellPos.y + data.buildingOffset.y + 1);
 
             cacheCenterPosition = logicalBase;
         }

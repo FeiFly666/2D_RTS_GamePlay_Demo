@@ -23,9 +23,32 @@ public class FactionData
     public bool CanAfford(int gold, int wood) => gold <= GoldNum && wood <= WoodNum;
     public bool HasPeopleSpace(int PopOc) => (currentPeopleNum +  PopOc) <= TotalPeopleNum;
 
+    public Dictionary<BuildingType, int> BuildingTypeCount = new Dictionary<BuildingType, int>();
+
     public FactionData (UnitSide side)
     {
         this.side = side;
+    }
+
+
+    public bool CanGenerate(BuildingType[] conditions)
+    {
+        foreach (BuildingType type in conditions)
+        {
+            if(BuildingTypeCount.TryGetValue(type, out int count))
+            {
+                if(count <= 0)
+                {
+                    count = 0;
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

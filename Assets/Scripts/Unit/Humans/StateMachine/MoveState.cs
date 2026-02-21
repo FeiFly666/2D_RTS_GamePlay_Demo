@@ -110,6 +110,10 @@ public class MoveState : IUnitState
                 }
 
                 Vector3 currentTargetPos = u.target.transform.position;
+                if(u.target is not HumanUnit)
+                {
+                    currentTargetPos = u.GetTargetAimPoint();
+                }
                 if (u.ai.IsPathVaild())
                 {
                     if ((currentTargetPos -u.lastEnemyPos).sqrMagnitude > 0.04f)

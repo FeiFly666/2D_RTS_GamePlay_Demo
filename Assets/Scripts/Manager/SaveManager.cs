@@ -92,6 +92,8 @@ public class SaveManager : MonoSingleton<SaveManager>
         }
         PoolManager.Instance.ReturnAllToPool<Arrow>("Arrow");
 
+        HPBarManager.Instance.ReturnAllBar();
+
         TilemapManager.Instance.isLoading = true;;
 
         TilemapManager.Instance.InitPathfing();
@@ -164,7 +166,11 @@ public class SaveManager : MonoSingleton<SaveManager>
 
         TilemapManager.Instance.isLoading = false;
         TilemapManager.Instance.LoadCheckStatus(root.fogData);
-        FogManager.Instance.InitFOW();
+
+        if(GameManager.Instance.isNeedFog)
+        {
+            FogManager.Instance.InitFOW();
+        }
 
         TilemapManager.Instance.UpdateAllNodes();
 

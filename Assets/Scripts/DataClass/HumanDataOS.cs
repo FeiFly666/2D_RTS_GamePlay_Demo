@@ -23,6 +23,7 @@ public class HumanDataOS : ScriptableObject
     [SerializeField] private bool IsAOE;
     [SerializeField] private int MaxHoldResourceNum;
     [SerializeField] private int ChopNum;
+    [SerializeField] public BuildingType[] conditions;
 
     public string humanName => HumanName;
     public string humanDescription => HumanDescription;

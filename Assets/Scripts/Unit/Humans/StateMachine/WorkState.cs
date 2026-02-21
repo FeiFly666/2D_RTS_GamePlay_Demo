@@ -53,7 +53,7 @@ public class WorkState :IUnitState
             if (building.buildingState == BuildingState.InConstruction)
             {
                 building.GetBuildingProcess().AddWorker(u);
-
+                //Debug.LogError("注册工人");
             }
         }
         if (u.currentWorkBuilidng != null && u.currentWorkBuilidng.buildingState == BuildingState.ConstructionFinished && !u.currentWorkBuilidng.stats.IsFullHP)
@@ -61,6 +61,7 @@ public class WorkState :IUnitState
             float repairAmount = 2f * u.checkFrequency;
             building.stats.IncreaseHP(repairAmount);
         }
+
         u.FlipController(building.transform.position);
         u.anim.SetBool("Build", true);
     }
@@ -102,6 +103,7 @@ public class WorkState :IUnitState
             u.anim.SetBool("Move", true);
             if (u.ai.GetPathFinalNode() == null || u.ai.GetPathFinalNode() != u.mySlot)
                 u.MoveToDestinationFrame(u.mySlot.GetNodePosition());
+            
         }
     }
     public void Exit()

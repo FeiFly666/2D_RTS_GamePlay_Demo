@@ -58,7 +58,7 @@ public class PlacementProcess
 
             if (TilemapManager.Instance.CanPlaceBuilding(position, buildingSide)) 
             {
-                TilemapManager.Instance.PlacementTilemap.SetColor(position, new Color(0, 1f, 0, 0.75f));
+                TilemapManager.Instance.PlacementTilemap.SetColor(position, new Color(1f, 1f, 1f, 0.75f));
             }
             else
             {

@@ -20,7 +20,7 @@ MonoBehaviour:
   WoodCost: 0
   FullHP: 1000
   Armor: 0
-  BuildingSize: {x: 6, y: 3, z: 0}
-  BuildingOffset: {x: -2, y: -1, z: 0}
+  BuildingSize: {x: 8, y: 5, z: 0}
+  BuildingOffset: {x: -4, y: -2, z: 0}
   FinishValue: 15
   IsStartGenerate: 0

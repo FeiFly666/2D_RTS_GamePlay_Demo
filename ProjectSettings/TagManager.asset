@@ -47,6 +47,9 @@ TagManager:
   - name: Unit
     uniqueID: 2566831203
     locked: 0
+  - name: HpBar
+    uniqueID: 1830279637
+    locked: 0
   - name: Fog
     uniqueID: 541587617
     locked: 0

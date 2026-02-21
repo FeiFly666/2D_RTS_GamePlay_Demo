@@ -21,6 +21,7 @@ public class BuildingAction : Action
     public GameObject structurePrefab => StructurePrefab;
     public string buildingName => buildingDataOS.buildingName;
     public string buildingDescription => buildingDataOS.buildingDescription;
+    public int peopleAddNum => buildingDataOS.peopleAddNum;
     public int goldCost => buildingDataOS.goldCost;
     public int woodCost => buildingDataOS.woodCost;
     public int fullHP => buildingDataOS.fullHP;

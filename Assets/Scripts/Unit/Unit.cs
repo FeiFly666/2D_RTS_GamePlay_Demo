@@ -24,6 +24,12 @@ public enum UnitSide
     A, B, C, D, E
 }
 
+public enum HpBarType
+{
+    Unit,
+    SmallBuilding,
+    LargeBuilding
+}
 
 public class Unit : MonoBehaviour
 {
@@ -38,8 +44,10 @@ public class Unit : MonoBehaviour
 
     public Vector3 detectPosition;
     [SerializeField] public float sortingYOffset = 0.2f;
+    [SerializeField] public float hpBarOffset;
 
     public GameObject HpBar;
+    public HpBarType hpbarType;
 
     public UnitStats stats => GetComponent<UnitStats>();
     [SerializeField]public UnityEngine.Rendering.SortingGroup sg;
@@ -71,6 +79,15 @@ public class Unit : MonoBehaviour
         }
 
         GameManager.Instance.RegisterSideUnit(this);
+
+        if(this is not ResourceUnit)
+        {
+           UIHealthBar hpBar = HPBarManager.Instance.GetAnHpBar(this);
+            if (hpBar != null)
+            {
+                this.HpBar = hpBar.gameObject;
+            }
+        }
     }
 
     // Update is called once per frame
@@ -103,14 +120,13 @@ public class Unit : MonoBehaviour
         int finalOrder = (yOrder * 10) + tieBreaker;
 
         sg.sortingOrder = Mathf.Clamp(finalOrder, -32768, 32767);
+        
     }
 
     public virtual void Death()
     {
         isDead = true;
         OnUnitDead?.Invoke();
-
-
 
         if(HpBar != null)
         {

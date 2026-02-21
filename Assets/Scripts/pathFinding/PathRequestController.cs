@@ -39,7 +39,7 @@ public class PathRequestController : MonoSingleton<PathRequestController>
     {
         int countThisFrame = 0;
 
-        if (Time.deltaTime > 0.018f)
+        if (Time.deltaTime > 0.02f)
             maxProcessedPerFrame = 4;
         else
             maxProcessedPerFrame = 8;
@@ -128,9 +128,18 @@ public class PathRequestController : MonoSingleton<PathRequestController>
 
     public void FinishedProcessing(List<Node> path, bool success)
     {
-        currentRequest?.callback?.Invoke(path, success);
+        try
+        {
+            currentRequest?.callback?.Invoke(path, success);
+        }
+        finally
+        {
+            isProcessing = false;
+            currentRequest = null;
+        }
+        /*currentRequest?.callback?.Invoke(path, success);
         isProcessing = false;
-        currentRequest = null;
+        currentRequest = null;*/
         //TryProcessNext();
     }
 }

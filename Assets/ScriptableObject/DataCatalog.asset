@@ -18,6 +18,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 731582d7decb582468725648782f61da, type: 2}
   - {fileID: 11400000, guid: 1f6664ed680373f4ebb91fe577b8ff9d, type: 2}
   - {fileID: 11400000, guid: 4d3586d1a71373347be26baad92c7828, type: 2}
+  - {fileID: 11400000, guid: 24b5972fe1e00fc4c9375eb4fcea6e60, type: 2}
   allHumans:
   - {fileID: 11400000, guid: 3f769e8f6f50a444685bc983a6c85921, type: 2}
   - {fileID: 11400000, guid: 6688a2344f868894f94b42a5a8f2743b, type: 2}
