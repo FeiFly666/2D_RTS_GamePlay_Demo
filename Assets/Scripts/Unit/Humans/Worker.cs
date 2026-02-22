@@ -49,7 +49,7 @@ public class Worker : HumanUnit
         }
         if(currentResource != null)
         {
-            currentResource.ReleaseSlot(this);
+            currentResource.WorkderReleaseSlot(this);
         }
         AnimationFinishTrigger3();
     }

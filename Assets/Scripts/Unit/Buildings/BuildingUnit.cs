@@ -9,7 +9,8 @@ public enum BuildingType
     Attack,
     Train,
     Ranged,
-    Goblin
+    Goblin,
+    Collect
 }
 public enum BuildingState
 {
@@ -218,6 +219,16 @@ public class BuildingUnit : Unit
 
         TilemapManager.Instance.AddBuildingArea(cacheCenterPosition, data.buildingSize, this.unitSide, delta, this);
     }
+    public void SetBuildingUnitTarget(Unit target)
+    {
+        foreach(var unit in spawnUnits)
+        {
+            if(unit.combatBehaviour.CanAttack(unit,target))
+            {
+                unit.SetClickTarget(target);
+            }
+        }
+    }
     private bool DeathParticalFinished()
     {
         return !DeathParticalSystem.isPlaying;
@@ -260,6 +271,10 @@ public class BuildingUnit : Unit
                 t.ResumeTrainingTask(data);
             }
 
+        }
+        if(this is GoldMine g)
+        {
+            g.ResumeInsideUnits(data.goldMinUnits);
         }
     }
 

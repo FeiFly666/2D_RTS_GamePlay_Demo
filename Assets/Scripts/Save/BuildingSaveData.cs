@@ -21,6 +21,8 @@ public class BuildingSaveData
     public List<TrainTaskSaveData> tasks = new List<TrainTaskSaveData>();
     public SerializableVector3 gatherPosition;
 
+    public List<InsideGoldMinUnit> goldMinUnits= new List<InsideGoldMinUnit>();
+
     public BuildingSaveData()
     {
 
@@ -51,6 +53,11 @@ public class BuildingSaveData
             }
 
             this.gatherPosition = new SerializableVector3(t.gatherPosition);
+        }
+
+        if(unit is GoldMine g)
+        {
+            this.goldMinUnits = g.humanInsideData.ToList();
         }
     }
 

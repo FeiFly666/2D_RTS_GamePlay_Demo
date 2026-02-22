@@ -11,7 +11,8 @@ public enum UnitStateType
     Move,
     Attack,
     Work,
-    Deliver
+    Deliver,
+    Enter
 }
 public class UnitStateMachine
 {
@@ -32,6 +33,7 @@ public class UnitStateMachine
         states[UnitStateType.Idle] = new IdleState(owner);
         states[UnitStateType.Move] = new MoveState(owner);
         states[UnitStateType.Attack] = new AttackState(owner);
+        states[UnitStateType.Enter] = new EnteringState(owner);
         if(owner is Worker worker)
         {
             states[UnitStateType.Work] = new WorkState(worker);

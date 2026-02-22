@@ -31,6 +31,7 @@ public class GameManager : MonoSingleton<GameManager>
         FilePath.Init();
 
         MyInputsystem.Instance.inputState = InputState.None;
+        MyInputsystem.Instance.isGameStart = true;
 
         InitEnemyLayers();
 
@@ -46,41 +47,7 @@ public class GameManager : MonoSingleton<GameManager>
     {
         MyInputsystem.Instance.UpdateMouseInput();
 
-        if(Input.GetKey(KeyCode.W))
-        {
-            Vector3 a = Camera.main.transform.position;
-
-            a.y += 10 * Time.deltaTime;
-
-            Camera.main.transform.position = a;
-        }
-
-        if (Input.GetKey(KeyCode.S))
-        {
-            Vector3 a = Camera.main.transform.position;
-
-            a.y -= 10 * Time.deltaTime;
-
-            Camera.main.transform.position = a;
-        }
-
-        if (Input.GetKey(KeyCode.D))
-        {
-            Vector3 a = Camera.main.transform.position;
-
-            a.x += 10 * Time.deltaTime;
-
-            Camera.main.transform.position = a;
-        }
-
-        if (Input.GetKey(KeyCode.A))
-        {
-            Vector3 a = Camera.main.transform.position;
-
-            a.x -= 10 * Time.deltaTime;
-
-            Camera.main.transform.position = a;
-        }
+        
     }
 
     private void InitFactions()

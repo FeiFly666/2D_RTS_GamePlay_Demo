@@ -23,9 +23,10 @@ public class AttackState :IUnitState
             if (!u.combatBehaviour.CanAttack(u, u.target))
             {
                 u.AnimationFinishTrigger2();
-                if(u.isBuildingUnit)
+                if (u.isBuildingUnit)
                 {
                     u.TransitionTo(UnitStateType.Idle);
+                    return;
                 }
                 else
                 {

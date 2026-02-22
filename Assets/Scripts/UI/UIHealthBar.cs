@@ -97,6 +97,7 @@ public class UIHealthBar : MonoBehaviour, Assets.Scripts.ObjectPool.IPoolable
         this.transform.position = owner.transform.position + this.offsetVector;
 
         ChangeUI();
+        this.gameObject.SetActive(false);
     }
 
     private void HandleSelect()

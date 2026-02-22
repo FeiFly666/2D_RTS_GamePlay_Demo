@@ -21,6 +21,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 30b43cf6e62c6f54b84899a0b0476105, type: 2}
   - {fileID: 11400000, guid: 24b5972fe1e00fc4c9375eb4fcea6e60, type: 2}
   - {fileID: 11400000, guid: c462107cc56b2c94c9cfb70e7d5d08ee, type: 2}
+  - {fileID: 11400000, guid: 8cff1df3142ae8142bdb10dcb73a9331, type: 2}
+  - {fileID: 11400000, guid: 98d368eadce569d439fe954421f7de61, type: 2}
+  - {fileID: 11400000, guid: 1f6664ed680373f4ebb91fe577b8ff9d, type: 2}
   allHumans:
   - {fileID: 11400000, guid: 3f769e8f6f50a444685bc983a6c85921, type: 2}
   - {fileID: 11400000, guid: 6688a2344f868894f94b42a5a8f2743b, type: 2}

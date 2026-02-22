@@ -9,7 +9,8 @@ public class BuildingManager : Singleton<BuildingManager>
     public void StartPlacement(BuildingAction action, UnitSide side)
     {
         placementProcess = new PlacementProcess(action, side);
-        MyInputsystem.Instance.ChangeInputState(InputState.Buliding);
+
+        MyInputsystem.Instance.ChangeInputState(InputState.Placing);
     }
         
     public void UpdatePlacement()
@@ -30,13 +31,13 @@ public class BuildingManager : Singleton<BuildingManager>
             building.InitConstruction();
             building.unitSide = placementProcess.buildingSide;
             ClearPlacementProcess();
-            MyInputsystem.Instance.ChangeInputState(InputState.None);
+            MyInputsystem.Instance.ChangeInputState(InputState.Building);
         }
     }
     public void CanclePlacement()
     {
         ClearPlacementProcess() ;
-        MyInputsystem.Instance.ChangeInputState(InputState.None );
+        MyInputsystem.Instance.ChangeInputState(InputState.Building);
     }
 
     private void ClearPlacementProcess()

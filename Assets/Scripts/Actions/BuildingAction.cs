@@ -39,6 +39,6 @@ public class BuildingAction : Action
 
     public UIDescriptionBaseData GetBuildingBaseData()
     {
-        return new UIDescriptionBaseData(this.buildingName, this.buildingDescription, this.goldCost, this.woodCost, this.finishValue);
+        return new UIDescriptionBaseData(this.buildingName, this.buildingDescription, this.goldCost, this.woodCost, this.finishValue, this.peopleAddNum);
     }
 }

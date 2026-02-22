@@ -16,7 +16,8 @@ MonoBehaviour:
   HumanDescription: "\u91C7\u96C6\u8D44\u6E90\u3001\u5EFA\u9020\u6216\u4FEE\u8865\u5EFA\u7B51"
   GoldCost: 10
   WoodCost: 10
-  DetectRadius: 18
+  PopWeight: 0
+  DetectRadius: 7
   AttackRadius: 1.8
   TrainingTime: 10
   FullHP: 120
@@ -28,3 +29,4 @@ MonoBehaviour:
   IsAOE: 0
   MaxHoldResourceNum: 10
   ChopNum: 3
+  conditions: 

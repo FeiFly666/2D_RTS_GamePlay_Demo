@@ -48,7 +48,7 @@ public class HumanAction : Action
     }
     public UIDescriptionBaseData GetHumanBaseData()
     {
-        return new UIDescriptionBaseData(this.humanName, this.humanDescription, this.goldCost, this.woodCost, this.trainingTime);
+        return new UIDescriptionBaseData(this.humanName, this.humanDescription, this.goldCost, this.woodCost, this.trainingTime, this.popWeight);
     }
 }
 

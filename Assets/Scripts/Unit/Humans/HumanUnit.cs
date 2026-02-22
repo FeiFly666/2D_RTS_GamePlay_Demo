@@ -30,7 +30,7 @@ public abstract class HumanUnit : Unit
 
     [Header("检测间隔")]
     [SerializeField] public float checkFrequency = 0.2f;
-    protected float checkTimer = 0f;
+    public float checkTimer = 0f;
     [SerializeField] protected float pathFoundFrequency = 0.2f;
     public float pathFoundTimer = 0f;
 
@@ -59,8 +59,6 @@ public abstract class HumanUnit : Unit
     public ICombatBehaviour combatBehaviour;
 
     public UnitStateMachine stateMachine;
-
-    [SerializeField] private GameObject visionIndicator;
     protected override void Awake()
     {
         base.Awake();
@@ -73,12 +71,6 @@ public abstract class HumanUnit : Unit
     protected override void Start()
     {
         base.Start();
-        if (visionIndicator != null)
-            visionIndicator.SetActive(this.unitSide == GameManager.Instance.playerSide);
-
-        // 根据 dectectRadius 设置圆圈大小
-        if (visionIndicator != null)
-            visionIndicator.transform.localScale = Vector3.one * (dectectRadius * 2.2f);
         //stateMachine.Change(new IdleState(this));
 
         HomePosition = this.transform.position;
@@ -99,9 +91,12 @@ public abstract class HumanUnit : Unit
             TransitionTo(UnitStateType.Idle);
             ai.ClearPath();
         }
+        if(checkTimer > 0)
+        {
+            float randomCheckTime = Random.Range(0, 0.99999999f);
+            checkTimer = Time.time + randomCheckTime;
+        }
 
-        float randomCheckTime = Random.Range(0, 0.99999999f);
-        checkTimer = Time.time + randomCheckTime;
     }
     private void UnitArriveHome()
     {
@@ -212,9 +207,16 @@ public abstract class HumanUnit : Unit
         if (!isForcingTarget)
         {
             isReturningHome = true;
-            MoveToDestinationFrame(HomePosition);
-            TransitionTo(UnitStateType.Move);
-            //ai.ClearPath();
+            if((HomePosition - this.transform.position).sqrMagnitude >0.25f)
+            {
+                MoveToDestinationFrame(HomePosition);
+                TransitionTo(UnitStateType.Move);
+            }
+            else
+            {
+                ai.ClearPath();
+                TransitionTo(UnitStateType.Idle);
+            }
         }
         else
         {
@@ -280,7 +282,7 @@ public abstract class HumanUnit : Unit
             worker.ResourceAreaID = -1;
             if(worker.currentResource != null)
             {
-                worker.currentResource.ReleaseSlot(this);
+                worker.currentResource.WorkderReleaseSlot(this);
                 worker.currentResource = null;
             }
         }
@@ -364,25 +366,25 @@ public abstract class HumanUnit : Unit
         this.isForcingTarget = true;
         this.isReturningHome = false;
 
-       /* if (combatBehaviour.CanAttack(this, target))
-        {
-            if (target is BuildingUnit building)
-            {
-                if (building.unitSide == this.unitSide)
-                {
-                    TransitionTo(UnitStateType.Work);
-                }
-                else
-                {
-                    TransitionTo(UnitStateType.Attack);
-                }
-            }
-            else if (target is ResourceUnit)
-            {
-                TransitionTo(UnitStateType.Work);
-            }
-        }
-        else*/
+        /* if (combatBehaviour.CanAttack(this, target))
+         {
+             if (target is BuildingUnit building)
+             {
+                 if (building.unitSide == this.unitSide)
+                 {
+                     TransitionTo(UnitStateType.Work);
+                 }
+                 else
+                 {
+                     TransitionTo(UnitStateType.Attack);
+                 }
+             }
+             else if (target is ResourceUnit)
+             {
+                 TransitionTo(UnitStateType.Work);
+             }
+         }
+         else*/
         TransitionTo(UnitStateType.Move);
     }
     public Vector3 GetDestination()
@@ -483,7 +485,14 @@ public abstract class HumanUnit : Unit
         base.Death();
         ai.arriveTarget -= UnitArriveHome;
         GameManager.Instance.liveHumanUnits.Remove(this);
-        anim.SetTrigger("Death");
+        if(stateMachine.CurrentState is not EnteringState)
+        {
+            anim.SetTrigger("Death");
+        }
+        else
+        {
+            DestroyUnit();
+        }
 
     }
     public abstract void PreformAttackAnimation();

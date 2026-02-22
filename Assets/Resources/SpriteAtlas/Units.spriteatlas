@@ -39,7 +39,7 @@ SpriteAtlas:
       padding: 4
       blockOffset: 1
       allowAlphaSplitting: 0
-      enableRotation: 1
+      enableRotation: 0
       enableTightPacking: 1
       enableAlphaDilation: 0
     secondaryTextureSettings: {}
@@ -1851,6 +1851,7 @@ SpriteAtlas:
     - 9460011b72fdf44c3b4aa686f5993a13: -3989553901234958139
     - 9460011b72fdf44c3b4aa686f5993a13: -3511625066769837986
     - 9460011b72fdf44c3b4aa686f5993a13: 1615815758522029734
+    - 9483951be6fb8453f9d2f75614e33c86: 21300000
     - b67ea81b372ff482480f6b94db552857: -5672506429785410100
     - b67ea81b372ff482480f6b94db552857: 2401901321164802203
     - b67ea81b372ff482480f6b94db552857: -3014082438352978858
@@ -2081,6 +2082,7 @@ SpriteAtlas:
     - c75865cc2ce084b93809e07045e5fc53: -5698094106703109678
     - 03b438cc1edb849a7978ee3571c43887: 21300000
     - a891aecccf2c0ca4ab7dff38110feb2d: 21300000
+    - 5e92e0fc16b8948c6bb70041214a2060: 21300000
     - 1e23a30d942f54eadaf04278c89d33e5: 3804270661726973974
     - 1e23a30d942f54eadaf04278c89d33e5: 704632438053712794
     - 1e23a30d942f54eadaf04278c89d33e5: -8774836977957818446
@@ -4354,6 +4356,7 @@ SpriteAtlas:
   - {fileID: -3989553901234958139, guid: 9460011b72fdf44c3b4aa686f5993a13, type: 3}
   - {fileID: -3511625066769837986, guid: 9460011b72fdf44c3b4aa686f5993a13, type: 3}
   - {fileID: 1615815758522029734, guid: 9460011b72fdf44c3b4aa686f5993a13, type: 3}
+  - {fileID: 21300000, guid: 9483951be6fb8453f9d2f75614e33c86, type: 3}
   - {fileID: -5672506429785410100, guid: b67ea81b372ff482480f6b94db552857, type: 3}
   - {fileID: 2401901321164802203, guid: b67ea81b372ff482480f6b94db552857, type: 3}
   - {fileID: -3014082438352978858, guid: b67ea81b372ff482480f6b94db552857, type: 3}
@@ -4584,6 +4587,7 @@ SpriteAtlas:
   - {fileID: -5698094106703109678, guid: c75865cc2ce084b93809e07045e5fc53, type: 3}
   - {fileID: 21300000, guid: 03b438cc1edb849a7978ee3571c43887, type: 3}
   - {fileID: 21300000, guid: a891aecccf2c0ca4ab7dff38110feb2d, type: 3}
+  - {fileID: 21300000, guid: 5e92e0fc16b8948c6bb70041214a2060, type: 3}
   - {fileID: 3804270661726973974, guid: 1e23a30d942f54eadaf04278c89d33e5, type: 3}
   - {fileID: 704632438053712794, guid: 1e23a30d942f54eadaf04278c89d33e5, type: 3}
   - {fileID: -8774836977957818446, guid: 1e23a30d942f54eadaf04278c89d33e5, type: 3}
@@ -6856,6 +6860,7 @@ SpriteAtlas:
   - Lancer_UpRight_Defence_1
   - Lancer_UpRight_Defence_2
   - Lancer_UpRight_Defence_3
+  - WoodTable_Slots
   - Warrior_Guard_4
   - Warrior_Guard_5
   - Warrior_Guard_0
@@ -7086,6 +7091,7 @@ SpriteAtlas:
   - Lancer_DownRight_Attack_2
   - Castle
   - TNT_Red
+  - WoodTable
   - Lancer_Down_Attack_1
   - Lancer_Down_Attack_0
   - Lancer_Down_Attack_2

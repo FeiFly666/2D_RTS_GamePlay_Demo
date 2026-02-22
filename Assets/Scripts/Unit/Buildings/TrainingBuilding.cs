@@ -10,6 +10,8 @@ using UnityEngine.UIElements;
 public class TrainingBuilding : BuildingUnit
 {
     FactionData faction ;
+    private LineRenderer line => GetComponent<LineRenderer>();
+
     [Header("生产配置")]
     public int maxTrainingNum = 9;
 
@@ -17,7 +19,7 @@ public class TrainingBuilding : BuildingUnit
 
     public Vector2 spawnPosition;
 
-    public Vector2 gatherPosition;
+    public Vector2 gatherPosition = new Vector2(-1500,-1500);
 
     public int queuePopWeight;//给AI用防止AI一直训练兵种
 
@@ -27,6 +29,15 @@ public class TrainingBuilding : BuildingUnit
     {
         base.Start();
         faction = GameManager.Instance.factions[(int)unitSide];
+
+        line.positionCount = 2;
+        line.startColor = line.endColor = Color.black;
+        line.startWidth = line.endWidth = 0.1f;
+        line.enabled = false;
+
+        OnSelected += ShowGatherPosition;
+
+        OnDeselected += StopShowGatherPosition;
     }
 
     protected override void Update()
@@ -62,7 +73,12 @@ public class TrainingBuilding : BuildingUnit
 
         human.unitSide = unitSide;
 
-
+        if(gatherPosition.x != -1500 || gatherPosition.y != -1500)
+        {
+            human.checkTimer = -100f;
+            human.TransitionTo(UnitStateType.Move);
+            human.MoveToDestinationFrame(gatherPosition);
+        }
 
         queuePopWeight -= task.humanData.popWeight;
 
@@ -119,5 +135,37 @@ public class TrainingBuilding : BuildingUnit
             TrainTask resumeTask = new TrainTask(taskData);
             this.trainingQueue.Add(resumeTask);
         }
+    }
+
+    public void SetGatherPosition(Vector3 Position)
+    {
+        if(TilemapManager.Instance.FindNode(Position).AreaID == TilemapManager.Instance.FindNode(this.transform.position + (Vector3)spawnPosition).AreaID)
+        {
+            this.gatherPosition = Position;
+            ShowGatherPosition();
+        }
+    }
+
+    public void ShowGatherPosition()
+    {
+        if (gatherPosition.x == -1500 && gatherPosition.y == -1500)
+        {
+            return;
+        }
+        line.enabled = true;
+        line.SetPosition(0, transform.position + (Vector3)spawnPosition);
+        line.SetPosition(1, gatherPosition);
+    }
+    public void StopShowGatherPosition()
+    {
+        line.enabled = false;
+    }
+
+    public override void Death()
+    {
+        base.Death();
+
+        OnSelected -= ShowGatherPosition;
+        OnDeselected -= StopShowGatherPosition;
     }
 }

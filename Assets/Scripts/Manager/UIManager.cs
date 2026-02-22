@@ -11,7 +11,7 @@ public class UIManager : MonoSingleton<UIManager>
 
     public void SetCurrentBuildingInfo(UIDescriptionBaseData buildingData)
     {
-        if(buildingData == null)
+        if(buildingData.isNone)
         {
             buildingInfo.CloseBuildingInfo();
         }
@@ -29,8 +29,9 @@ public class UIManager : MonoSingleton<UIManager>
         switch (state)
         {
             case InputState.None: stateText = "默认"; break;
-            case InputState.Unit: stateText = "兵种"; break;
-            case InputState.Buliding: stateText = "建造"; break;
+            case InputState.Human: stateText = "兵种"; break;
+            case InputState.Building: stateText = "建筑"; break;
+            case InputState.Placing: stateText = "放置"; break;
 
         }
         inputState.text += stateText;

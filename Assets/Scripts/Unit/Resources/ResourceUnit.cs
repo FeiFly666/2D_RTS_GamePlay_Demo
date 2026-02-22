@@ -111,13 +111,20 @@ public class ResourceUnit : Unit
         }
         return null;
     }
-    public void ReleaseSlot(HumanUnit unit)
+    public void WorkderReleaseSlot(HumanUnit unit)
     {
         if (workerToSlot.ContainsKey(unit))
         {
             workerToSlot[unit].occupant = this.gameObject;
             (unit as Worker).mySlot = null;
             workerToSlot.Remove(unit);
+        }
+    }
+    private void ReleaseSlot()
+    {
+        foreach(var slot in availableSlots)
+        {
+            slot.occupant = null;
         }
     }
     private void OnResourcesNumChanged()
@@ -136,7 +143,7 @@ public class ResourceUnit : Unit
         }
         foreach(var unit in worker)
         {
-            ReleaseSlot(unit);
+            WorkderReleaseSlot(unit);
         }
 
         base.Death();
@@ -144,6 +151,7 @@ public class ResourceUnit : Unit
         {
             GameManager.Instance.resources.Remove(this);
         }
+        ReleaseSlot();
         anim.SetTrigger("Death");
     }
     

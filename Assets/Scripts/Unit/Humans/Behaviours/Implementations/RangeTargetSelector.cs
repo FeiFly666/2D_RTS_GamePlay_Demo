@@ -45,7 +45,7 @@ internal class RangeTargetSelector : ITargetSelector
 
             float distance = (unit.transform.position - self.transform.position).sqrMagnitude;
 
-            if (unit is BuildingUnit building && building.buildingType == BuildingType.Static)
+            if (unit is BuildingUnit building && building.buildingType != BuildingType.Attack)
             {
                 if (distance < closestStaticBuildingDistance)
                 {
@@ -72,7 +72,7 @@ internal class RangeTargetSelector : ITargetSelector
 
         //非玩家操控方可以自主锁定静态建筑
 
-        if (self.unitSide != GameManager.Instance.playerSide && closestStaticEnemyBuilding != null)
+        if (self.unitSide != GameManager.Instance.playerSide && closestStaticEnemyBuilding != null || self.isBuildingUnit)
         {
             return closestStaticEnemyBuilding;
         }

@@ -10,6 +10,7 @@ public class UIBuildingInfo : MonoBehaviour
     [SerializeField]public Text woodCost;
     [SerializeField]public Text finishValue;
     [SerializeField]public Text buildingDescription;
+    [SerializeField] public Text peopleNum;
 
     public void ShowBuildingInfo(UIDescriptionBaseData data)
     {
@@ -18,6 +19,11 @@ public class UIBuildingInfo : MonoBehaviour
         this.woodCost.text = data.woodCost.ToString();
         this.finishValue.text = data.finishValue.ToString();
         this.buildingDescription.text = data.Desciption;
+        if (data.peopleNum < 0)
+            this.peopleNum.text = data.peopleNum.ToString();
+        else
+            this.peopleNum.text = "+" + data.peopleNum.ToString();
+        
         ShowUI();
     }
     public void CloseBuildingInfo()

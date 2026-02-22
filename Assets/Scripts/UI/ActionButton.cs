@@ -37,7 +37,7 @@ public class ActionButton : MonoBehaviour,IPoolable
 
     public void ShowButtonInfo()
     {
-        if(this.unitData != null)
+        if(!this.unitData.isNone)
         {
             UIManager.Instance.SetCurrentBuildingInfo(this.unitData);
         }
@@ -48,9 +48,9 @@ public class ActionButton : MonoBehaviour,IPoolable
     }
     public void CloseButtonInfo()
     {
-        if (this.unitData != null)
+        if (!this.unitData.isNone)
         {
-            UIManager.Instance.SetCurrentBuildingInfo(null);
+            UIManager.Instance.SetCurrentBuildingInfo(UIDescriptionBaseData.Empty());
 
         }
         else

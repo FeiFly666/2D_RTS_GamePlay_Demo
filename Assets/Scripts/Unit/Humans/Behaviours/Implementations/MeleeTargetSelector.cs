@@ -46,7 +46,7 @@ public class MeleeTargetSelector : ITargetSelector
 
             float distance = (unit.transform.position - self.transform.position).sqrMagnitude;
 
-            if(unit is BuildingUnit building && building.buildingType == BuildingType.Static)
+            if(unit is BuildingUnit building && building.buildingType != BuildingType.Attack)
             {
                 if(distance < closestStaticBuildingDistance)
                 {

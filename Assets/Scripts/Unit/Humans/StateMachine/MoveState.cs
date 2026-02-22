@@ -42,7 +42,16 @@ public class MoveState : IUnitState
                 }
 
             }
-            if (u.target is BuildingUnit building && building.unitSide == u.unitSide)//工人可以建造/修理建筑
+            if (u.target is GoldMine mine && mine.buildingState == BuildingState.ConstructionFinished)
+            {
+                if(u.IsTargetDetected(u.target))
+                {
+                    u.TransitionTo(UnitStateType.Enter);
+                    return;
+                }
+            }
+
+            if (u.target is BuildingUnit building && building.unitSide == u.unitSide )//工人可以建造/修理建筑
             {
                 if (u.combatBehaviour.CanAttack(u, u.target))
                 {

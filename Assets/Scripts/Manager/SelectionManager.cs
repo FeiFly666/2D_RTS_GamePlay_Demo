@@ -28,7 +28,7 @@ public class SelectionManager : MonoSingleton<SelectionManager>
 
         if (unit != null && (unit.unitSide == GameManager.Instance.playerSide|| debugSelect) )
         {
-            if(MyInputsystem.Instance.inputState == InputState.Unit && unit is BuildingUnit)
+            if(MyInputsystem.Instance.inputState == InputState.Human && unit is BuildingUnit)
             {
                 return false;
             }
@@ -39,11 +39,22 @@ public class SelectionManager : MonoSingleton<SelectionManager>
 
             unit.OnSelected?.Invoke();
 
-            MyInputsystem.Instance.ChangeInputState(InputState.Unit);
+            if(unit is HumanUnit)
+            {
+                MyInputsystem.Instance.ChangeInputState(InputState.Human);
+            }
+            else
+            {
+                MyInputsystem.Instance.ChangeInputState(InputState.Building);
+            }
 
             UIManager.Instance.actionBar.CloseActionBar();
 
-            UIManager.Instance.actionBar.ShowActionBarForUnit(unit);
+
+            if(unit is BuildingUnit building && building.buildingState == BuildingState.ConstructionFinished)
+            {
+                UIManager.Instance.actionBar.ShowActionBarForUnit(unit);
+            }
 
             return true;
         }
@@ -68,7 +79,7 @@ public class SelectionManager : MonoSingleton<SelectionManager>
         }
         if(ActiveUnits.Count > 0)
         {
-            MyInputsystem.Instance.ChangeInputState(InputState.Unit);
+            MyInputsystem.Instance.ChangeInputState(InputState.Human);
             if(ActiveUnits.Count == 1)
             {
                 UIManager.Instance.actionBar.ShowActionBarForUnit(ActiveUnits[0]);
@@ -83,7 +94,135 @@ public class SelectionManager : MonoSingleton<SelectionManager>
     
     public void ExecuteCommand(Vector3 mousePos)
     {
-        if (ActiveUnits.Count == 0) return;
+        for (int i = ActiveUnits.Count - 1; i >= 0; i--)
+        {
+            if (ActiveUnits[i] == null)
+            {
+                ActiveUnits.RemoveAt(i);
+            }
+        }
+        if (ActiveUnits.Count == 0)
+        {
+            MyInputsystem.Instance.ChangeInputState(InputState.None);
+            return;
+        }
+
+        VisualManager.Instance.UpdatePointer(mousePos, null, PointerMode.click);
+
+        if (ActiveUnits[0] is BuildingUnit)
+        {
+            HandleBuildingCommand(ActiveUnits[0] as BuildingUnit, mousePos);
+        }
+        else
+        {
+            HandleHumanCommand(mousePos);
+        }
+
+
+
+        //以组为单位进行命令
+        //Node targetNode = TilemapManager.Instance.FindNode(mousePos);
+        //处理建造命令或治疗命令
+        /*        foreach (var group in Normalgroups)
+                {
+                    if(group.members.Count == 1)
+                    {
+                        HumanUnit human = group.members[0];
+                        group.leader.ai.LeaveGroup();
+                        GameManager.Instance.groups.Remove(group);
+                        if (isAttackCommand)
+                        {
+                            human.SetClickTarget(target);
+                        }
+                        else if(targetNode != null && targetNode.IsWalkable)
+                        {
+                            human.ForcingMoveToDestination(targetNode.GetNodePosition());
+                        }
+                        continue;
+                    }
+                    else
+                    {
+                        if(isAttackCommand)
+                        {
+                            group.FormGroupMoving(target.transform.position, target);
+                        }
+                        else if(isMovingCommand && targetNode != null && targetNode.IsWalkable)
+                        {
+                            group.FormGroupMoving(mousePos);
+                        }
+                        else
+                        {
+                            foreach(var member in  group.members.ToList())
+                            {
+                                member.ai.LeaveGroup();
+                                member.ai.ClearPath();
+                            }
+                        }
+                    }
+
+                }*/
+
+        ;
+    }
+    private void HandleBuildingCommand(BuildingUnit unit, Vector3 mousePos)
+    {
+        Unit target = GetUnitAtPos(mousePos);
+
+        bool isEnemy = target != null && target is not ResourceUnit && target.unitSide != GameManager.Instance.playerSide;
+        bool isAlly = target != null && target is not ResourceUnit && target.unitSide == GameManager.Instance.playerSide;
+        bool isGround = target == null;
+        bool commandAvailable = true;
+
+        if(unit.buildingState == BuildingState.ConstructionFinished)
+        {
+            switch (unit.buildingType)
+            {
+                case BuildingType.Attack:
+                    if (isEnemy)
+                    {
+                        unit.SetBuildingUnitTarget(target);
+                    }
+                    else
+                    {
+                        commandAvailable = false;
+                    }
+                    break;
+                case BuildingType.Train:
+                    if (isGround)
+                    {
+                        TrainingBuilding t = unit as TrainingBuilding;
+                        t.SetGatherPosition(mousePos);
+                    }
+                    else
+                    {
+                        commandAvailable = false;
+                    }
+                    break;
+                case BuildingType.Collect:
+                    if (target == unit)
+                    {
+                        GoldMine goldMine = unit as GoldMine;
+                        goldMine.ReleaseAllUnits();
+                    }
+                    else
+                    {
+                        commandAvailable = false;
+                    }
+                    break;
+                default:
+                    commandAvailable = false;
+                    break;
+            }
+        }
+        else
+            commandAvailable = false;
+        if(!commandAvailable)
+        {
+            ClearActiveUnit();
+        }
+    }
+    private void HandleHumanCommand(Vector3 mousePos)
+    {
         foreach (var unit in ActiveUnits)
         {
             if (unit is HumanUnit human && unit != null)
@@ -99,6 +238,7 @@ public class SelectionManager : MonoSingleton<SelectionManager>
         Unit target = GetUnitAtPos(mousePos);
         bool isEnemy = target != null && target is not ResourceUnit && target.unitSide != GameManager.Instance.playerSide;
         bool isAlly = target != null && target is not ResourceUnit && target.unitSide == GameManager.Instance.playerSide;
+        bool isInsideMine = isAlly && target is GoldMine mine && mine.buildingState == BuildingState.ConstructionFinished;
         bool isResource = target != null && target is ResourceUnit;
 
         Dictionary<UnitRole, List<HumanUnit>> roleUnits = new Dictionary<UnitRole, List<HumanUnit>>();
@@ -114,7 +254,7 @@ public class SelectionManager : MonoSingleton<SelectionManager>
             }
         }
 
-        foreach(var role in roleUnits)
+        foreach (var role in roleUnits)
         {
             UnitRole currentRole = role.Key;
             List<HumanUnit> currentUnits = role.Value;
@@ -123,12 +263,29 @@ public class SelectionManager : MonoSingleton<SelectionManager>
 
             foreach (var unitGroup in unitGroups)
             {
-                if(unitGroup.members.Count == 1)
+                //金矿所有单位都可下，所以无需判断role
+                if (isInsideMine)
+                {
+                    Vector3 entryPos = target.transform.position + (Vector3)(target as GoldMine).spawnPosition;
+                    if (unitGroup.members.Count == 1)
+                    {
+                        HumanUnit human = unitGroup.members[0];
+                        human.ai.LeaveGroup();
+                        human.SetClickTarget(target);
+                    }
+                    else
+                    {
+                        unitGroup.FormGroupMoving(entryPos, target);
+                    }
+                    continue;
+                }
+
+                if (unitGroup.members.Count == 1)
                 {
                     HumanUnit human = unitGroup.members[0];
                     unitGroup.members[0].ai.LeaveGroup();
 
-                    DispatchCommand(human, currentRole, target, mousePos ,isEnemy, isAlly, isResource);
+                    DispatchCommand(human, currentRole, target, mousePos, isEnemy, isAlly, isResource);
                 }
                 else
                 {
@@ -137,54 +294,8 @@ public class SelectionManager : MonoSingleton<SelectionManager>
             }
 
         }
-
-
-
-        //以组为单位进行命令
-        //Node targetNode = TilemapManager.Instance.FindNode(mousePos);
-        //处理建造命令或治疗命令
-/*        foreach (var group in Normalgroups)
-        {
-            if(group.members.Count == 1)
-            {
-                HumanUnit human = group.members[0];
-                group.leader.ai.LeaveGroup();
-                GameManager.Instance.groups.Remove(group);
-                if (isAttackCommand)
-                {
-                    human.SetClickTarget(target);
-                }
-                else if(targetNode != null && targetNode.IsWalkable)
-                {
-                    human.ForcingMoveToDestination(targetNode.GetNodePosition());
-                }
-                continue;
-            }
-            else
-            {
-                if(isAttackCommand)
-                {
-                    group.FormGroupMoving(target.transform.position, target);
-                }
-                else if(isMovingCommand && targetNode != null && targetNode.IsWalkable)
-                {
-                    group.FormGroupMoving(mousePos);
-                }
-                else
-                {
-                    foreach(var member in  group.members.ToList())
-                    {
-                        member.ai.LeaveGroup();
-                        member.ai.ClearPath();
-                    }
-                }
-            }
-           
-        }*/
-        
-        VisualManager.Instance.UpdatePointer(mousePos, null, PointerMode.click);
-;
     }
+
     private List<UnitGroup> SplitGroups(List<HumanUnit> humans )
     {
         List<UnitGroup> groups = new List<UnitGroup>();

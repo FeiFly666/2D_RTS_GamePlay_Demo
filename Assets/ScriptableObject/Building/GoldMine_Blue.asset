@@ -14,13 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Icon: {fileID: 21300000, guid: 86b80a67008e67f44b08c1c43cad6e93, type: 3}
   ID: 02fd9caa-c3ea-4531-adfe-bc05f00b0f73
-  FoundationSprite: {fileID: 0}
-  CompleteSprite: {fileID: 0}
-  StructurePrefab: {fileID: 0}
-  BuildingName: "\u77FF\u573A"
-  BuildingDescription: "\u6301\u7EED\u4E0D\u65AD\u91C7\u96C6\u91D1\u77FF\u8D44\u6E90"
-  GoldCost: 0
-  WoodCost: 0
-  BuildingSize: {x: 2, y: 2, z: 0}
-  BuildingOffset: {x: -1, y: -1, z: 0}
-  FinishValue: 3
+  FoundationSprite: {fileID: 21300000, guid: 280941e1e5f52574f812ae718f49766e, type: 3}
+  CompleteSprite: {fileID: 21300000, guid: ca0d4ff4046a81249b4b606c63f1363c, type: 3}
+  DestroyedSprite: {fileID: 21300000, guid: df2c85e8ad54514468401e10719655db, type: 3}
+  StructurePrefab: {fileID: 4351558748804524637, guid: 080daf8ecb26bb645993b6b501c173ab, type: 3}
+  buildingDataOS: {fileID: 11400000, guid: 7d3e1f919f358fd41be36ddaac379170, type: 2}
