@@ -9,15 +9,15 @@ public class FactionData
 
     [Header("阵营资源")]
 
-    public int GoldNum = 1000;
-    public int WoodNum = 1000;
+    public int GoldNum = 20;
+    public int WoodNum = 20;
 
     [Header("阵营单位")]
     public List<HumanUnit> humans = new List<HumanUnit>();
     public List<BuildingUnit> buildings = new List<BuildingUnit>();
 
     [Header("阵营人口信息")]
-    public int TotalPeopleNum = 10;
+    public int TotalPeopleNum = 0;
     public int currentPeopleNum = 0;
 
     public bool CanAfford(int gold, int wood) => gold <= GoldNum && wood <= WoodNum;
@@ -50,5 +50,16 @@ public class FactionData
         }
         return true;
     }
+    public void ResetFactionData(FactionSaveData data)
+    {
+        TotalPeopleNum = 0;
+        currentPeopleNum = 0;
 
+        WoodNum = data.WoodNum;
+        GoldNum = data.GoldNum;
+    }
+    public FactionSaveData ToSaveData()
+    {
+        return new FactionSaveData(this);
+    }
 }

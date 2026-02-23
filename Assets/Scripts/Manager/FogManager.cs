@@ -19,11 +19,15 @@ public class FogManager : MonoSingleton<FogManager>
 
     void Start()
     {
-        PathFinding = TilemapManager.Instance.GetPathFinding();
+        GetPathFinding();
         if(GameManager.Instance.isNeedFog)
         {
             InitFOW();
         }
+    }
+    public void GetPathFinding()
+    {
+        PathFinding = TilemapManager.Instance.GetPathFinding();
     }
     private Vector2Int[] GetCircularOffsets(int r)
     {
@@ -65,8 +69,8 @@ public class FogManager : MonoSingleton<FogManager>
                 toShow.Add(tilePos);
             }
         }
-        ExecuteUpdate(toShow);
         ExecuteUpdate(toHide, blackTile);
+        ExecuteUpdate(toShow);
     }
     private void Update()
     {

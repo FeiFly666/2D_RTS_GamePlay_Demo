@@ -30,6 +30,11 @@ public class SaveManager : MonoSingleton<SaveManager>
 
         root.nextAvailableID = GameManager.Instance.GetAnID();
 
+        foreach(var faction in GameManager.Instance.factions)
+        {
+            root.factions.Add(faction.ToSaveData());
+        }
+
         foreach(var human in GameManager.Instance.liveHumanUnits)
         {
             root.allHumans.Add(human.ToSaveData());
@@ -108,6 +113,13 @@ public class SaveManager : MonoSingleton<SaveManager>
         
         SaveGameRoot root = JsonConvert.DeserializeObject<SaveGameRoot>(json);
 
+        GameManager.Instance.InitFactions();
+
+        foreach (var factionData in root.factions)
+        {
+            GameManager.Instance.factions[factionData.side].ResetFactionData(factionData);
+        }
+
         foreach (var resourceData in root.allResources)
         {
             ResourceAction data = dataCatalog.GetResourceByID(resourceData.SOID);
@@ -169,6 +181,7 @@ public class SaveManager : MonoSingleton<SaveManager>
 
         if(GameManager.Instance.isNeedFog)
         {
+            FogManager.Instance.GetPathFinding();
             FogManager.Instance.InitFOW();
         }
 

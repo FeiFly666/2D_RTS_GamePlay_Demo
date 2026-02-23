@@ -50,8 +50,9 @@ public class GameManager : MonoSingleton<GameManager>
         
     }
 
-    private void InitFactions()
+    public void InitFactions()
     {
+        factions.Clear();
         for (int i = 0; i < sideNum; i++)
         {
             factions.Add(new FactionData((UnitSide)i));
