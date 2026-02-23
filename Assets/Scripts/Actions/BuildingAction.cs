@@ -30,6 +30,7 @@ public class BuildingAction : Action
     public Vector3Int buildingOffset => buildingDataOS.buildingOffset;
     public float finishValue => buildingDataOS.finishValue;
     public bool isStartGenerate => buildingDataOS.isStartGenerate;
+    public BuildingType[] conditions => buildingDataOS.conditions;
     public override void ExecuteAction(UnitSide unitSide)
     {
 

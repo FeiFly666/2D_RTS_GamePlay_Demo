@@ -37,6 +37,11 @@ public class Worker : HumanUnit
         this.stateMachine.Change(UnitStateType.Deliver);
 
     }
+    public void AddWoodToFaction()
+    {
+        faction.AddWood(this.holdResourceNum);
+        this.holdResourceNum = 0;
+    }
     public override void OnExitWorkState()
     {
         if(currentWorkBuilidng != null)

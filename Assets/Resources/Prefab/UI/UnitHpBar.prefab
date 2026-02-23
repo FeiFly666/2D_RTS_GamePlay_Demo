@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5683234972603135334}
   - component: {fileID: 3381309544981963161}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2079102458017910078}
   - component: {fileID: 775454985356887278}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: 4071520422278274178}
   - component: {fileID: 852695109443680106}
   - component: {fileID: 3063532577872252487}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: UnitHpBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}

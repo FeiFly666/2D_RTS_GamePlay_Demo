@@ -24,7 +24,7 @@ public class BuildingManager : Singleton<BuildingManager>
     {
         if(placementProcess != null && placementProcess.CanPlaceBuilding(out Vector3 placePostion))
         {
-            var building = BuildingFactory.CreateBuilding(
+            var building = UnitFactory.CreateBuilding(
                     placementProcess.buildingAction,
                     placePostion
             );

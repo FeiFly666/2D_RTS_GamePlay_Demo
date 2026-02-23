@@ -15,6 +15,10 @@ public class GameManager : MonoSingleton<GameManager>
 
     private int availableID = 0;
 
+    [SerializeField] public Transform HumanParent;
+    [SerializeField] public Transform BuildingParent;
+    [SerializeField] public Transform ResourceParent;
+
     [SerializeField] public List<HumanUnit> liveHumanUnits = new List<HumanUnit>(100);
     [SerializeField] public List<BuildingUnit> buildings = new List<BuildingUnit>(50);
     [SerializeField] public List<UnitGroup> groups = new List<UnitGroup>(10);
@@ -40,6 +44,7 @@ public class GameManager : MonoSingleton<GameManager>
     private void Start()
     {
         PoolManager.Instance.CreatePool("Arrow", arrowPrefab, 300,this.transform);
+        factions[(int)playerSide].AddGold(0);
         
     }
 
@@ -52,15 +57,24 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void InitFactions()
     {
+        if (factions.Count > 0)
+        {
+            UIManager.Instance.LogOutFactionDataDisplay();
+        }
         factions.Clear();
         for (int i = 0; i < sideNum; i++)
         {
             factions.Add(new FactionData((UnitSide)i));
         }
+        UIManager.Instance.RegisterFactionDataDisplay();
     }
     public void RegisterSideUnit(Unit unit)
     {
-        if(unit is HumanUnit human)
+        if (factions.Count < sideNum)
+        {
+            InitFactions();
+        }
+        if (unit is HumanUnit human)
         {
             /*if(!sideHuman.ContainsKey(human.unitSide))
             {

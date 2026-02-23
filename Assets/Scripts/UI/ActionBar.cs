@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using static UnityEngine.GraphicsBuffer;
 
 public class ActionBar : MonoBehaviour
 {
@@ -13,10 +12,11 @@ public class ActionBar : MonoBehaviour
     [SerializeField] private GameObject actionButtonPPrefab;
 
     [SerializeField]private List<ActionButton> actionButtons = new List<ActionButton>();
+    [SerializeField] private Transform buttonRoot;
     [Header("训练面板")]
     [SerializeField] private UITrainningProcess trainingProcess;
 
-    private Unit currentUnit;
+    public Unit currentUnit;
 
     private void Start()
     {
@@ -46,13 +46,16 @@ public class ActionBar : MonoBehaviour
         this.trainingProcess.UpdateUI();
     }
 
-    public void RegisterActionButton(UIDescriptionBaseData buildingData, Sprite icon, UnityAction action)
+    public void RegisterActionButton(UIDescriptionBaseData buildingData, Sprite icon, UnityAction action, bool interactable = false)
     {
         ActionButton button = PoolManager.Instance.Spawn<ActionButton>("ActionButton");
 
         actionButtons.Add(button);
 
-        button.InitButton(buildingData, icon, action);
+        button.InitButton(buildingData, icon, action, interactable);
+
+        button.transform.parent = buttonRoot;
+
     }
 
     private void ChangeCurrentUnit(Unit newUnit)
@@ -74,6 +77,8 @@ public class ActionBar : MonoBehaviour
 
         ChangeCurrentUnit(unit);
 
+        FactionData faction = GameManager.Instance.factions[(int)unit.unitSide];
+
         if(unit.Actions.Count > 0)
         {
             Unit invoker = unit;
@@ -89,12 +94,13 @@ public class ActionBar : MonoBehaviour
 
                 if(currentAction is BuildingAction buildingAction)
                 {
-                    RegisterActionButton(buildingAction.GetBuildingBaseData(), currentAction.Icon, ()=> currentAction.ExecuteAction(invoker.unitSide));
+                    if (faction.CanGenerate(buildingAction.conditions))
+                        RegisterActionButton(buildingAction.GetBuildingBaseData(), currentAction.Icon, ()=> currentAction.ExecuteAction(invoker.unitSide),faction.CanAfford(buildingAction.goldCost,buildingAction.woodCost));
                 }
                 else if (currentAction is HumanAction humanAction)
                 {
-                    //Debug.Log($"按钮点击：建筑是 {invoker.gameObject.name}, 执行动作是 {humanAction.name}");
-                    RegisterActionButton(humanAction.GetHumanBaseData(), currentAction.Icon, () => currentAction.ExecuteAction(invoker));
+                    if (faction.CanGenerate(humanAction.conditions))
+                        RegisterActionButton(humanAction.GetHumanBaseData(), currentAction.Icon, () => currentAction.ExecuteAction(invoker), faction.CanAfford(humanAction.goldCost, humanAction.woodCost));
                 }
             }
             ShowActionBar();

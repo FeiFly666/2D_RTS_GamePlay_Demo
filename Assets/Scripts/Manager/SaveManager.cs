@@ -126,15 +126,9 @@ public class SaveManager : MonoSingleton<SaveManager>
 
             Vector3 spawnPoint = new Vector3(resourceData.position.x, resourceData.position.y, resourceData.position.z);
 
-            GameObject resourceGO = Instantiate(data.resourcePrefab, spawnPoint, Quaternion.identity);
+            ResourceUnit resource = UnitFactory.CreatResource(data, spawnPoint);
 
-            ResourceUnit resource = resourceGO.GetComponent<ResourceUnit>();
             resource.LoadData(resourceData);
-
-            if (!GameManager.Instance.resources.Contains(resource))
-            {
-                GameManager.Instance.resources.Add(resource);
-            }
         }
 
         foreach (var buildingData in root.allBuildings)
@@ -143,11 +137,8 @@ public class SaveManager : MonoSingleton<SaveManager>
 
             Vector3 spawnPos = new Vector3(buildingData.position.x, buildingData.position.y, buildingData.position.z);
 
-            BuildingUnit building = BuildingFactory.CreateBuilding(data, spawnPos);
+            BuildingUnit building = UnitFactory.CreateBuilding(data, spawnPos);
             building.LoadData(buildingData);
-
-            if(!GameManager.Instance.buildings.Contains(building))
-                GameManager.Instance.buildings.Add(building);
             
         }
 
@@ -156,13 +147,10 @@ public class SaveManager : MonoSingleton<SaveManager>
             HumanAction data = dataCatalog.GetHumanByID(humanData.HumanSOID);
 
             Vector3 spawnPos = new Vector3(humanData.position.x, humanData.position.y, humanData.position.z);
-            GameObject humanGo = Instantiate(data.humanPrefab, spawnPos, Quaternion.identity);
 
-            HumanUnit human = humanGo.GetComponent<HumanUnit>();
+            HumanUnit human = UnitFactory.CreateHuman(data, spawnPos);
+
             human.isNeedInitPosition = false;
-
-            if (!GameManager.Instance.liveHumanUnits.Contains(human))
-                GameManager.Instance.liveHumanUnits.Add(human);
 
             human.LoadData(humanData);
 

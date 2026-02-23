@@ -43,7 +43,7 @@ public class DeliverState :IUnitState
         }
         else
         {
-            u.holdResourceNum = 0;
+            u.AddWoodToFaction();
 
             u.woodGO.SetActive(false);
             u.anim.SetBool("Deliver", false);

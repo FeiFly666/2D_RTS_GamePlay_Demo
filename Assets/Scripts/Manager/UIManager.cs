@@ -6,9 +6,22 @@ using UnityEngine.UI;
 public class UIManager : MonoSingleton<UIManager>
 {
     [SerializeField] public ActionBar actionBar;
-    [SerializeField] public Text inputState;
-    [SerializeField] public UIBuildingInfo buildingInfo;
+    [SerializeField] private Text inputState;
+    [SerializeField] private UIBuildingInfo buildingInfo;
+    [SerializeField] private UITopBar TopBar;
 
+    private void Start()
+    {
+
+    }
+    public void RegisterFactionDataDisplay()
+    {
+        GameManager.Instance.factions[(int)GameManager.Instance.playerSide].OnDataUpdate += UpdatePlayerFactionData;
+    }
+    public void LogOutFactionDataDisplay()
+    {
+        GameManager.Instance.factions[(int)GameManager.Instance.playerSide].OnDataUpdate -= UpdatePlayerFactionData;
+    }
     public void SetCurrentBuildingInfo(UIDescriptionBaseData buildingData)
     {
         if(buildingData.isNone)
@@ -35,6 +48,15 @@ public class UIManager : MonoSingleton<UIManager>
 
         }
         inputState.text += stateText;
+    }
+
+    private void UpdatePlayerFactionData()
+    {
+        TopBar.UpdatUI();
+        if(actionBar.gameObject.activeSelf)
+        {
+            actionBar.ShowActionBarForUnit(actionBar.currentUnit);
+        }
     }
 
 }

@@ -118,51 +118,6 @@ public class SelectionManager : MonoSingleton<SelectionManager>
             HandleHumanCommand(mousePos);
         }
 
-
-
-        //以组为单位进行命令
-        //Node targetNode = TilemapManager.Instance.FindNode(mousePos);
-        //处理建造命令或治疗命令
-        /*        foreach (var group in Normalgroups)
-                {
-                    if(group.members.Count == 1)
-                    {
-                        HumanUnit human = group.members[0];
-                        group.leader.ai.LeaveGroup();
-                        GameManager.Instance.groups.Remove(group);
-                        if (isAttackCommand)
-                        {
-                            human.SetClickTarget(target);
-                        }
-                        else if(targetNode != null && targetNode.IsWalkable)
-                        {
-                            human.ForcingMoveToDestination(targetNode.GetNodePosition());
-                        }
-                        continue;
-                    }
-                    else
-                    {
-                        if(isAttackCommand)
-                        {
-                            group.FormGroupMoving(target.transform.position, target);
-                        }
-                        else if(isMovingCommand && targetNode != null && targetNode.IsWalkable)
-                        {
-                            group.FormGroupMoving(mousePos);
-                        }
-                        else
-                        {
-                            foreach(var member in  group.members.ToList())
-                            {
-                                member.ai.LeaveGroup();
-                                member.ai.ClearPath();
-                            }
-                        }
-                    }
-
-                }*/
-
-        ;
     }
     private void HandleBuildingCommand(BuildingUnit unit, Vector3 mousePos)
     {

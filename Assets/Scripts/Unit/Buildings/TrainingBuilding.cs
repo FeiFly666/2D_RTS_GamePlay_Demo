@@ -9,7 +9,6 @@ using UnityEngine.UIElements;
 
 public class TrainingBuilding : BuildingUnit
 {
-    FactionData faction ;
     private LineRenderer line => GetComponent<LineRenderer>();
 
     [Header("生产配置")]
@@ -65,11 +64,12 @@ public class TrainingBuilding : BuildingUnit
     }
     private void CompleteTraining(TrainTask task)
     {
-        faction.currentPeopleNum += task.humanData.popWeight;
+        //faction.currentPeopleNum += task.humanData.popWeight;
+        faction.AddPopWeight(task.humanData.popWeight);
 
-        GameObject go = Instantiate(task.humanData.humanPrefab, this.transform.position + (Vector3)spawnPosition, Quaternion.identity);
+        // GameObject go = Instantiate(task.humanData.humanPrefab, this.transform.position + (Vector3)spawnPosition, Quaternion.identity);
 
-        HumanUnit human = go.GetComponent<HumanUnit>();
+        HumanUnit human = UnitFactory.CreateHuman(task.humanData, this.transform.position + (Vector3)spawnPosition);
 
         human.unitSide = unitSide;
 
@@ -98,9 +98,8 @@ public class TrainingBuilding : BuildingUnit
         if (!faction.CanAfford(humanData.goldCost, humanData.woodCost)) return;
         if (!faction.HasPeopleSpace(0)) return;
 
-        faction.WoodNum -= humanData.woodCost;
-        faction.GoldNum -= humanData.goldCost;
-
+        faction.TrySpendResource(humanData.goldCost, humanData.woodCost);
+        
         queuePopWeight += humanData.popWeight;
 
         trainingQueue.Add(new TrainTask(humanData));
@@ -118,8 +117,9 @@ public class TrainingBuilding : BuildingUnit
 
         HumanAction data = cancleTask.humanData;
 
-        faction.WoodNum += data.woodCost;
-        faction.GoldNum += data.goldCost;
+        faction.RefundResource(data.goldCost, data.woodCost);
+       /* faction.WoodNum += data.woodCost;
+        faction.GoldNum += data.goldCost;*/
 
         trainingQueue.Remove(cancleTask);
     }

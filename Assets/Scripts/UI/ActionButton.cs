@@ -20,19 +20,15 @@ public class ActionButton : MonoBehaviour,IPoolable
         button.onClick.RemoveAllListeners();
         gameObject.SetActive(false);
     }
-    public void InitButton(UIDescriptionBaseData unitData, Sprite icon, UnityAction action)
+    public void InitButton(UIDescriptionBaseData unitData, Sprite icon, UnityAction action, bool interactable = true)
     {
         this.unitData = unitData;
 
         button.onClick.AddListener(action);
 
         buttonIcon.overrideSprite = icon;
-    }
-    public void InitButton(Sprite icon, UnityAction action)
-    {
-        button.onClick.AddListener(action);
 
-        buttonIcon.overrideSprite = icon;
+        button.interactable = interactable;
     }
 
     public void ShowButtonInfo()

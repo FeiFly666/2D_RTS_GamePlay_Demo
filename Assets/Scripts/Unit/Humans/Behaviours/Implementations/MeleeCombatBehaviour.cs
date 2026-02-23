@@ -27,7 +27,7 @@ public class MeleeCombatBehaviour : ICombatBehaviour
             //float dist = Vector2.Distance(self.GetTargetAimPoint(), self.detectPosition);
             float enterRange = self.attackRadius - 0.2f;
             float exitRange = self.attackRadius;
-            return (currentState is AttackState) ? IsInRange(self.GetTargetAimPoint(), self.detectPosition, exitRange) : IsInRange(self.GetTargetAimPoint(), self.detectPosition, enterRange);
+            return (currentState is AttackState) ? IsInRange(self.GetTargetAimPoint(target), self.detectPosition, exitRange) : IsInRange(self.GetTargetAimPoint(target), self.detectPosition, enterRange);
         }
     }
     public void ExecuteAttack(HumanUnit self, Unit target)

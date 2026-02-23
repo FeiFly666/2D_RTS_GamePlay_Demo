@@ -34,6 +34,8 @@ public class HumanAction : Action
     public bool isAOE => HumanData.isAOE;
     public int maxHoldResourceNum => HumanData.maxHoldResourceNum;
     public int chopNum => HumanData.gatherNum;
+
+    public BuildingType[] conditions => HumanData.conditions;
     public override void ExecuteAction(UnitSide unitSide)
     {
 

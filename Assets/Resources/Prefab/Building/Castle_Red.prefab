@@ -18,11 +18,11 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 73a1ac3de59683e46950cea02967a8eb, type: 3}
     - target: {fileID: 4902785887264406247, guid: f81e26d60a2cdfa4b9a7ff9121010b4c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 25.204842
       objectReference: {fileID: 0}
     - target: {fileID: 4902785887264406247, guid: f81e26d60a2cdfa4b9a7ff9121010b4c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -7.6973095
       objectReference: {fileID: 0}
     - target: {fileID: 4902785887264406247, guid: f81e26d60a2cdfa4b9a7ff9121010b4c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -56,13 +56,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6172087172423503476, guid: f81e26d60a2cdfa4b9a7ff9121010b4c, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6172087172423503476, guid: f81e26d60a2cdfa4b9a7ff9121010b4c, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6172087172423503476, guid: f81e26d60a2cdfa4b9a7ff9121010b4c, type: 3}
+      propertyPath: m_Color.r
+      value: 0.7568628
+      objectReference: {fileID: 0}
     - target: {fileID: 8563413060394198183, guid: f81e26d60a2cdfa4b9a7ff9121010b4c, type: 3}
       propertyPath: data
       value: 
       objectReference: {fileID: 11400000, guid: 30b43cf6e62c6f54b84899a0b0476105, type: 2}
     - target: {fileID: 8563413060394198183, guid: f81e26d60a2cdfa4b9a7ff9121010b4c, type: 3}
+      propertyPath: unitSide
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8563413060394198183, guid: f81e26d60a2cdfa4b9a7ff9121010b4c, type: 3}
       propertyPath: Actions.Array.size
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8563413060394198183, guid: f81e26d60a2cdfa4b9a7ff9121010b4c, type: 3}
       propertyPath: Actions.Array.data[0]
@@ -80,6 +96,10 @@ PrefabInstance:
       propertyPath: Actions.Array.data[3]
       value: 
       objectReference: {fileID: 11400000, guid: 98d368eadce569d439fe954421f7de61, type: 2}
+    - target: {fileID: 8563413060394198183, guid: f81e26d60a2cdfa4b9a7ff9121010b4c, type: 3}
+      propertyPath: Actions.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: deda6ab6139b3974a94f8de83657bb72, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

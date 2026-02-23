@@ -14,11 +14,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2645871894716912778, guid: 29779cb3e18ef3c4fa5c0ec58c93f01a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 17.942022
       objectReference: {fileID: 0}
     - target: {fileID: 2645871894716912778, guid: 29779cb3e18ef3c4fa5c0ec58c93f01a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -12.566603
       objectReference: {fileID: 0}
     - target: {fileID: 2645871894716912778, guid: 29779cb3e18ef3c4fa5c0ec58c93f01a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -60,6 +60,18 @@ PrefabInstance:
       propertyPath: data
       value: 
       objectReference: {fileID: 11400000, guid: c462107cc56b2c94c9cfb70e7d5d08ee, type: 2}
+    - target: {fileID: 8999476206917190672, guid: 29779cb3e18ef3c4fa5c0ec58c93f01a, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8999476206917190672, guid: 29779cb3e18ef3c4fa5c0ec58c93f01a, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8999476206917190672, guid: 29779cb3e18ef3c4fa5c0ec58c93f01a, type: 3}
+      propertyPath: m_Color.r
+      value: 0.7568628
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

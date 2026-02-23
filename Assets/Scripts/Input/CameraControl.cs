@@ -119,6 +119,12 @@ public class CameraControl : MonoBehaviour
             ClampPosition();
         }
     }
+
+    public void FocusOn(Vector3 pos)
+    {
+        transform.position = pos;
+        ClampPosition();
+    }
     private void ClampPosition()//限制位置
     {
         float camHeight = cam.orthographicSize;

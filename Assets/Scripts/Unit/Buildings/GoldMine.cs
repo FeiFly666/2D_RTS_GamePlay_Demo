@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class GoldMine : BuildingUnit
 {
-    FactionData faction;
-
     public List<InsideGoldMinUnit> humanInsideData = new List<InsideGoldMinUnit>();
 
     [SerializeField] private Sprite hasHumanSprite;
@@ -55,7 +53,7 @@ public class GoldMine : BuildingUnit
         {
             collectTimer = Time.time;
 
-            faction.GoldNum += currentNum;
+            faction.AddGold(currentNum);
             
         }
     }
@@ -79,9 +77,9 @@ public class GoldMine : BuildingUnit
         {
             HumanAction humanData = SaveManager.Instance.dataCatalog.GetHumanByID(data.data);
 
-            GameObject go = Instantiate(humanData.humanPrefab, this.transform.position + (Vector3)spawnPosition, Quaternion.identity);
+            //GameObject go = Instantiate(humanData.humanPrefab, this.transform.position + (Vector3)spawnPosition, Quaternion.identity);
 
-            HumanUnit human = go.GetComponent<HumanUnit>();
+            HumanUnit human = UnitFactory.CreateHuman(humanData, this.transform.position + (Vector3)spawnPosition);
 
             human.uniqueID = data.UnitID;
 

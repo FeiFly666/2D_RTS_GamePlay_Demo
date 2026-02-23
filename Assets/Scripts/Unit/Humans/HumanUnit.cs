@@ -8,6 +8,7 @@ using UnityEngine.UIElements;
 public abstract class HumanUnit : Unit
 {
     [SerializeField] public HumanAction data;
+    protected FactionData faction;
 
     public UnitRole role;
 
@@ -72,6 +73,8 @@ public abstract class HumanUnit : Unit
     {
         base.Start();
         //stateMachine.Change(new IdleState(this));
+
+        faction = GameManager.Instance.factions[(int)unitSide];
 
         HomePosition = this.transform.position;
 
@@ -434,9 +437,11 @@ public abstract class HumanUnit : Unit
         }
         return TilemapManager.Instance.CheckBlockBetween2Nodes(currentNode.GetNodePosition(), targetNode.GetNodePosition());
     }
-    public Vector3 GetTargetAimPoint()
+    public Vector3 GetTargetAimPoint(Unit target = null)
     {
-        if (!HasRegisterTarget) return Vector3.zero;
+        Unit currentUnit = target == null? this.target : target;
+        if (target == null) target = this.target;
+        if (currentUnit == null) return Vector3.zero;
         if (target is not HumanUnit)
         {
             Collider2D col = target.GetComponent<BoxCollider2D>();

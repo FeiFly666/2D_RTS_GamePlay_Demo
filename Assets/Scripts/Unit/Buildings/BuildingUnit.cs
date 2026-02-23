@@ -47,6 +47,8 @@ public class BuildingUnit : Unit
     public bool isStartGenerate = false;
 
     protected SpriteRenderer sr =>GetComponentInChildren<SpriteRenderer>();
+
+    protected FactionData faction;
     protected override void Awake()
     {
         base.Awake();
@@ -57,6 +59,7 @@ public class BuildingUnit : Unit
     protected override void Start()
     {
         base.Start();
+        faction = GameManager.Instance.factions[(int)unitSide];
         StartCoroutine(NotifyingBuildingChanged());
         if(!GameManager.Instance.buildings.Contains(this))
         {
@@ -139,11 +142,21 @@ public class BuildingUnit : Unit
         this.buildingState = BuildingState.ConstructionFinished;
         ApplyArea(1);
 
-        FactionData faction = GameManager.Instance.factions[(int)unitSide];
-        if(faction != null)
+        if(faction == null)
         {
-            faction.TotalPeopleNum += data.peopleAddNum;
+            faction = GameManager.Instance.factions[(int)unitSide];
         }
+
+        if (data.peopleAddNum > 0)//扩张
+        {
+            faction.AddTotalPeople(data.peopleAddNum);
+        }
+        else if (data.peopleAddNum < 0)//占用
+        {
+            faction.AddPopWeight(data.peopleAddNum);
+        }
+
+        faction.AddTypeBuildingNum(this.buildingType);
 
 
         for (int i = 0; i < spawnPositions.Length; i++) 
@@ -191,10 +204,18 @@ public class BuildingUnit : Unit
 
         if(this.buildingState == BuildingState.ConstructionFinished)
         {
-            FactionData faction = GameManager.Instance.factions[(int)unitSide];
             if (faction != null)
             {
-                faction.TotalPeopleNum -= data.peopleAddNum;
+                if(data.peopleAddNum > 0)//扩张
+                {
+                    faction.DecreaseTotalPeople(data.peopleAddNum);
+                }
+                else if(data.peopleAddNum < 0)//占用
+                {
+                    faction.ReleasePopWeight(data.peopleAddNum);
+                }
+
+                faction.DecreaseTypeBuildingNum(this.buildingType);
             }
 
             ApplyArea(-1);
@@ -221,9 +242,9 @@ public class BuildingUnit : Unit
     }
     public void SetBuildingUnitTarget(Unit target)
     {
-        foreach(var unit in spawnUnits)
+        foreach (var unit in spawnUnits)
         {
-            if(unit.combatBehaviour.CanAttack(unit,target))
+            if (unit.combatBehaviour.CanAttack(unit,target))
             {
                 unit.SetClickTarget(target);
             }

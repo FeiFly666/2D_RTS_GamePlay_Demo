@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4462094918053842037}
   - component: {fileID: 1712804710018959624}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 6373731850023281566}
   - component: {fileID: 1498172984948948814}
   - component: {fileID: 9000629386088136327}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LittleBuildingHpBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -196,7 +196,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2807645376041830305}
   - component: {fileID: 2078760963297293868}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}

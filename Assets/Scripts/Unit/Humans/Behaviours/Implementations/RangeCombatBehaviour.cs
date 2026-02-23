@@ -27,7 +27,7 @@ public class RangeCombatBehaviour : ICombatBehaviour
             //float dist = Vector2.Distance(self.GetTargetAimPoint(), self.detectPosition);
             float enterRange = self.attackRadius - 1.0f;
             float exitRange = self.attackRadius;
-            return (currentState is AttackState) ? IsInRange(self.GetTargetAimPoint(), self.detectPosition, exitRange) : IsInRange(self.GetTargetAimPoint(), self.detectPosition, enterRange);
+            return (currentState is AttackState) ? IsInRange(self.GetTargetAimPoint(target), self.detectPosition, exitRange) : IsInRange(self.GetTargetAimPoint(target), self.detectPosition, enterRange);
         }
 
     }

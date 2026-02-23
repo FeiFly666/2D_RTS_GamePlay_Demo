@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 using static CommonUtils;
+using UnityEditor.PackageManager.Requests;
 
 public class TilemapManager : MonoSingleton<TilemapManager>
 {
@@ -122,9 +123,9 @@ public class TilemapManager : MonoSingleton<TilemapManager>
 
         if(delta < 0)
         {
-            if (cachebuilidngArea[builiding] != null)
+            if (cachebuilidngArea.TryGetValue(builiding,out List<Vector2Int> Area ))
             {
-                foreach (var pos in cachebuilidngArea[builiding])
+                foreach (var pos in Area)
                 {
                     int ix = pos.x + buildingOffset.x;
                     int iy = pos.y + buildingOffset.y;
