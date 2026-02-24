@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -49,12 +49,13 @@ public class Unit : MonoBehaviour
     public GameObject HpBar;
     public HpBarType hpbarType;
 
-    public UnitStats stats => GetComponent<UnitStats>();
+    public UnitStats stats;
     [SerializeField]public UnityEngine.Rendering.SortingGroup sg;
+    private int lastFinalOrder;
+    [SerializeField ]public SpriteRenderer sr;
 
     public bool isDead = false;
 
-    public System.Action OnFlipped;
     public System.Action OnSelected;
     public System.Action OnDeselected;
     public System.Action OnUnitDead;
@@ -62,6 +63,8 @@ public class Unit : MonoBehaviour
     protected virtual void Awake()
     {
         sg = GetComponent<UnityEngine.Rendering.SortingGroup>();
+        sr = GetComponentInChildren<SpriteRenderer>();
+        stats = GetComponent<UnitStats>();
 
         uniqueID = GameManager.Instance.GetAnID();
 
@@ -104,7 +107,9 @@ public class Unit : MonoBehaviour
     private void LateUpdate()
     {
         if (sg == null || this is HumanUnit human && human.isBuildingUnit) return;
+        if (this is BuildingUnit) return;
         UpdateSortingGroup();
+        //UpdateZAxisSort();
     }
 
     private void UpdateSortingGroup()
@@ -119,8 +124,26 @@ public class Unit : MonoBehaviour
 
         int finalOrder = (yOrder * 10) + tieBreaker;
 
-        sg.sortingOrder = Mathf.Clamp(finalOrder, -32768, 32767);
-        
+        //sg.sortingOrder = Mathf.Clamp(finalOrder, -32768, 32767);
+/*        sg.sortingOrder = Mathf.Clamp(finalOrder, -32768, 32767);
+        lastFinalOrder = finalOrder;*/
+        if (finalOrder != lastFinalOrder)
+        {
+            sg.sortingOrder = Mathf.Clamp(finalOrder, -32768, 32767);
+            lastFinalOrder = finalOrder;
+        }
+
+    }
+    private void UpdateZAxisSort()
+    {
+        float logicalY = transform.position.y + sortingYOffset;
+
+        float sortZ = logicalY * 0.01f;
+
+        float tieBreaker = (Mathf.Abs(gameObject.GetInstanceID() % 100)) * 0.0001f;
+
+        Vector3 currentPos = transform.position;
+        transform.position = new Vector3(currentPos.x, currentPos.y, sortZ + tieBreaker);
     }
 
     public virtual void Death()

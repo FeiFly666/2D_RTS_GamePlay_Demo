@@ -49,15 +49,18 @@ public class UIHealthBar : MonoBehaviour, Assets.Scripts.ObjectPool.IPoolable
     }
     private void LateUpdate()
     {
-        if (owner == null || owner is not HumanUnit) return;
-
+        if (owner == null || owner is not HumanUnit)
+        {
+            if(this.gameObject.activeSelf) OnDespawn();
+            return;
+        }
         Vector3 barPos = owner.transform.position + offsetVector;
 
         barPos.z = barPos.y * 0.1f;
 
         this.transform.position = barPos;
 
-        Vector3 bgPos = bg.transform.position;
+/*        Vector3 bgPos = bg.transform.position;
 
         bgPos.z = this.transform.position.z - 0.001f;
         bg.transform.position = bgPos;
@@ -65,7 +68,7 @@ public class UIHealthBar : MonoBehaviour, Assets.Scripts.ObjectPool.IPoolable
         Vector3 fillPos = fill.transform.position;
 
         fillPos.z = this.transform.position.z - 0.002f;
-        fill.transform.position = fillPos;
+        fill.transform.position = fillPos;*/
 
     }
     public void OnSpawn()

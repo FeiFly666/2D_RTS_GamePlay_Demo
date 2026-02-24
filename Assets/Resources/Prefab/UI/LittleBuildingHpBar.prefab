@@ -96,6 +96,7 @@ GameObject:
   - component: {fileID: 6373731850023281566}
   - component: {fileID: 1498172984948948814}
   - component: {fileID: 9000629386088136327}
+  - component: {fileID: 8680922712457350654}
   m_Layer: 7
   m_Name: LittleBuildingHpBar
   m_TagString: Untagged
@@ -186,6 +187,18 @@ MonoBehaviour:
   fill: {fileID: 2926132820413944623}
   bg: {fileID: 1343861576720991740}
   barSr: {fileID: 0}
+--- !u!210 &8680922712457350654
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1828056024245514253}
+  m_Enabled: 1
+  m_SortingLayerID: 1830279637
+  m_SortingLayer: 2
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &2926132820413944623
 GameObject:
   m_ObjectHideFlags: 0

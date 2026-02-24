@@ -423,6 +423,16 @@ public class SelectionManager : MonoSingleton<SelectionManager>
         }
     }
 
+    public void HandleBuyBuildingCommand(Vector3 pos)
+    {
+        Unit unit = GetUnitAtPos(pos);
+
+        if(unit is BuildingUnit building)
+        {
+            building.BuyThisBuilding();
+        }
+    }
+
     public void ClearActiveUnit()
     {
         foreach(var unit in ActiveUnits)
@@ -436,14 +446,16 @@ public class SelectionManager : MonoSingleton<SelectionManager>
         VisualManager.Instance.ClearAll();
     }
 
+    private static Collider2D[] slot = new Collider2D[20];
     public Unit GetUnitAtPos(Vector3 pos)
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(pos,dectectRadius);
+        int num = Physics2D.OverlapCircleNonAlloc(pos, dectectRadius, slot);
 
         Unit bestTarget = null;
 
-        foreach (var col in colliders)
+        for (int i = 0; i < num; i++)
         {
+            Collider2D col = slot[i];
             Unit u = col.GetComponentInParent<Unit>();//人优先级最高
             if (u == null) continue;
 

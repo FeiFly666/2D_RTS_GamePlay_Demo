@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 7208658593013474174}
   - component: {fileID: 4733793915486183217}
   - component: {fileID: 8438594971900945330}
+  - component: {fileID: 2401220247468779}
   m_Layer: 7
   m_Name: LargeBuildingHpBar
   m_TagString: Untagged
@@ -185,6 +186,18 @@ MonoBehaviour:
   fill: {fileID: 1406711346526654642}
   bg: {fileID: 3546638464044485465}
   barSr: {fileID: 0}
+--- !u!210 &2401220247468779
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2486433603558558039}
+  m_Enabled: 1
+  m_SortingLayerID: 1830279637
+  m_SortingLayer: 2
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &3546638464044485465
 GameObject:
   m_ObjectHideFlags: 0

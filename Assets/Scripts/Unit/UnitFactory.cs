@@ -13,7 +13,7 @@ public static class UnitFactory
 
         var building = buildingGo.GetComponent<BuildingUnit>();
 
-        building.transform.parent = GameManager.Instance.BuildingParent;
+        //building.transform.parent = GameManager.Instance.BuildingParent;
 
         if (!GameManager.Instance.buildings.Contains(building))
             GameManager.Instance.buildings.Add(building);
@@ -29,7 +29,7 @@ public static class UnitFactory
 
         var human = humanGo.GetComponent<HumanUnit>();
 
-        human.transform.parent = GameManager.Instance.HumanParent;
+        //human.transform.parent = GameManager.Instance.HumanParent;
 
         if (!GameManager.Instance.liveHumanUnits.Contains(human))
             GameManager.Instance.liveHumanUnits.Add(human);
@@ -42,7 +42,7 @@ public static class UnitFactory
 
         var resource = resourceGo.GetComponent<ResourceUnit>();
 
-        resource.transform.parent = GameManager.Instance.ResourceParent;
+        //resource.transform.parent = GameManager.Instance.ResourceParent;
 
         if (!GameManager.Instance.resources.Contains(resource))
         {

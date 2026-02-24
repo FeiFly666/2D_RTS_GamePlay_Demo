@@ -11,7 +11,8 @@ public enum InputState
     None, //未选中任何单位
     Human, //选中兵种单位
     Building, //选中建筑单位
-    Placing // 放置建筑单位
+    Placing, // 放置建筑单位
+    BuyBuilding //售出建筑单位
 }
 
 public class MyInputsystem : Common.Singleton<MyInputsystem>
@@ -24,8 +25,6 @@ public class MyInputsystem : Common.Singleton<MyInputsystem>
     private Vector2 LeftDragStartPos;
     private bool isLeftDragging = false;
 
-    private Vector2 MiddleDragStartPos;
-    private bool isMiddleDragging = false;
     private float minDragDistance = 0.5f;
 
     public bool isGameStart = false;
@@ -35,7 +34,8 @@ public class MyInputsystem : Common.Singleton<MyInputsystem>
         set {
             _LastState = _InputState;
             _InputState = value;
-            UIManager.Instance.ShowInputSystemState(this.inputState);
+            //UIManager.Instance.ShowInputSystemState(this.inputState);
+            UIManager.Instance.ChangeBuyNotifyActive(value);
         }
     }
     public void UpdateMouseInput()
@@ -88,7 +88,12 @@ public class MyInputsystem : Common.Singleton<MyInputsystem>
     }
     private void HandleLeftClick(Vector3 mousePos)
     {
-        if (inputState == InputState.Placing)
+        if(inputState == InputState.BuyBuilding)
+        {
+            SelectionManager.Instance.HandleBuyBuildingCommand(mousePos);
+            return;
+        }
+        else if (inputState == InputState.Placing)
         {
             BuildingManager.Instance.ConfirmPlacement();
             return;
@@ -114,6 +119,11 @@ public class MyInputsystem : Common.Singleton<MyInputsystem>
     }
     private void HandleRightClick(Vector3 mousePos)
     {
+        if(inputState == InputState.BuyBuilding)
+        {
+            this.ChangeInputState(InputState.None);
+            return;
+        }
         if(inputState == InputState.Placing)
         {
             BuildingManager.Instance.CanclePlacement();

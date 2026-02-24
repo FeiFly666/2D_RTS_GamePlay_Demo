@@ -27,6 +27,9 @@ public class TilemapManager : MonoSingleton<TilemapManager>
     public int maxSearch = 1000;
 
     public bool isLoading = false;
+
+    private bool isNeedRefresh = false;
+    private float nextRefreshTime;
     private PathFinding PathFinding;
     public PathShare pathShare;
     private Dictionary<BuildingUnit, List<Vector2Int>> cachebuilidngArea = new Dictionary<BuildingUnit, List<Vector2Int>>();
@@ -87,7 +90,9 @@ public class TilemapManager : MonoSingleton<TilemapManager>
 
         PathFinding.UpdateNodesInArea(bounds);
 
-        PathFinding.RefreshAreaIDs();
+        //PathFinding.RefreshAreaIDs();
+        PathFinding.FastRepairAreaAfterBuildingDeath(bounds);
+        //isNeedRefresh = true;
     }
 
     public void RefreshAreaIDS() => PathFinding.RefreshAreaIDs();
@@ -520,6 +525,10 @@ public class TilemapManager : MonoSingleton<TilemapManager>
             }
             foreach (Node node in PathFinding.grid)
             {
+               /* float hue = (node.AreaID * 0.618033988749895f) % 1.0f;
+                Gizmos.color = Color.HSVToRGB(hue, 0.8f, 0.9f);
+                Gizmos.DrawCube(new Vector3(node.CenterX, node.CenterY), nodeDrawSize * 0.9f);
+                continue;*/
                 if (node.IsWalkable == false)
                 {
                     Gizmos.color = Color.red;

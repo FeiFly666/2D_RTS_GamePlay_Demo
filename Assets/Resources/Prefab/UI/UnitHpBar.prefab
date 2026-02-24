@@ -180,6 +180,7 @@ GameObject:
   - component: {fileID: 4071520422278274178}
   - component: {fileID: 852695109443680106}
   - component: {fileID: 3063532577872252487}
+  - component: {fileID: 8087491136222572214}
   m_Layer: 7
   m_Name: UnitHpBar
   m_TagString: Untagged
@@ -270,3 +271,15 @@ MonoBehaviour:
   fill: {fileID: 473221726967244745}
   bg: {fileID: 6330246603732513537}
   barSr: {fileID: 0}
+--- !u!210 &8087491136222572214
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7691176690686086380}
+  m_Enabled: 1
+  m_SortingLayerID: 1830279637
+  m_SortingLayer: 2
+  m_SortingOrder: 0
+  m_SortAtRoot: 0

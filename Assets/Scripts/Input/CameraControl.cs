@@ -10,7 +10,7 @@ public class CameraControl : MonoBehaviour
     private Vector3 lastMousePos;
     [Header("通用设置")]
     [SerializeField] private float cameraMoveSpeed = 15f;
-    [SerializeField] private float dragSpeed = 1.5f;
+    //[SerializeField] private float dragSpeed = 1.5f;
 
     [Header("边缘滚动设置")]
     [SerializeField] private bool useEdgeScrolling = true;
@@ -103,7 +103,7 @@ public class CameraControl : MonoBehaviour
 
                 cam.transform.position += finalMove;
                 ClampPosition();
-                lastMousePos = cam.ScreenToWorldPoint(Input.mousePosition);
+                //lastMousePos = cam.ScreenToWorldPoint(Input.mousePosition);
             }
         }
 

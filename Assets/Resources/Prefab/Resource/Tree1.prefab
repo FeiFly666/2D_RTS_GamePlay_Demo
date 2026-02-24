@@ -15,7 +15,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1606771996914643141
 Transform:
@@ -70,8 +70,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1728136093
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.09137459, g: 0.61635214, b: 0.0058145467, a: 1}
@@ -101,7 +101,7 @@ GameObject:
   m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &126876508830963645
 Transform:
@@ -116,8 +116,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1606771996914643141}
   - {fileID: 5090522651797288693}
+  - {fileID: 1606771996914643141}
   - {fileID: 1787230371601032308}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -142,12 +142,25 @@ MonoBehaviour:
   hpBarOffset: 0
   HpBar: {fileID: 0}
   hpbarType: 0
+  stats: {fileID: 0}
   sg: {fileID: 0}
+  sr: {fileID: 0}
   isDead: 0
   anim: {fileID: 0}
   resourceAreaID: 0
   fullResourceNum: 100
   maxWorkerNum: 2
+  idleSprites:
+  - {fileID: 6215267202064938543, guid: c5a6a054a96fc4546851fdd38f73c8bb, type: 3}
+  - {fileID: -5597570988121575489, guid: c5a6a054a96fc4546851fdd38f73c8bb, type: 3}
+  - {fileID: 542723386359573843, guid: c5a6a054a96fc4546851fdd38f73c8bb, type: 3}
+  - {fileID: 3940409226945107963, guid: c5a6a054a96fc4546851fdd38f73c8bb, type: 3}
+  - {fileID: -9130447484784962851, guid: c5a6a054a96fc4546851fdd38f73c8bb, type: 3}
+  - {fileID: 9050774589780060452, guid: c5a6a054a96fc4546851fdd38f73c8bb, type: 3}
+  - {fileID: -4024382073413787549, guid: c5a6a054a96fc4546851fdd38f73c8bb, type: 3}
+  - {fileID: 8143098205146776124, guid: c5a6a054a96fc4546851fdd38f73c8bb, type: 3}
+  frameRate: 10
+  emptySprite: {fileID: 21300000, guid: 7951e8106b28e48e0b11aed17a9978d1, type: 3}
   data: {fileID: 11400000, guid: ca7ed9461783dc74689679ca0451e16a, type: 2}
 --- !u!210 &8947611698733266601
 SortingGroup:
@@ -223,7 +236,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &5090522651797288693
 Transform:
@@ -278,9 +291,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -1728136093
+  m_SortingLayer: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 6215267202064938543, guid: c5a6a054a96fc4546851fdd38f73c8bb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -300,7 +313,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4682572189035410768}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: a4df723909e00e346b23649913fccae0, type: 2}
   m_CullingMode: 0
@@ -340,7 +353,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1787230371601032308
 Transform:

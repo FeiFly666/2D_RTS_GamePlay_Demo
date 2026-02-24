@@ -1,3 +1,4 @@
+using Assets.Scripts.Input;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,8 @@ public class UIManager : MonoSingleton<UIManager>
     [SerializeField] private Text inputState;
     [SerializeField] private UIBuildingInfo buildingInfo;
     [SerializeField] private UITopBar TopBar;
+    [SerializeField] private GameObject UIMiniMap;
+    [SerializeField] private Text buyNotify;
 
     private void Start()
     {
@@ -53,10 +56,32 @@ public class UIManager : MonoSingleton<UIManager>
     private void UpdatePlayerFactionData()
     {
         TopBar.UpdatUI();
-        if(actionBar.gameObject.activeSelf)
+        if(actionBar.gameObject.activeSelf && actionBar.currentUnit != null)
         {
             actionBar.ShowActionBarForUnit(actionBar.currentUnit);
         }
     }
 
+    public void ChangeMiniMapActive()
+    {
+        UIMiniMap.gameObject.SetActive(!UIMiniMap.gameObject.activeSelf);
+    }
+
+    public void BuyBuildingButton()
+    {
+        SelectionManager.Instance.ClearActiveUnit();
+        MyInputsystem.Instance.ChangeInputState(InputState.BuyBuilding);
+    }
+
+    public void ChangeBuyNotifyActive(InputState state)
+    {
+        if(state == InputState.BuyBuilding)
+        {
+            buyNotify.gameObject.SetActive(true);
+        }
+        else
+        {
+            buyNotify.gameObject.SetActive(false);
+        }
+    }
 }

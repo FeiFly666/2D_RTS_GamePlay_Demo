@@ -7,7 +7,6 @@ public class UITopBar : MonoBehaviour
     [SerializeField] private Text WoodNum;
     [SerializeField] private Text GoldNum;
     [SerializeField] private Text CurrentPeople;
-    [SerializeField] private Text TotalPeople;
     
     public void UpdatUI()
     {
@@ -17,9 +16,7 @@ public class UITopBar : MonoBehaviour
 
         GoldNum.text = faction.GoldNum.ToString();
 
-        CurrentPeople.text = faction.currentPeopleNum.ToString();
-
-        TotalPeople.text = faction.TotalPeopleNum.ToString();
+        CurrentPeople.text = faction.currentPeopleNum.ToString() + "/" + faction.TotalPeopleNum.ToString();
     }
 
 }

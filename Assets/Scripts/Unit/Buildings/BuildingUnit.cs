@@ -46,8 +46,6 @@ public class BuildingUnit : Unit
 
     public bool isStartGenerate = false;
 
-    protected SpriteRenderer sr =>GetComponentInChildren<SpriteRenderer>();
-
     protected FactionData faction;
     protected override void Awake()
     {
@@ -193,6 +191,7 @@ public class BuildingUnit : Unit
         foreach(var unit in spawnUnits)
         {
             unit.stats.DecreaseHP(null, 1000000000);
+            unit.sr.enabled = false;
         }
 
         this.buildingType = BuildingType.Static;
@@ -240,6 +239,48 @@ public class BuildingUnit : Unit
 
         TilemapManager.Instance.AddBuildingArea(cacheCenterPosition, data.buildingSize, this.unitSide, delta, this);
     }
+    public void BuyThisBuilding()
+    {
+        buildingProcess?.RemoveAllWorkers();
+
+        foreach (var unit in spawnUnits)
+        {
+            unit.stats.DecreaseHP(null, 1000000000);
+            unit.sr.enabled = false;
+        }
+        if (this is TrainingBuilding t)
+        {
+            t.RemoveAllTrainingTask();
+        }
+
+        if (this.buildingState == BuildingState.ConstructionFinished)
+        {
+            if (faction != null)
+            {
+                if (data.peopleAddNum > 0)//¿©’≈
+                {
+                    faction.DecreaseTotalPeople(data.peopleAddNum);
+                }
+                else if (data.peopleAddNum < 0)//’º”√
+                {
+                    faction.ReleasePopWeight(data.peopleAddNum);
+                }
+
+                faction.DecreaseTypeBuildingNum(this.buildingType);
+
+                faction.RefundResource(data.goldCost / 2, data.woodCost / 2);
+            }
+
+            ApplyArea(-1);
+        }
+
+        GameManager.Instance.buildings.Remove(this);
+
+        TilemapManager.Instance.NotifyingBuildingChanged(this.GetComponent<BoxCollider2D>().bounds);
+
+        Destroy(this.gameObject);
+
+    }
     public void SetBuildingUnitTarget(Unit target)
     {
         foreach (var unit in spawnUnits)
@@ -256,7 +297,7 @@ public class BuildingUnit : Unit
     }
     IEnumerator AfterDeath()
     {
-        this.GetComponentInChildren<SpriteRenderer>().sprite = data.destroyedSprite;
+        sr.sprite = data.destroyedSprite;
 
         yield return new WaitForSeconds(0.02f);
 

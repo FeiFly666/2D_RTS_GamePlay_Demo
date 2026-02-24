@@ -14,10 +14,9 @@ public class GameManager : MonoSingleton<GameManager>
     public bool isNeedFog = false;
 
     private int availableID = 0;
-
-    [SerializeField] public Transform HumanParent;
-    [SerializeField] public Transform BuildingParent;
-    [SerializeField] public Transform ResourceParent;
+    [SerializeField] public Transform HumanRoot;
+    [SerializeField] public Transform BuildingRoot;
+    [SerializeField] public Transform ResourceRoot;
 
     [SerializeField] public List<HumanUnit> liveHumanUnits = new List<HumanUnit>(100);
     [SerializeField] public List<BuildingUnit> buildings = new List<BuildingUnit>(50);
@@ -82,6 +81,8 @@ public class GameManager : MonoSingleton<GameManager>
             }
             sideHuman[human.unitSide].Add(human);*/
             factions[(int)unit.unitSide].humans.Add(human);
+            if(!human.isBuildingUnit)
+                human.gameObject.transform.parent = HumanRoot;
         }
         else if(unit is BuildingUnit building)
         {
@@ -91,6 +92,7 @@ public class GameManager : MonoSingleton<GameManager>
             }
             sideBuilding[building.unitSide].Add(building);*/
             factions[(int)unit.unitSide].buildings.Add(building);
+            building.gameObject.transform.parent = BuildingRoot;
         }
         else if(unit is ResourceUnit resource)
         {
@@ -99,6 +101,7 @@ public class GameManager : MonoSingleton<GameManager>
                 areaResources[resource.resourceAreaID] = new List<ResourceUnit>();
             }
             areaResources[resource.resourceAreaID].Add(resource);
+            resource.gameObject.transform.parent = ResourceRoot;
         }
     }
     public void UnregisterSideUnit(Unit unit)

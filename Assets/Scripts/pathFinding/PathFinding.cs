@@ -442,6 +442,38 @@ public class PathFinding
             }
         }
     }
+    public void FastRepairAreaAfterBuildingDeath(Bounds bounds)
+    {
+        Node minNode = FindNode(bounds.min);
+        Node maxNode = FindNode(bounds.max);
+        if (minNode == null || maxNode == null) return;
+
+        int seedAreaID = -1;
+
+        for (int x = minNode.GridX - 1; x <= maxNode.GridX + 1; x++)
+        {
+            for (int y = minNode.GridY - 1; y <= maxNode.GridY + 1; y++)
+            {
+                Node neighbor = FindNode(x, y);
+                if (neighbor != null && neighbor.IsWalkable && neighbor.AreaID > 0)
+                {
+                    seedAreaID = neighbor.AreaID;
+                    break;
+                }
+            }
+            if (seedAreaID != -1) break;
+        }
+
+        if (seedAreaID != -1)
+        {
+            for (int i = minNode.GridX; i <= maxNode.GridX; i++)
+                for (int j = minNode.GridY; j <= maxNode.GridY; j++)
+                {
+                    Node node = Grid[i, j];
+                    if (node.IsWalkable) node.AreaID = seedAreaID;
+                }
+        }
+    }
 
     private void FillArea(Node startNode, int id)
     {

@@ -41,6 +41,12 @@ namespace Assets.Scripts.Input
             worldSize = new Vector2(bounds.size.x, bounds.size.y);
 
             SetMiniMapCam();
+            minimapCam.enabled = false;
+            InvokeRepeating(nameof(UpdateMinimap), 0, 0.08f); //每秒更新10~20次
+        }
+        void UpdateMinimap()
+        {
+            minimapCam.Render();
         }
         private void SetMiniMapCam()
         {

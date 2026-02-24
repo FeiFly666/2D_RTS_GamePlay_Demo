@@ -334,7 +334,6 @@ public abstract class HumanUnit : Unit
 
     protected void FlipSprite()
     {
-        OnFlipped?.Invoke();
         isFacingRight = !isFacingRight;
         transform.Rotate(0, 180, 0);
     }

@@ -60,31 +60,46 @@ public class WorkerTargetSelector : ITargetSelector
         {
             List<BuildingUnit> allyBuildings = GameManager.Instance.factions[(int)worker.unitSide].buildings;
 
-            BuildingUnit building = null;
+            BuildingUnit unfinishedBuilding = null;
+
             float closestDis = Mathf.Infinity;
 
-            //找未完成的建筑
+            BuildingUnit damagedBuilding = null;
+            float closestDis2 = Mathf.Infinity;
+
+            //找未完成的建筑 + 受伤建筑
             foreach (var currentBuilding in allyBuildings)
             {
                 if (currentBuilding == null) continue;
-                if (currentBuilding.buildingState == BuildingState.ConstructionFinished) continue;
 
                 if (!IsTargetReachable(self, currentBuilding)) continue;
 
                 float distance = (self.transform.position - currentBuilding.transform.position).sqrMagnitude;
-                if (distance < closestDis)
+
+                if (currentBuilding.buildingState == BuildingState.InConstruction)
                 {
-                    building = currentBuilding;
-                    closestDis = distance;
+                    if (distance < closestDis)
+                    {
+                        unfinishedBuilding = currentBuilding;
+                        closestDis = distance;
+                    }
+                }
+                else if(!currentBuilding.stats.IsFullHP)
+                {
+                    if (distance < closestDis2)
+                    {
+                        damagedBuilding = currentBuilding;
+                        closestDis2 = distance;
+                    }
                 }
             }
 
-            if(building != null)
+            if(unfinishedBuilding != null)
             {
-                return building;
+                return unfinishedBuilding;
             }
 
-            //找未满血的建筑
+/*            //找未满血的建筑
             foreach (var currentBuilding in allyBuildings)
             {
                 if (currentBuilding == null) continue;
@@ -96,15 +111,15 @@ public class WorkerTargetSelector : ITargetSelector
                 float distance = (self.transform.position - currentBuilding.transform.position).sqrMagnitude;
                 if (distance < closestDis)
                 {
-                    building = currentBuilding;
+                    unfinishedBuilding = currentBuilding;
                     closestDis = distance;
                 }
 
-            }
+            }*/
 
-            if (building != null)
+            if (damagedBuilding != null)
             {
-                return building;
+                return damagedBuilding;
             }
         }
         //资源区域无可用资源/无需要worker进行修理建造的建筑

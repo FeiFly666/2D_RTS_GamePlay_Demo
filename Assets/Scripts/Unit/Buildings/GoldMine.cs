@@ -66,7 +66,11 @@ public class GoldMine : BuildingUnit
         InsideGoldMinUnit data = new InsideGoldMinUnit(unit);
         humanInsideData.Add(data);
 
-        sr.sprite = hasHumanSprite;
+        if(humanInsideData.Count == 1)
+        {
+            collectTimer = Time.time;
+            sr.sprite = hasHumanSprite;
+        }
 
         return true;
     }

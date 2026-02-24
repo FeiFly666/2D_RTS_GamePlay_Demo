@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 
 public class ResourceUnit : Unit
@@ -29,11 +30,19 @@ public class ResourceUnit : Unit
         }
     }
 
-    private SpriteRenderer sr => GetComponent<SpriteRenderer>();
     [SerializeField] private int maxWorkerNum = 2;//暂时不可变
     private Node standNode;
     private List<Node> availableSlots;
     private Dictionary<HumanUnit, Node> workerToSlot = new Dictionary<HumanUnit, Node>();
+
+    public Sprite[] idleSprites;
+    public float frameRate = 12f;
+    int currentFrame = 0;
+    public Sprite emptySprite;
+
+    private float timer;
+
+    private bool isPlaying = true;
 
     public ResourceAction data;
 
@@ -52,7 +61,19 @@ public class ResourceUnit : Unit
         }
         StartCoroutine(NotifyingResourceChanged());
         InitSlot();
-        
+        currentFrame = uniqueID % idleSprites.Length;
+    }
+    protected override void Update()
+    {
+        base.Update();
+        if (!isPlaying) return;
+        timer += Time.deltaTime;
+        if (timer >= 1f / frameRate)
+        {
+            timer -= 1f / frameRate;
+            currentFrame = (currentFrame + 1) % idleSprites.Length;
+            sr.sprite = idleSprites[currentFrame];
+        }
     }
     private void InitData()
     {
@@ -152,7 +173,11 @@ public class ResourceUnit : Unit
             GameManager.Instance.resources.Remove(this);
         }
         ReleaseSlot();
-        anim.SetTrigger("Death");
+        isPlaying = false;
+        sr.sprite = emptySprite;
+        this.enabled = false;
+        PolygonCollider2D clickCollider = this.GetComponentInChildren<PolygonCollider2D>();
+        clickCollider.enabled = false;
     }
     
     public void ResourceChopper()

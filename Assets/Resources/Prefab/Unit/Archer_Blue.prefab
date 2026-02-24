@@ -59,7 +59,9 @@ MonoBehaviour:
   hpBarOffset: 1.2
   HpBar: {fileID: 0}
   hpbarType: 0
+  stats: {fileID: 0}
   sg: {fileID: 0}
+  sr: {fileID: 0}
   isDead: 0
   data: {fileID: 11400000, guid: 3f769e8f6f50a444685bc983a6c85921, type: 2}
   role: 0
@@ -242,8 +244,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1728136093
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.039215684, g: 0.11794504, b: 1, a: 1}
