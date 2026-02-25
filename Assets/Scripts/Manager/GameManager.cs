@@ -28,6 +28,7 @@ public class GameManager : MonoSingleton<GameManager>
     public Dictionary<int, List<ResourceUnit>> areaResources = new Dictionary<int, List<ResourceUnit>>();
 
     public List<FactionData> factions = new List<FactionData>();
+    public List<FactionAI> ais = new List<FactionAI>();
 
     protected override void OnStart()
     {
@@ -44,7 +45,10 @@ public class GameManager : MonoSingleton<GameManager>
     {
         PoolManager.Instance.CreatePool("Arrow", arrowPrefab, 300,this.transform);
         factions[(int)playerSide].AddGold(0);
-        
+
+
+        InitFactionAI();
+
     }
 
     private void Update()
@@ -60,12 +64,41 @@ public class GameManager : MonoSingleton<GameManager>
         {
             UIManager.Instance.LogOutFactionDataDisplay();
         }
+      
         factions.Clear();
         for (int i = 0; i < sideNum; i++)
         {
             factions.Add(new FactionData((UnitSide)i));
+
         }
         UIManager.Instance.RegisterFactionDataDisplay();
+    }
+    public void InitFactionAI()
+    {
+        if (ais.Count > 0)
+        {
+            for (int i = ais.Count - 1; i >= 0; i--)
+            {
+                Destroy(ais[i].gameObject);
+            }
+            ais.Clear();
+        }
+        for (int i = 0; i < sideNum; i++)
+        {
+            if (i != (int)playerSide)
+            {
+                GameObject ai = new GameObject("FacionAI");
+
+                FactionAI factionAI = ai.AddComponent<FactionAI>();
+
+                factionAI.unitSide = (UnitSide)i;
+
+                factionAI.InitAI();
+
+                ais.Add(factionAI);
+            }
+
+        }
     }
     public void RegisterSideUnit(Unit unit)
     {
@@ -80,9 +113,13 @@ public class GameManager : MonoSingleton<GameManager>
                 sideHuman[human.unitSide] = new List<HumanUnit>();
             }
             sideHuman[human.unitSide].Add(human);*/
-            factions[(int)unit.unitSide].humans.Add(human);
-            if(!human.isBuildingUnit)
+            if (!human.isBuildingUnit)
+            {
+                factions[(int)unit.unitSide].humans.Add(human);
+                if (human is Worker worker) factions[(int)unit.unitSide].workers.Add(worker);
                 human.gameObject.transform.parent = HumanRoot;
+            }
+            
         }
         else if(unit is BuildingUnit building)
         {
@@ -92,7 +129,14 @@ public class GameManager : MonoSingleton<GameManager>
             }
             sideBuilding[building.unitSide].Add(building);*/
             factions[(int)unit.unitSide].buildings.Add(building);
+
+            if(building is TrainingBuilding train)
+                factions[(int)unit.unitSide].trainings.Add(train);
+            if(building is GoldMine gold)
+                factions[(int)unit.unitSide].goldMines.Add(gold);
+
             building.gameObject.transform.parent = BuildingRoot;
+
         }
         else if(unit is ResourceUnit resource)
         {
@@ -109,12 +153,20 @@ public class GameManager : MonoSingleton<GameManager>
         if(unit is HumanUnit human)
         {
             /*sideHuman[human.unitSide].Remove(human);*/
-            factions[(int)unit.unitSide].humans.Remove(human);
+            if(!human.isBuildingUnit)
+            {
+                factions[(int)unit.unitSide].humans.Remove(human);
+                if (human is Worker worker) factions[(int)unit.unitSide].workers.Remove(worker);
+            }
         }
         else if (unit is BuildingUnit building)
         {
             /*sideBuilding[building.unitSide].Remove(building);*/
             factions[(int)unit.unitSide].buildings.Remove(building);
+            if (building is TrainingBuilding train)
+                factions[(int)unit.unitSide].trainings.Remove(train);
+            if (building is GoldMine gold)
+                factions[(int)unit.unitSide].goldMines.Remove(gold);
         }
         else if(unit is ResourceUnit resource)
         {

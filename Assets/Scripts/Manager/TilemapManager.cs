@@ -46,7 +46,7 @@ public class TilemapManager : MonoSingleton<TilemapManager>
         GameObject go = new GameObject("PathFindingController");
         go.transform.parent = transform;
         go.AddComponent<PathRequestController>();
-        
+
     }
     public PathFinding GetPathFinding()
     {
@@ -90,11 +90,12 @@ public class TilemapManager : MonoSingleton<TilemapManager>
 
         PathFinding.UpdateNodesInArea(bounds);
 
+        
+
         //PathFinding.RefreshAreaIDs();
         PathFinding.FastRepairAreaAfterBuildingDeath(bounds);
         //isNeedRefresh = true;
     }
-
     public void RefreshAreaIDS() => PathFinding.RefreshAreaIDs();
     public void UpdateAllNodes()
     {
@@ -104,17 +105,17 @@ public class TilemapManager : MonoSingleton<TilemapManager>
 
     public void FindPathFrameByFrame(Vector3 startPosition, Vector3 endPosition)
     {
-        StartCoroutine(PathFinding.FindPathCoroutine(startPosition, endPosition ,OnPathFindingFinished));
+        StartCoroutine(PathFinding.FindPathCoroutine(startPosition, endPosition, OnPathFindingFinished));
     }
     private void OnPathFindingFinished(List<Node> path, bool success)
     {
-        PathRequestController.Instance.FinishedProcessing(path,success);
+        PathRequestController.Instance.FinishedProcessing(path, success);
     }
     public Node FindNode(Vector3 position) => PathFinding.FindNode(position);
 
     public Node FindNode(int x, int y) => PathFinding.FindNode(x, y);
 
-    public void AddBuildingArea(Vector2Int buildingCenter,Vector3Int buildingSize,UnitSide side, int delta, BuildingUnit builiding)//未验证
+    public void AddBuildingArea(Vector2Int buildingCenter, Vector3Int buildingSize, UnitSide side, int delta, BuildingUnit builiding)//未验证
     {
         int extendX = (buildingSize.x - 1) * 3;
         int extendY = (buildingSize.y - 1) * 3;
@@ -126,9 +127,9 @@ public class TilemapManager : MonoSingleton<TilemapManager>
         queue.Enqueue(startPos);
         visited.Add(startPos);
 
-        if(delta < 0)
+        if (delta < 0)
         {
-            if (cachebuilidngArea.TryGetValue(builiding,out List<Vector2Int> Area ))
+            if (cachebuilidngArea.TryGetValue(builiding, out List<Vector2Int> Area))
             {
                 foreach (var pos in Area)
                 {
@@ -138,7 +139,7 @@ public class TilemapManager : MonoSingleton<TilemapManager>
                 }
                 return;
             }
-           
+
         }
         cachebuilidngArea[builiding] = new List<Vector2Int>();
         cachebuilidngArea[builiding].Add(startPos);
@@ -198,8 +199,8 @@ public class TilemapManager : MonoSingleton<TilemapManager>
         }
 
     }
-    
-    private void UpdateSideTilemap(UnitSide side,Vector3Int pos, int arryX, int arryY, int x)
+
+    private void UpdateSideTilemap(UnitSide side, Vector3Int pos, int arryX, int arryY, int x)
     {
         int[,] counter = buildingAreaCounter[side];
         Tilemap Tm = SideBuildingArea[(int)side];
@@ -208,7 +209,7 @@ public class TilemapManager : MonoSingleton<TilemapManager>
         counter[arryX, arryY] = Mathf.Max(oldCount + x, 0);
         int newCount = counter[arryX, arryY];
 
-        if(oldCount == 0 && newCount > 0)
+        if (oldCount == 0 && newCount > 0)
         {
             Tm.SetTile(pos, buildBaseTile);
         }
@@ -248,11 +249,11 @@ public class TilemapManager : MonoSingleton<TilemapManager>
             {
                 Node currentNode = queue.Dequeue();
 
-                if(checkNeighbors)
+                if (checkNeighbors)
                 {
                     if (!currentNode.IsWalkable) { continue; }
                 }
-                if (currentNode.IsWalkable && currentNode.AreaID == allowedAreaID &&IsNodeAndNeighborsFree(currentNode, requester, checkNeighbors))
+                if (currentNode.IsWalkable && currentNode.AreaID == allowedAreaID && IsNodeAndNeighborsFree(currentNode, requester, checkNeighbors))
                 {
                     if (!checkNeighbors)
                     {
@@ -303,7 +304,7 @@ public class TilemapManager : MonoSingleton<TilemapManager>
                     }
 
                 }
-                if(bestNode != null)
+                if (bestNode != null)
                     return bestNode; // 返回这一层里最适合单位的格子
             }
             queue = nextQueue;
@@ -314,14 +315,14 @@ public class TilemapManager : MonoSingleton<TilemapManager>
     private List<Node> GetAllNeighbors(Node node)
     {
         List<Node> neighbors = new List<Node>();
-        for(int x=-1;x<=1;x++)
+        for (int x = -1; x <= 1; x++)
         {
-            for(int y=-1;y<=1;y++)
+            for (int y = -1; y <= 1; y++)
             {
                 if (x == 0 && y == 0) continue;
                 int newX = node.GridX + x;
                 int newY = node.GridY + y;
-                if(newX >=0 && newX<PathFinding.grid.GetLength(0) && newY >=0 && newY < PathFinding.grid.GetLength(1))   
+                if (newX >= 0 && newX < PathFinding.grid.GetLength(0) && newY >= 0 && newY < PathFinding.grid.GetLength(1))
                 {
                     if (Mathf.Abs(x) == 1 && Mathf.Abs(y) == 1)
                     {
@@ -333,7 +334,7 @@ public class TilemapManager : MonoSingleton<TilemapManager>
                             continue;
                         }
                     }
-                    neighbors.Add(PathFinding.grid[newX,newY]);
+                    neighbors.Add(PathFinding.grid[newX, newY]);
                 }
             }
         }
@@ -346,9 +347,9 @@ public class TilemapManager : MonoSingleton<TilemapManager>
     {
         List<Node> list = GetAllNeighbors(node);
         List<Node> result = new List<Node>();
-        foreach(Node neighbor in list)
+        foreach (Node neighbor in list)
         {
-            if(neighbor.IsWalkable && !neighbor.IsQccupied)
+            if (neighbor.IsWalkable && !neighbor.IsQccupied)
             {
                 result.Add(neighbor);
             }
@@ -424,18 +425,18 @@ public class TilemapManager : MonoSingleton<TilemapManager>
         }
         return FindNearestAvailableNode(searchOrigin, requester, false);
     }
-    public bool CanPlaceBuilding(Vector3Int position,UnitSide side)
+    public bool CanPlaceBuilding(Vector3Int position, UnitSide side)
     {
         return SideBuildingArea[(int)side].HasTile(position) && !IsPlaceOverUnreachableArea(position) && !boundTilemap.HasTile(position);
     }
 
     public bool IsNodeAndNeighborsFree(Node targetNode, GameObject requester, bool checkNeighbors)
     {
-        if(!targetNode.IsWalkable) return false;
+        if (!targetNode.IsWalkable) return false;
 
-        if(targetNode.occupant != null && targetNode.occupant != requester) return false;
+        if (targetNode.occupant != null && targetNode.occupant != requester) return false;
 
-        if(checkNeighbors)
+        if (checkNeighbors)
         {
             for (int x = -1; x <= 1; x++)
             {
@@ -465,11 +466,13 @@ public class TilemapManager : MonoSingleton<TilemapManager>
     {
         Vector3 tileSize = WalkableTilemap.cellSize;
 
+        
+
         Collider2D[] colliders = Physics2D.OverlapBoxAll(position + tileSize * .5f, tileSize * .9f, 0);
 
-        foreach(var collider in colliders)
+        foreach (var collider in colliders)
         {
-            if(collider.gameObject.tag == "Unit" || collider.gameObject.tag == "Building")
+            if (collider.gameObject.tag == "Unit" || collider.gameObject.tag == "Building")
             {
                 return true;
             }
@@ -477,7 +480,7 @@ public class TilemapManager : MonoSingleton<TilemapManager>
         return false;
     }
 
-    
+
     public bool CanWalkAtTile(Vector3 worldPos, Vector3 nodeSize)
     {
         Vector3Int tilePos = WalkableTilemap.WorldToCell(worldPos);
@@ -489,9 +492,9 @@ public class TilemapManager : MonoSingleton<TilemapManager>
         //int buildingLayerMask = LayerMask.GetMask("Unit");
 
         Collider2D[] collider = Physics2D.OverlapBoxAll(worldPos, nodeSize * 0.9f, 0);
-        if(collider != null)
+        if (collider != null)
         {
-            foreach(var  col in collider)
+            foreach (var col in collider)
             {
                 if (col.CompareTag("Building"))
                 {
@@ -501,6 +504,12 @@ public class TilemapManager : MonoSingleton<TilemapManager>
         }
         return true;
     }
+
+    public BoundsInt GetBuildingAreaForAI(UnitSide side)
+    {
+        return SideBuildingArea[(int)side].cellBounds;
+    }
+
 
     public byte[] SaveCheckStatus() => PathFinding.GetNodeCheckStatus();
 

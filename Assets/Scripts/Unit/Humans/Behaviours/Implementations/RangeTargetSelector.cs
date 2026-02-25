@@ -82,6 +82,8 @@ internal class RangeTargetSelector : ITargetSelector
     }
     public bool IsTargetReachable(HumanUnit self, Unit targetUnit, bool isForced = false)
     {
+        if (self == null || self.isDead) return false;
+
         int id = targetUnit.gameObject.GetInstanceID();
 
         if (self.myUnreachableCache.ContainsKey(id))

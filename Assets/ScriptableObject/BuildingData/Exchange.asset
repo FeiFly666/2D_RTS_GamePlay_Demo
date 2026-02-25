@@ -16,12 +16,12 @@ MonoBehaviour:
   PeopleAddNum: 0
   BuildingName: "\u4EA4\u6613\u6240"
   BuildingDescription: "\u5C06\u77FF\u77F3\u4EA4\u6362\u6210\u6728\u6750\uFF085\uFF1A1\uFF09"
-  GoldCost: 0
-  WoodCost: 0
+  GoldCost: 800
+  WoodCost: 100
   FullHP: 1200
   Armor: 2
   BuildingSize: {x: 4, y: 4, z: 0}
   BuildingOffset: {x: -2, y: -2, z: 0}
   FinishValue: 15
   IsStartGenerate: 0
-  conditions: 
+  conditions: 0500000006000000

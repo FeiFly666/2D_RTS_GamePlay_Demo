@@ -60,6 +60,7 @@ public class BuildingUnit : Unit
     {
         base.Start();
         faction = GameManager.Instance.factions[(int)unitSide];
+
         StartCoroutine(NotifyingBuildingChanged());
         if(!GameManager.Instance.buildings.Contains(this))
         {
@@ -189,6 +190,7 @@ public class BuildingUnit : Unit
     {
         if(isDead) return;
         base.Death();
+
         buildingProcess?.RemoveAllWorkers();
 
         foreach(var unit in spawnUnits)

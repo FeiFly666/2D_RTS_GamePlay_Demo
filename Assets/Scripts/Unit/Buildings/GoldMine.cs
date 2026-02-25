@@ -14,7 +14,7 @@ public class GoldMine : BuildingUnit
 
     [SerializeField] private float CollectCD = 5;
 
-    [SerializeField] private int maxUnitNum = 3;
+    [SerializeField] public int maxUnitNum = 3;
 
     public Vector2 spawnPosition;
     private float collectTimer;

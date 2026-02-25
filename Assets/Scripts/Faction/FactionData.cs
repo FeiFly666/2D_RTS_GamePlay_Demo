@@ -31,7 +31,10 @@ public class FactionData
 
     [Header("阵营单位")]
     public List<HumanUnit> humans = new List<HumanUnit>();
+    public List<Worker> workers = new List<Worker>();
     public List<BuildingUnit> buildings = new List<BuildingUnit>();
+    public List<TrainingBuilding> trainings = new List<TrainingBuilding>();
+    public List<GoldMine> goldMines = new List<GoldMine>();
 
     [Header("阵营人口信息")]
     private int _totalPeopleNum = 0;
@@ -67,8 +70,21 @@ public class FactionData
     public FactionData (UnitSide side)
     {
         this.side = side;
+        InitBuildingTypeCountMap();
     }
 
+    private void InitBuildingTypeCountMap()
+    {
+        BuildingTypeCount[BuildingType.Train] = 0;
+        BuildingTypeCount[BuildingType.Ranged] = 0;
+        BuildingTypeCount[BuildingType.Static] = 0;
+        BuildingTypeCount[BuildingType.Attack] = 0;
+        BuildingTypeCount[BuildingType.Goblin] = 0;
+        BuildingTypeCount[BuildingType.Collect] = 0;
+        BuildingTypeCount[BuildingType.Exchange] = 0;
+        BuildingTypeCount[BuildingType.House] = 0;
+
+    }
     public void AddTypeBuildingNum(BuildingType type)
     {
         if(!BuildingTypeCount.ContainsKey(type))

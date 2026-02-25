@@ -143,9 +143,12 @@ public class ResourceUnit : Unit
     }
     private void ReleaseSlot()
     {
-        foreach(var slot in availableSlots)
+        if(availableSlots != null)
         {
-            slot.occupant = null;
+            foreach (var slot in availableSlots)
+            {
+                slot.occupant = null;
+            }
         }
     }
     private void OnResourcesNumChanged()
@@ -168,10 +171,10 @@ public class ResourceUnit : Unit
         }
 
         base.Death();
-        if(GameManager.Instance.resources.Contains(this))
+/*        if(GameManager.Instance.resources.Contains(this))
         {
             GameManager.Instance.resources.Remove(this);
-        }
+        }*/
         ReleaseSlot();
         isPlaying = false;
         sr.sprite = emptySprite;

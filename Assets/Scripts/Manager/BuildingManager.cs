@@ -27,17 +27,30 @@ public class BuildingManager : Singleton<BuildingManager>
     }
     public void ConfirmPlacement()
     {
-        if(placementProcess != null && placementProcess.CanPlaceBuilding(out Vector3 placePostion))
+        if(placementProcess != null && placementProcess.CanPlaceBuilding(out Vector3 placePosition))
         {
             var building = UnitFactory.CreateBuilding(
                     placementProcess.buildingAction,
-                    placePostion
+                    placePosition
             );
             building.InitConstruction();
             building.unitSide = placementProcess.buildingSide;
             ClearPlacementProcess();
             MyInputsystem.Instance.ChangeInputState(InputState.Building);
         }
+    }
+    public void ConfirmPlacementForAI(BuildingAction buildingAction, UnitSide buildingSide ,Vector3Int placePosition)
+    {
+        var building = UnitFactory.CreateBuilding(
+                    buildingAction,
+                     placePosition
+            );
+        building.InitConstruction();
+        building.unitSide = buildingSide;
+
+        FactionData faction = GameManager.Instance.factions[(int)buildingSide];
+
+        faction.TrySpendResource(buildingAction.goldCost, buildingAction.woodCost);
     }
     public void CanclePlacement()
     {

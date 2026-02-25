@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
@@ -89,6 +90,7 @@ public class PathFinding
         RefreshAreaIDs();
 
     }
+
     public void UpdateNodesInArea(Bounds bounds)
     {
         Node minNode = FindNode(bounds.min + new Vector3(0.01f, 0.01f, 0));

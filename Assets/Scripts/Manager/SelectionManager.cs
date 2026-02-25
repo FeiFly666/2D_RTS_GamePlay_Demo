@@ -438,7 +438,7 @@ public class SelectionManager : MonoSingleton<SelectionManager>
     {
         Unit unit = GetUnitAtPos(pos);
 
-        if(unit is BuildingUnit building)
+        if(unit is BuildingUnit building && unit.unitSide == GameManager.Instance.playerSide)
         {
             building.BuyThisBuilding();
         }

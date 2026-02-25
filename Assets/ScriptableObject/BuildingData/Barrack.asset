@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Barrack
   m_EditorClassIdentifier: 
   StructurePrefab: {fileID: 0}
-  PeopleAddNum: 4
+  PeopleAddNum: 2
   BuildingName: "\u5175\u8425"
   BuildingDescription: "\u8BAD\u7EC3\u58EB\u5175"
   GoldCost: 25

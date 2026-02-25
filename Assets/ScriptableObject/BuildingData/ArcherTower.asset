@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ArcherTower
   m_EditorClassIdentifier: 
   StructurePrefab: {fileID: 0}
-  PeopleAddNum: -6
+  PeopleAddNum: -3
   BuildingName: "\u7BAD\u5854"
   BuildingDescription: "\u4E09\u5F13\u7BAD\u624B\u9AD8\u7AD9\u5854\u9876"
   GoldCost: 40

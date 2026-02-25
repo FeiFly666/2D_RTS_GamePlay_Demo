@@ -129,7 +129,9 @@ public class WorkerTargetSelector : ITargetSelector
 
     public bool IsTargetReachable(HumanUnit self, Unit targetUnit, bool isForced = false)
     {
-        if(self is Worker w)
+        if (self == null || self.isDead) return false;
+
+        if (self is Worker w)
         {
             if (w.woodGO.activeSelf) return false;
         }

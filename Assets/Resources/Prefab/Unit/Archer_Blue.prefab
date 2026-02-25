@@ -64,7 +64,16 @@ MonoBehaviour:
   sr: {fileID: 0}
   isDead: 0
   data: {fileID: 11400000, guid: 3f769e8f6f50a444685bc983a6c85921, type: 2}
-  role: 0
+  faction:
+    side: 0
+    _goldNum: 0
+    _woodNum: 0
+    humans: []
+    workers: []
+    buildings: []
+    trainings: []
+    goldMines: []
+  role: 1
   CurrentVelocity: {x: 0, y: 0, z: 0}
   HomePosition: {x: 0, y: 0, z: 0}
   lastPathRequestTargetPos: {x: -1500, y: -1500, z: -1500}

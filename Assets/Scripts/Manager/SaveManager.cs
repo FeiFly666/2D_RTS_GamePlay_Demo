@@ -175,6 +175,8 @@ public class SaveManager : MonoSingleton<SaveManager>
 
         TilemapManager.Instance.UpdateAllNodes();
 
+        GameManager.Instance.InitFactionAI();
+
         //开始赋予灵魂
         //小队移动唤醒
         foreach (var group in GameManager.Instance.groups.ToList())
