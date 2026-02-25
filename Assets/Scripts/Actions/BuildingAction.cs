@@ -33,9 +33,14 @@ public class BuildingAction : Action
     public BuildingType[] conditions => buildingDataOS.conditions;
     public override void ExecuteAction(UnitSide unitSide)
     {
+        FactionData faction = GameManager.Instance.factions[(int)unitSide];
 
         BuildingManager.Instance.CanclePlacement();
-        BuildingManager.Instance.StartPlacement(this, unitSide);
+
+        if(faction.TrySpendResource(goldCost, woodCost))
+        {
+            BuildingManager.Instance.StartPlacement(this, unitSide);
+        }
     }
 
     public UIDescriptionBaseData GetBuildingBaseData()

@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 public abstract class HumanUnit : Unit
 {
     [SerializeField] public HumanAction data;
-    protected FactionData faction;
+    public FactionData faction;
 
     public UnitRole role;
 
@@ -75,6 +75,8 @@ public abstract class HumanUnit : Unit
         //stateMachine.Change(new IdleState(this));
 
         faction = GameManager.Instance.factions[(int)unitSide];
+
+        faction.AddPopWeight(data.popWeight);
 
         HomePosition = this.transform.position;
 
@@ -489,6 +491,7 @@ public abstract class HumanUnit : Unit
         base.Death();
         ai.arriveTarget -= UnitArriveHome;
         GameManager.Instance.liveHumanUnits.Remove(this);
+        faction.ReleasePopWeight(this.data.popWeight);
         if(stateMachine.CurrentState is not EnteringState)
         {
             anim.SetTrigger("Death");

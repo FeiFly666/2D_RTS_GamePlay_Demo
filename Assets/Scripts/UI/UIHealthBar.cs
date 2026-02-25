@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class UIHealthBar : MonoBehaviour, Assets.Scripts.ObjectPool.IPoolable
 {
-    private Unit owner;
+    public Unit owner;
 
     private Vector3 offsetVector;
 
@@ -49,11 +49,14 @@ public class UIHealthBar : MonoBehaviour, Assets.Scripts.ObjectPool.IPoolable
     }
     private void LateUpdate()
     {
-        if (owner == null || owner is not HumanUnit)
+        if (owner == null || owner.isDead)
         {
-            if(this.gameObject.activeSelf) OnDespawn();
+            if (this.gameObject.activeSelf) OnDespawn();
             return;
         }
+
+        if (owner is not HumanUnit) return;
+
         Vector3 barPos = owner.transform.position + offsetVector;
 
         barPos.z = barPos.y * 0.1f;
@@ -80,7 +83,7 @@ public class UIHealthBar : MonoBehaviour, Assets.Scripts.ObjectPool.IPoolable
         if(this.owner != null)
         {
             owner.stats.OnHealthChanged -= HandleHealthChanged;
-            owner.OnSelected -= HandleDeselect;
+            owner.OnSelected -= HandleSelect;
             owner.OnDeselected -= HandleDeselect;
         }
         this.owner = null;

@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HumanName: "\u5251\u58EB"
   HumanDescription: "\u6807\u51C6\u8FD1\u6218\u5355\u4F4D"
-  GoldCost: 5
-  WoodCost: 5
+  GoldCost: 10
+  WoodCost: 15
+  PopWeight: 1
   DetectRadius: 7.5
   AttackRadius: 2
   TrainingTime: 10
@@ -27,4 +28,5 @@ MonoBehaviour:
   MoveSpeed: 4
   IsAOE: 0
   MaxHoldResourceNum: 0
-  GatherNum: 0
+  ChopNum: 0
+  conditions: 

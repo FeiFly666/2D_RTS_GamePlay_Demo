@@ -14,18 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HumanName: "\u5DE5\u4EBA"
   HumanDescription: "\u91C7\u96C6\u8D44\u6E90\u3001\u5EFA\u9020\u6216\u4FEE\u8865\u5EFA\u7B51"
-  GoldCost: 10
+  GoldCost: 5
   WoodCost: 10
-  PopWeight: 0
+  PopWeight: 1
   DetectRadius: 7
   AttackRadius: 1.8
-  TrainingTime: 10
-  FullHP: 120
-  Attack: 6
+  TrainingTime: 6
+  FullHP: 100
+  Attack: 5
   Armor: 2
   CritChance: 2
   CritMutiple: 0.3
-  MoveSpeed: 5
+  MoveSpeed: 4
   IsAOE: 0
   MaxHoldResourceNum: 10
   ChopNum: 3

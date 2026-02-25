@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7c47958a4ea4bc4589e0886d60aad86, type: 3}
-  m_Name: GoldMin_Red
+  m_Name: GoldMine_Red
   m_EditorClassIdentifier: 
   Icon: {fileID: 21300000, guid: 86b80a67008e67f44b08c1c43cad6e93, type: 3}
   ID: b30b292e-d5a2-4bfc-aa88-5265d86a222b

@@ -8,7 +8,7 @@ public class FactionData
     public UnitSide side;
 
     [Header("ÕóÓª×ÊÔ´")]
-    [SerializeField] private int _goldNum = 20;
+    [SerializeField] private int _goldNum = 80;
     public int GoldNum
     {
         get { return _goldNum;}
@@ -18,7 +18,7 @@ public class FactionData
             OnDataUpdate?.Invoke();
         }
     }
-    [SerializeField] private int _woodNum = 20;
+    [SerializeField] private int _woodNum = 80;
     public int WoodNum
     {
         get { return _woodNum; }
@@ -160,6 +160,33 @@ public class FactionData
         _goldNum = data.GoldNum;
 
         OnDataUpdate?.Invoke();
+    }
+    public void ExchangeGoldToWood()
+    {
+        if(GoldNum >=5)
+        {
+            _goldNum -= 5;
+            _woodNum += 1;
+            OnDataUpdate?.Invoke();
+        }
+    }
+
+    public BuildingUnit GetNearestAllyBase(Unit unit)
+    {
+        BuildingUnit nearestBase = null;
+        float nearestDistance = Mathf.Infinity;
+        foreach (var b in buildings)
+        {
+            if (b.buildingState == BuildingState.InConstruction || b.buildingType == BuildingType.Attack || b.buildingType == BuildingType.Collect) continue;
+
+            float distance = (unit.transform.position - b.transform.position).sqrMagnitude;
+            if (distance < nearestDistance)
+            {
+                nearestDistance = distance;
+                nearestBase = b;
+            }
+        }
+        return nearestBase;
     }
     public FactionSaveData ToSaveData()
     {

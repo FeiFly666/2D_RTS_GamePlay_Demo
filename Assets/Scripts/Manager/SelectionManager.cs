@@ -164,6 +164,17 @@ public class SelectionManager : MonoSingleton<SelectionManager>
                         commandAvailable = false;
                     }
                     break;
+                case BuildingType.Exchange:
+                    if(target == unit)
+                    {
+                        FactionData faction = GameManager.Instance.factions[(int)unit.unitSide];
+                        faction.ExchangeGoldToWood();
+                    }
+                    else
+                    {
+                        commandAvailable = false;
+                    }
+                    break;
                 default:
                     commandAvailable = false;
                     break;

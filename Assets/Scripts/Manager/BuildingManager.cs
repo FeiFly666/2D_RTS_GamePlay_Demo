@@ -5,10 +5,15 @@ using UnityEngine;
 public class BuildingManager : Singleton<BuildingManager>
 {
     private PlacementProcess placementProcess;
+    public BuildingAction currentBuilding;
+    public UnitSide currentSide;
 
     public void StartPlacement(BuildingAction action, UnitSide side)
     {
         placementProcess = new PlacementProcess(action, side);
+
+        currentBuilding = action;
+        currentSide = side;
 
         MyInputsystem.Instance.ChangeInputState(InputState.Placing);
     }
@@ -36,6 +41,12 @@ public class BuildingManager : Singleton<BuildingManager>
     }
     public void CanclePlacement()
     {
+        if(currentBuilding != null)
+        {
+            FactionData faction = GameManager.Instance.factions[(int)currentSide];
+
+            faction.RefundResource(currentBuilding.goldCost, currentBuilding.woodCost);
+        }
         ClearPlacementProcess() ;
         MyInputsystem.Instance.ChangeInputState(InputState.Building);
     }
@@ -45,5 +56,7 @@ public class BuildingManager : Singleton<BuildingManager>
         placementProcess?.ClearHighlightArea();
         placementProcess?.DestroyOutline();
         placementProcess = null;
+        currentBuilding = null;
+        currentSide = UnitSide.E;
     }
 }

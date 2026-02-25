@@ -65,7 +65,7 @@ public class TrainingBuilding : BuildingUnit
     private void CompleteTraining(TrainTask task)
     {
         //faction.currentPeopleNum += task.humanData.popWeight;
-        faction.AddPopWeight(task.humanData.popWeight);
+        //faction.AddPopWeight(task.humanData.popWeight);
 
         // GameObject go = Instantiate(task.humanData.humanPrefab, this.transform.position + (Vector3)spawnPosition, Quaternion.identity);
 

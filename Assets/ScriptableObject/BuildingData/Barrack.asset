@@ -13,14 +13,15 @@ MonoBehaviour:
   m_Name: Barrack
   m_EditorClassIdentifier: 
   StructurePrefab: {fileID: 0}
-  PeopleAddNum: 10
+  PeopleAddNum: 4
   BuildingName: "\u5175\u8425"
   BuildingDescription: "\u8BAD\u7EC3\u58EB\u5175"
-  GoldCost: 0
-  WoodCost: 0
-  FullHP: 1000
+  GoldCost: 25
+  WoodCost: 20
+  FullHP: 1800
   Armor: 0
   BuildingSize: {x: 8, y: 5, z: 0}
   BuildingOffset: {x: -4, y: -2, z: 0}
   FinishValue: 15
   IsStartGenerate: 0
+  conditions: 

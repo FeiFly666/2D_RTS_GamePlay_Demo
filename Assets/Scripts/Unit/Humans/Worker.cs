@@ -20,7 +20,7 @@ public class Worker : HumanUnit
     public Node mySlot = null;
     
 
-    private void PrepareToDeliver()
+/*    private void PrepareToDeliver()
     {
         OnExitWorkState();
         BuildingUnit nearestBase = GameManager.Instance.GetNearestAllyBase(this);
@@ -36,7 +36,7 @@ public class Worker : HumanUnit
 
         this.stateMachine.Change(UnitStateType.Deliver);
 
-    }
+    }*/
     public void AddWoodToFaction()
     {
         faction.AddWood(this.holdResourceNum);

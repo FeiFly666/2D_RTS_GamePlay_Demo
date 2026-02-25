@@ -144,7 +144,7 @@ public class GameManager : MonoSingleton<GameManager>
         availableID++;
         return res;
     }
-    public BuildingUnit GetNearestAllyBase(Unit unit)
+/*    public BuildingUnit GetNearestAllyBase(Unit unit)
     {
         BuildingUnit nearestBase = null;
         float nearestDistance = Mathf.Infinity;
@@ -160,7 +160,7 @@ public class GameManager : MonoSingleton<GameManager>
             }
         }
         return nearestBase;
-    }
+    }*/
     public void InitID(int newID)
     {
         this.availableID = newID;

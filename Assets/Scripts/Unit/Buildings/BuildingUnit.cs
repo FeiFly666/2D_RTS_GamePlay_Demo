@@ -5,12 +5,14 @@ using UnityEngine;
 using static UnityEngine.UI.CanvasScaler;
 public enum BuildingType
 {
-    Static,
-    Attack,
-    Train,
-    Ranged,
-    Goblin,
-    Collect
+    Static,//基地
+    Attack,//防御塔
+    Train,//训练营
+    Ranged,//弓箭手前置
+    Goblin,//哥布林前置
+    Collect,//金矿
+    House,//房子
+    Exchange//交易所
 }
 public enum BuildingState
 {
@@ -122,6 +124,11 @@ public class BuildingUnit : Unit
         sr.sprite = data.foundationSprite;
 
         this.buildingState = BuildingState.InConstruction;
+
+/*        if (data.peopleAddNum < 0)//占用
+        {
+            faction.AddPopWeight(data.peopleAddNum);
+        }*/
     }
 
     public BuildingProcess GetBuildingProcess()
@@ -148,10 +155,6 @@ public class BuildingUnit : Unit
         if (data.peopleAddNum > 0)//扩张
         {
             faction.AddTotalPeople(data.peopleAddNum);
-        }
-        else if (data.peopleAddNum < 0)//占用
-        {
-            faction.AddPopWeight(data.peopleAddNum);
         }
 
         faction.AddTypeBuildingNum(this.buildingType);
@@ -209,10 +212,10 @@ public class BuildingUnit : Unit
                 {
                     faction.DecreaseTotalPeople(data.peopleAddNum);
                 }
-                else if(data.peopleAddNum < 0)//占用
+/*                else if(data.peopleAddNum < 0)//占用
                 {
                     faction.ReleasePopWeight(data.peopleAddNum);
-                }
+                }*/
 
                 faction.DecreaseTypeBuildingNum(this.buildingType);
             }
@@ -261,10 +264,10 @@ public class BuildingUnit : Unit
                 {
                     faction.DecreaseTotalPeople(data.peopleAddNum);
                 }
-                else if (data.peopleAddNum < 0)//占用
+/*                else if (data.peopleAddNum < 0)//占用
                 {
                     faction.ReleasePopWeight(data.peopleAddNum);
-                }
+                }*/
 
                 faction.DecreaseTypeBuildingNum(this.buildingType);
 

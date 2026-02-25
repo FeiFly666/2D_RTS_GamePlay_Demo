@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
 public enum UnitState
@@ -124,9 +125,8 @@ public class Unit : MonoBehaviour
 
         int finalOrder = (yOrder * 10) + tieBreaker;
 
-        //sg.sortingOrder = Mathf.Clamp(finalOrder, -32768, 32767);
-/*        sg.sortingOrder = Mathf.Clamp(finalOrder, -32768, 32767);
-        lastFinalOrder = finalOrder;*/
+        //int finalOrder = -Mathf.FloorToInt(logicalY / 0.2f);
+
         if (finalOrder != lastFinalOrder)
         {
             sg.sortingOrder = Mathf.Clamp(finalOrder, -32768, 32767);

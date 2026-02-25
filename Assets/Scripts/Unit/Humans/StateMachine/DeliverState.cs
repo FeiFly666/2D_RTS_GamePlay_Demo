@@ -58,7 +58,7 @@ public class DeliverState :IUnitState
     private BuildingUnit PrepareToDeliver()
     {
         u.OnExitWorkState();
-        BuildingUnit nearestBase = GameManager.Instance.GetNearestAllyBase(u);
+        BuildingUnit nearestBase = u.faction.GetNearestAllyBase(u);
 
         return nearestBase;
     }

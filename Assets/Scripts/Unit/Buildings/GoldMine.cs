@@ -90,6 +90,8 @@ public class GoldMine : BuildingUnit
             human.unitSide = this.unitSide;
 
             human.stats.currentHP = data.humanCurrentHP;
+
+            faction.ReleasePopWeight(humanData.popWeight);
         }
         humanInsideData.Clear();
 

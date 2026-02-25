@@ -13,14 +13,15 @@ MonoBehaviour:
   m_Name: ArcherTower
   m_EditorClassIdentifier: 
   StructurePrefab: {fileID: 0}
-  PeopleAddNum: 0
+  PeopleAddNum: -6
   BuildingName: "\u7BAD\u5854"
   BuildingDescription: "\u4E09\u5F13\u7BAD\u624B\u9AD8\u7AD9\u5854\u9876"
-  GoldCost: 10
-  WoodCost: 10
-  FullHP: 600
+  GoldCost: 40
+  WoodCost: 45
+  FullHP: 1000
   Armor: 0
   BuildingSize: {x: 4, y: 4, z: 0}
   BuildingOffset: {x: -2, y: -2, z: 0}
   FinishValue: 10
   IsStartGenerate: 0
+  conditions: 03000000
