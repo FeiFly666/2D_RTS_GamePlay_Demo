@@ -8,13 +8,36 @@ public class AIEconomy
 
     BuildingAction requestBuilding;
 
+    private float buildCooldown = 3f;
+    private float cooldownStart = 0f;
+
     public AIEconomy(FactionAI AI)
     {
         this.AI = AI;
     }
     public void UpdateLogic()
     {
+        UpdateResourcesBlance();
+
+        UpdateBuilding();
+    }
+    public void UpdateResourcesBlance()
+    {
+        if (AI.faction.BuildingTypeCount[BuildingType.Collect] > 0)
+        {
+            if (AI.faction.GoldNum > 600 && AI.faction.GoldNum > AI.faction.WoodNum * 3)
+            {
+                //1:3��һЩľͷ
+                AI.faction.TrySpendResource(120, 0);
+                AI.faction.AddWood(40);
+            }
+        }
+    }
+    public void UpdateBuilding()
+    {
         if (AI.strategy.requestBuilding == null) return;
+
+        if (Time.time - cooldownStart < buildCooldown) return;
 
         requestBuilding = AI.strategy.requestBuilding;
 
@@ -22,17 +45,18 @@ public class AIEconomy
 
         Vector3Int setPosition = SetBuildingPosition();
 
-        if(setPosition.x != -1500)
+        if (setPosition.x != -1500)
         {
-            BuildingManager.Instance.ConfirmPlacementForAI(requestBuilding, AI.unitSide ,setPosition);
+            BuildingManager.Instance.ConfirmPlacementForAI(requestBuilding, AI.unitSide, setPosition);
 
             Physics2D.SyncTransforms();
 
             AI.strategy.requestBuilding = null;
+
+            cooldownStart = Time.time;
         }
 
     }
-
     public Vector3Int SetBuildingPosition()
     {
         Vector3 startPosition = AI.basePosition;

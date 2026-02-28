@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,8 @@ using UnityEngine;
 public class AIProduction
 {
     private FactionAI AI;
+
+
     public AIProduction(FactionAI AI)
     {
         this.AI = AI;
@@ -30,9 +33,18 @@ public class AIProduction
 
     private TrainingBuilding FindBestProducerFor(HumanAction data)
     {
-        return AI.faction.trainings
-                 .Where(t => t.buildingType == BuildingType.Train)
-                 .OrderBy(t => t.trainingQueue.Count)
-                 .FirstOrDefault();
+        TrainingBuilding target = null;
+
+        int minTaskNum = int.MaxValue;
+
+        foreach(var t in AI.faction.trainings)
+        {
+            if(t.trainingQueue.Count < minTaskNum)
+            {
+                minTaskNum = t.trainingQueue.Count;
+                target = t;
+            }
+        }
+        return target;
     }
 }

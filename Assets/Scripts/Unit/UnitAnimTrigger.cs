@@ -7,7 +7,7 @@ public class UnitAnimTrigger : MonoBehaviour
     protected Unit owner => GetComponentInParent<Unit>();
     public void AnimCounterRandomAdd() => (owner as HumanUnit).AnimationCounterRandomAdd();
 
-    private static Collider2D[] scanBuffer = new Collider2D[40];
+    private static Collider2D[] scanBuffer = new Collider2D[200];
 
     private void AttackTrigger()
     {

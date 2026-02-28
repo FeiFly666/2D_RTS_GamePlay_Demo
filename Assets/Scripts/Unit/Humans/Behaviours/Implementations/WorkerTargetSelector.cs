@@ -72,6 +72,8 @@ public class WorkerTargetSelector : ITargetSelector
             {
                 if (currentBuilding == null) continue;
 
+                if (currentBuilding is GoldMine) continue;//不想修bug，所以金矿坑不能修理
+
                 if (!IsTargetReachable(self, currentBuilding)) continue;
 
                 float distance = (self.transform.position - currentBuilding.transform.position).sqrMagnitude;

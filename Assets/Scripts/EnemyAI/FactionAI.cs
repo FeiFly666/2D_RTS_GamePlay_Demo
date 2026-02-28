@@ -96,6 +96,8 @@ public class FactionAI : MonoBehaviour
         if(executeTimer>= executeFrequency)
         {
             executeTimer = 0;
+            float randomRest = Random.Range(0, 1f);
+            if (randomRest < 0.3f) return;
             strategy.UpdateLogic();
             economy.UpdateLogic();
             production.UpdateLogic();

@@ -490,10 +490,11 @@ public abstract class HumanUnit : Unit
     {
         base.Death();
         ai.arriveTarget -= UnitArriveHome;
+        stateMachine.CurrentState.Exit();
         GameManager.Instance.liveHumanUnits.Remove(this);
-        faction.ReleasePopWeight(this.data.popWeight);
         if(stateMachine.CurrentState is not EnteringState)
         {
+            faction.ReleasePopWeight(this.data.popWeight);
             anim.SetTrigger("Death");
         }
         else

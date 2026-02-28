@@ -280,6 +280,7 @@ public class BuildingUnit : Unit
         }
 
         GameManager.Instance.buildings.Remove(this);
+        GameManager.Instance.UnregisterSideUnit(this);
 
         TilemapManager.Instance.NotifyingBuildingChanged(this.GetComponent<BoxCollider2D>().bounds);
 

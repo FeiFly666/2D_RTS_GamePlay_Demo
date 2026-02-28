@@ -19,13 +19,14 @@ public class AITactical
     {
         var allWorkers = AI.faction.workers;
 
-        List<Worker> idleWorkers = allWorkers
-            .Where(w => w.stateMachine.CurrentState is IdleState && !w.ai.IsPathVaild())
-            .ToList();
+        List<Worker> idleWorkers = AI.faction.IdleWorkers;
 
-        if (idleWorkers.Count <= 2) return;
+        int needToWorkNum = Mathf.Max(idleWorkers.Count - 2, 0);
 
-        int needToWorkNum = idleWorkers.Count - 2;
+        if (idleWorkers.Count <= 4)
+        {
+            needToWorkNum = idleWorkers.Count - 1;
+        }
         
 
         for (int i = 0; i < needToWorkNum; i++)
@@ -44,7 +45,7 @@ public class AITactical
     }
     private void AssignTaskToWorker(Worker worker,int chopNum)
     {
-        var mines = GetAvailableGoldMines();
+        GoldMine mine = GetAvailableGoldMines();
         if(chopNum == 0)
         {
             var ntree = GetNearestTree(worker.transform.position);
@@ -54,9 +55,9 @@ public class AITactical
                 return;
             }
         }
-        if (mines.Count > 0)
+        if (mine != null)
         {
-            worker.SetClickTarget(mines[0]);
+            worker.SetClickTarget(mine);
             return;
         }
         var tree = GetNearestTree(worker.transform.position);
@@ -68,32 +69,43 @@ public class AITactical
     }
     private void ManageSoldiers()
     {
-        var idleCombatants = AI.faction.humans
-            .Where(h => h.role != UnitRole.Worker && h.stateMachine.CurrentState is IdleState)
-            .ToList();
+        var idleCombatants = AI.faction.IdleNoWorkerHumans;
 
         if (idleCombatants.Count == 0) return;
 
-        var mines = GetAvailableGoldMines();
-        if (mines.Count == 0) return;
+        GoldMine mine = GetAvailableGoldMines();
+        if (mine == null) return;
 
         //防抖，一个士兵找到就退出
-        foreach (var soldier in idleCombatants)
+        int i = Random.Range(0, idleCombatants.Count);
+
+        if (mine.CanInside)
+        {
+            if (!idleCombatants[i].isBuildingUnit)
+            {
+                idleCombatants[i].SetClickTarget(mine);
+            }
+        }
+/*        foreach (var soldier in idleCombatants)
         {
             if (mines[0].CanInside)
             {
                 soldier.SetClickTarget(mines[0]);
                 break;
             }
-        }
+        }*/
     }
 
-    private List<GoldMine> GetAvailableGoldMines()
+    private GoldMine GetAvailableGoldMines()
     {
-        return AI.faction.buildings
-            .OfType<GoldMine>()
-            .Where(m => m.buildingState == BuildingState.ConstructionFinished && m.CanInside)
-            .ToList();
+        foreach(var m in AI.faction.goldMines)
+        {
+            if(m.buildingState == BuildingState.ConstructionFinished && m.humanInsideData.Count < m.maxUnitNum)
+            {
+                return m;
+            }
+        }
+        return null;
     }
 
     private ResourceUnit GetNearestTree(Vector3 origin)

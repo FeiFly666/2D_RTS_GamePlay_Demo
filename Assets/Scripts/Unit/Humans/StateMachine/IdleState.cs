@@ -15,6 +15,19 @@ public class IdleState : IUnitState
     public void Enter()
     {
         //u.ai.ClearPath();
+        if(u.faction.side != GameManager.Instance.playerSide)
+        {
+            if(u.role != UnitRole.Worker)
+            {
+                if (!u.faction.IdleNoWorkerHumans.Contains(u))
+                    u.faction.IdleNoWorkerHumans.Add(u);
+            }
+            else
+            {
+                if (!u.faction.IdleWorkers.Contains(u))
+                    u.faction.IdleWorkers.Add(u as Worker);
+            }
+        }
     }
     public void Update()
     {
@@ -70,10 +83,21 @@ public class IdleState : IUnitState
         }
 
     }
-
     public void Exit()
     {
-
+        if (u.faction.side != GameManager.Instance.playerSide)
+        {
+            if (u.role != UnitRole.Worker)
+            {
+                if (u.faction.IdleNoWorkerHumans.Contains(u))
+                    u.faction.IdleNoWorkerHumans.Remove(u);
+            }
+            else
+            {
+                if (u.faction.IdleWorkers.Contains(u))
+                    u.faction.IdleWorkers.Remove(u as Worker);
+            }
+        }
     }
 
 }

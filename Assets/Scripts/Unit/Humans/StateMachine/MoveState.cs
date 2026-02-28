@@ -42,7 +42,7 @@ public class MoveState : IUnitState
                 }
 
             }
-            if (u.target is GoldMine mine && mine.buildingState == BuildingState.ConstructionFinished)
+            if (u.target is GoldMine mine && mine.buildingState == BuildingState.ConstructionFinished && mine.unitSide == u.unitSide)
             {
                 if(u.IsTargetDetected(u.target))
                 {

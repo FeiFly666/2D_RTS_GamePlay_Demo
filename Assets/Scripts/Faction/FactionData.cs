@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 
 [System.Serializable]
@@ -32,6 +33,8 @@ public class FactionData
     [Header("ÕóÓªµ¥Î»")]
     public List<HumanUnit> humans = new List<HumanUnit>();
     public List<Worker> workers = new List<Worker>();
+    public List<HumanUnit>IdleNoWorkerHumans = new List<HumanUnit>();
+    public List<Worker>IdleWorkers = new List<Worker>();
     public List<BuildingUnit> buildings = new List<BuildingUnit>();
     public List<TrainingBuilding> trainings = new List<TrainingBuilding>();
     public List<GoldMine> goldMines = new List<GoldMine>();
@@ -61,7 +64,7 @@ public class FactionData
     }
 
     public bool CanAfford(int gold, int wood) => gold <= GoldNum && wood <= WoodNum;
-    public bool HasPeopleSpace(int PopOc) => (currentPeopleNum +  PopOc) <= TotalPeopleNum;
+    public bool HasPeopleSpace(int PopOc) => (currentPeopleNum +  PopOc) < TotalPeopleNum;
 
     public Dictionary<BuildingType, int> BuildingTypeCount = new Dictionary<BuildingType, int>();
 
@@ -179,14 +182,29 @@ public class FactionData
     }
     public void ExchangeGoldToWood()
     {
-        if(GoldNum >=5)
+        if(GoldNum >=90)
         {
-            _goldNum -= 5;
-            _woodNum += 1;
+            _goldNum -= 90;
+            _woodNum += 30;
             OnDataUpdate?.Invoke();
         }
     }
-
+    public int GetWorkerNum()
+    {
+        int res = workers.Count;
+        foreach(var t in trainings)
+        {
+            for(int i = 0;i<t.trainingQueue.Count;i++)
+            {
+                var human = t.trainingQueue[i].humanData.humanPrefab.GetComponent<HumanUnit>();
+                if(human.role == UnitRole.Worker)
+                {
+                    res++;
+                }
+            }
+        }
+        return res;
+    }
     public BuildingUnit GetNearestAllyBase(Unit unit)
     {
         BuildingUnit nearestBase = null;
