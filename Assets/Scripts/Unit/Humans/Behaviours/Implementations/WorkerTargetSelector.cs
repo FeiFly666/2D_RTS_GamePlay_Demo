@@ -72,7 +72,7 @@ public class WorkerTargetSelector : ITargetSelector
             {
                 if (currentBuilding == null) continue;
 
-                if (currentBuilding is GoldMine) continue;//不想修bug，所以金矿坑不能修理
+                if (currentBuilding is GoldMine goldMine && goldMine.buildingState == BuildingState.ConstructionFinished) continue;//不想修bug，所以金矿坑不能修理
 
                 if (!IsTargetReachable(self, currentBuilding)) continue;
 

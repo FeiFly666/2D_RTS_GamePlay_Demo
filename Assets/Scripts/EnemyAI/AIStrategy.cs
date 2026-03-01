@@ -15,6 +15,9 @@ public class AIStrategy
     public BuildingAction requestBuilding;
     public HumanAction requestHuman;
 
+    private List<HumanAction> possibleHumanActions = new List<HumanAction>();
+    private List<BuildingAction> possibleBuildingActions = new List<BuildingAction>();
+
     private int woodBuffer = 100;
     private int goldBuffer = 70;
 
@@ -39,7 +42,7 @@ public class AIStrategy
 
         if (requestBuilding == null)//没有需要的建筑造兵
         {
-            if (data.GoldNum > 100 && data.WoodNum > 100)
+            if (data.GoldNum > 100 && data.WoodNum > 120)
                 HandleNormalProduction(data);
         }
         else//lz很富有，可以边造兵边建建筑
@@ -101,13 +104,15 @@ public class AIStrategy
     {
         if (!IsAnyBuildingIsInConstruction() && data.BuildingTypeCount[BuildingType.Static] > 0)
         {
-            List<BuildingAction> possibleActions = new List<BuildingAction>();
+            //List<BuildingAction> possibleActions = new List<BuildingAction>();
             if (data.BuildingTypeCount[BuildingType.Ranged] < 1)
             {
                 BuildingAction rangedCamp = AI.buildingMap[BuildingType.Ranged][0];
                 if (data.CanAfford(rangedCamp.goldCost + goldBuffer, rangedCamp.woodCost + woodBuffer))
                 {
-                    possibleActions.Add(rangedCamp);
+                    possibleBuildingActions.Add(rangedCamp);
+                    possibleBuildingActions.Add(rangedCamp);
+                    possibleBuildingActions.Add(rangedCamp);
                 }
             }
 
@@ -115,9 +120,12 @@ public class AIStrategy
             {
                 BuildingAction tower = AI.buildingMap[BuildingType.Attack][0];
 
-                if (data.CanAfford(tower.goldCost + goldBuffer / 2, tower.woodCost + woodBuffer / 2) && data.HasPeopleSpace(-tower.peopleAddNum))
+                int goldCost = AI.faction.BuildingTypeCount[BuildingType.Attack] < 5 ? tower.goldCost + goldBuffer / 2 : tower.goldCost + goldBuffer ;
+                int woodCost = AI.faction.BuildingTypeCount[BuildingType.Attack] < 5 ? tower.woodCost + woodBuffer / 2 : tower.woodCost + woodBuffer ;
+
+                if (data.CanAfford(goldCost, woodCost) && data.HasPeopleSpace(-tower.peopleAddNum))
                 {
-                    possibleActions.Add(tower);
+                    possibleBuildingActions.Add(tower);
                 }
             }
 
@@ -126,7 +134,7 @@ public class AIStrategy
                 BuildingAction barracks = AI.buildingMap[BuildingType.Train][0];
                 if (data.CanAfford(barracks.goldCost + goldBuffer, barracks.woodCost + woodBuffer))
                 {
-                    possibleActions.Add(barracks);
+                    possibleBuildingActions.Add(barracks);
                 }
             }
 
@@ -135,21 +143,23 @@ public class AIStrategy
                 BuildingAction goldMine = AI.buildingMap[BuildingType.Collect][0];
                 if (data.CanAfford(goldMine.goldCost + goldBuffer, goldMine.woodCost + woodBuffer))
                 {
-                    possibleActions.Add(goldMine);
+                    possibleBuildingActions.Add(goldMine);
                 }
             }
 
 
-            if (possibleActions.Count > 0)
+            if (possibleBuildingActions.Count > 0)
             {
-                possibleActions.Add(null);
-                possibleActions.Add(null);
-                possibleActions.Add(null);
-                possibleActions.Add(null);
+                possibleBuildingActions.Add(null);
+                possibleBuildingActions.Add(null);
+                possibleBuildingActions.Add(null);
+                possibleBuildingActions.Add(null);
 
-                int random = Random.Range(0, possibleActions.Count);
+                int random = Random.Range(0, possibleBuildingActions.Count);
 
-                requestBuilding = possibleActions[random];
+                requestBuilding = possibleBuildingActions[random];
+
+                possibleBuildingActions.Clear();
             }
         }
     }
@@ -162,7 +172,7 @@ public class AIStrategy
         }
         if (!data.HasPeopleSpace(allTrainWeight + 1)) return;
 
-        List<HumanAction> possibleActions = new List<HumanAction>();
+        //List<HumanAction> possibleActions = new List<HumanAction>();
 
         int meleeCount = data.humans.Count(h => h.role == UnitRole.Melee);
         int rangedCount = data.humans.Count(h => h.role == UnitRole.Ranged);
@@ -171,7 +181,7 @@ public class AIStrategy
         {
             HumanAction melee = AI.humanMap[UnitRole.Melee][0];
             if (AI.faction.CanAfford(melee.goldCost + goldBuffer / 2, melee.woodCost + woodBuffer / 2))
-                possibleActions.Add(melee);
+                possibleHumanActions.Add(melee);
         }
         else
         {
@@ -179,29 +189,31 @@ public class AIStrategy
             {
                 HumanAction ranged = AI.humanMap[UnitRole.Ranged][0];
                 if (AI.faction.CanAfford(ranged.goldCost + goldBuffer / 2, ranged.woodCost + woodBuffer / 2))
-                    possibleActions.Add(ranged);
+                    possibleHumanActions.Add(ranged);
             }
         }
 
-        if (AI.faction.GetWorkerNum() < 8)
+        if (AI.faction.GetWorkerNum() < 9)
         {
             HumanAction worker = AI.humanMap[UnitRole.Worker][0];
             if (AI.faction.CanAfford(worker.goldCost + goldBuffer / 2, worker.woodCost + woodBuffer / 2))
             {
-                possibleActions.Add(AI.humanMap[UnitRole.Worker][0]);
-                possibleActions.Add(AI.humanMap[UnitRole.Worker][0]);
+                possibleHumanActions.Add(AI.humanMap[UnitRole.Worker][0]);
+                possibleHumanActions.Add(AI.humanMap[UnitRole.Worker][0]);
             }
         }
 
-        if(possibleActions.Count > 0)
+        if(possibleHumanActions.Count > 0)
         {
-            possibleActions.Add(null);
-            possibleActions.Add(null);
-            possibleActions.Add(null);
+            possibleHumanActions.Add(null);
+            possibleHumanActions.Add(null);
+            possibleHumanActions.Add(null);
 
-            int random = Random.Range(0, possibleActions.Count);
+            int random = Random.Range(0, possibleHumanActions.Count);
 
-            requestHuman = possibleActions[random];
+            requestHuman = possibleHumanActions[random];
+
+            possibleHumanActions.Clear();
         }
 
     }
@@ -211,14 +223,39 @@ public class AIStrategy
     }
     private bool IsBuildingTypeInConstruction(BuildingType buildingType)
     {
-        return AI.faction.buildings.Any(b => b.buildingType == buildingType && b.buildingState == BuildingState.InConstruction);
+        foreach(var building in AI.faction.buildings)
+        {
+            if(building.buildingType == buildingType && building.buildingState == BuildingState.InConstruction)
+            {
+                return true;
+            }
+        }
+        return false;
+        //return AI.faction.buildings.Any(b => b.buildingType == buildingType && b.buildingState == BuildingState.InConstruction);
     }
     private bool IsAnyBuildingIsInConstruction()
     {
-        return AI.faction.buildings.Any(b => b.buildingState == BuildingState.InConstruction);
+        foreach(var building in AI.faction.buildings)
+        {
+            if(building.buildingState == BuildingState.InConstruction)
+            {
+                return true;
+            }
+        }
+        return false;
+        //return AI.faction.buildings.Any(b => b.buildingState == BuildingState.InConstruction);
     }
     private bool IsAnyGoldMineEmpty()
     {
-        return AI.faction.goldMines.Any(g => g.humanInsideData.Count < g.maxUnitNum);
+        foreach(var goldMine in AI.faction.goldMines)
+        {
+            if(goldMine.humanInsideData.Count < goldMine.maxUnitNum)
+            {
+                return true;
+            }
+        }
+        return false;
+
+        //return AI.faction.goldMines.Any(g => g.humanInsideData.Count < g.maxUnitNum);
     }
 }

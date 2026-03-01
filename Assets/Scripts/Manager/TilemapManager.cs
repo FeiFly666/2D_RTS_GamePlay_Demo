@@ -461,22 +461,31 @@ public class TilemapManager : MonoSingleton<TilemapManager>
     {
         return UnreachaableTilemap.HasTile(position) || IsPlaceOverObstacle(position);
     }
-
+    static Collider2D[] results = new Collider2D[10];
     private bool IsPlaceOverObstacle(Vector3Int position)
     {
         Vector3 tileSize = WalkableTilemap.cellSize;
 
-        
+        //Collider2D[] colliders = Physics2D.OverlapBoxAll(position + tileSize * .5f, tileSize * .9f, 0);
 
-        Collider2D[] colliders = Physics2D.OverlapBoxAll(position + tileSize * .5f, tileSize * .9f, 0);
+        int num = Physics2D.OverlapBoxNonAlloc(position + tileSize * .5f, tileSize * .9f, 0, results);
 
-        foreach (var collider in colliders)
+        for(int i = 0; i < num; i++)
         {
+            Collider2D collider = results[i];
             if (collider.gameObject.tag == "Unit" || collider.gameObject.tag == "Building")
             {
                 return true;
             }
         }
+
+/*        foreach (var collider in colliders)
+        {
+            if (collider.gameObject.tag == "Unit" || collider.gameObject.tag == "Building")
+            {
+                return true;
+            }
+        }*/
         return false;
     }
 

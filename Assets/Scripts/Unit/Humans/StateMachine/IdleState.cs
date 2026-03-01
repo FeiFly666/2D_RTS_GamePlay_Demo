@@ -24,8 +24,9 @@ public class IdleState : IUnitState
             }
             else
             {
-                if (!u.faction.IdleWorkers.Contains(u))
-                    u.faction.IdleWorkers.Add(u as Worker);
+                Worker w = u as Worker;
+                if (!u.faction.IdleWorkers.Contains(w) && w.ResourceAreaID == -1)
+                    u.faction.IdleWorkers.Add(w);
             }
         }
     }

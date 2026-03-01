@@ -23,11 +23,12 @@ public class AITactical
 
         int needToWorkNum = Mathf.Max(idleWorkers.Count - 2, 0);
 
-        if (idleWorkers.Count <= 4)
+        if (allWorkers.Count <= 4)
         {
-            needToWorkNum = idleWorkers.Count - 1;
+            needToWorkNum = Mathf.Max(idleWorkers.Count - 1, 0);
         }
-        
+
+        if (needToWorkNum == 0) return;
 
         for (int i = 0; i < needToWorkNum; i++)
         {
@@ -110,9 +111,24 @@ public class AITactical
 
     private ResourceUnit GetNearestTree(Vector3 origin)
     {
-        return GameManager.Instance.resources
+        float minDis = Mathf.Infinity;
+        ResourceUnit resourceUnit = null;
+
+        foreach(var tree in GameManager.Instance.resources)
+        {
+            float dis = (origin - tree.transform.position).sqrMagnitude;
+
+            if(dis < minDis)
+            {
+                minDis = dis;
+                resourceUnit = tree;
+            }
+        }
+
+        return resourceUnit;
+/*        return GameManager.Instance.resources
             .Where(r =>  r.resourceLeftNum > 0)
             .OrderBy(r => (r.transform.position - origin).sqrMagnitude)
-            .FirstOrDefault();
+            .FirstOrDefault();*/
     }
 }

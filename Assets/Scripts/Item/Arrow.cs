@@ -54,11 +54,23 @@ public class Arrow : MonoBehaviour , IPoolable
         }
 
     }
+    static Collider2D[] results = new Collider2D[20];
     private void CheckHit()
     {
-        Collider2D[] hit = Physics2D.OverlapCircleAll(this.transform.position, detectedRadius);
+        //Collider2D[] hit = Physics2D.OverlapCircleAll(this.transform.position, detectedRadius);
 
-        if (hit != null)
+        int num = Physics2D.OverlapCircleNonAlloc(this.transform.position, detectedRadius, results);
+
+        for(int i = 0; i < num; i++)
+        {
+            Collider2D unit = results[i];
+            if (unit.GetComponent<Unit>() == target)
+            {
+                ApplyDamage();
+            }
+        }
+
+       /* if (hit != null)
         {
             foreach(var unit in hit)
             {
@@ -67,7 +79,7 @@ public class Arrow : MonoBehaviour , IPoolable
                     ApplyDamage();
                 }
             }
-        }
+        }*/
     }
     private void ApplyDamage()
     {
