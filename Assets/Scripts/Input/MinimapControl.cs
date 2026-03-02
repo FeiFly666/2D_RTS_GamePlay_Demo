@@ -24,6 +24,8 @@ namespace Assets.Scripts.Input
 
         private Vector2 miniWorldMin;
         private Vector2 miniWorldSize;
+
+        private WaitForSeconds waitTime;
         // Use this for initialization
         void Awake()
         {
@@ -31,6 +33,10 @@ namespace Assets.Scripts.Input
             minimapRect = GetComponent<RectTransform>();
 
             mainCam = Camera.main;
+
+            CommonUtils.DisableMouseEvents(mainCam);
+            CommonUtils.DisableMouseEvents(minimapCam);
+
             mainCamControl = mainCam.gameObject.GetComponent<CameraControl>();
         }
         private void Start()
@@ -42,7 +48,22 @@ namespace Assets.Scripts.Input
 
             SetMiniMapCam();
             minimapCam.enabled = false;
-            InvokeRepeating(nameof(UpdateMinimap), 0, 0.08f); //每秒更新10~20次
+
+            waitTime = new WaitForSeconds(0.08f);
+
+
+            StartCoroutine(UpdateMinmap());
+            //InvokeRepeating(nameof(UpdateMinimap), 0, 0.08f); //每秒更新10~20次
+        }
+        IEnumerator UpdateMinmap()
+        {
+            while (true)
+            {
+                minimapCam.Render();
+
+                yield return waitTime;
+            }
+
         }
         void UpdateMinimap()
         {

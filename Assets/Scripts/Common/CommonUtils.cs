@@ -17,4 +17,8 @@ public class CommonUtils
     {
         return (A - B).sqrMagnitude <= range * range;
     }
+    public static void DisableMouseEvents(Camera cam)
+    {
+        cam.eventMask = 0;
+    }
 }

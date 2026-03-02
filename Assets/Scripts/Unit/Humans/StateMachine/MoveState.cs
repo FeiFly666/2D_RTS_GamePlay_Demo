@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using static HumanBehaviourInterface;
-using static UnityEngine.GraphicsBuffer;
 
 public class MoveState : IUnitState
 {
@@ -95,6 +93,7 @@ public class MoveState : IUnitState
     private void ExecuteChaseLogic()
     {
         UpdateChasingTimeOut();
+        //if (u.target is not HumanUnit) return;
         if (u.CanRequestNewChasingPath())
         {
             u.pathFoundTimer = Time.time;
@@ -119,13 +118,15 @@ public class MoveState : IUnitState
                 }
 
                 Vector3 currentTargetPos = u.target.transform.position;
-                if(u.target is not HumanUnit)
+/*                if(u.target is not HumanUnit)
                 {
                     currentTargetPos = u.GetTargetAimPoint();
-                }
+                }*/
                 if (u.ai.IsPathVaild())
                 {
-                    if ((currentTargetPos -u.lastEnemyPos).sqrMagnitude > 0.04f)
+                    if (u.target is not HumanUnit) return;
+
+                    if ((currentTargetPos - u.lastEnemyPos).sqrMagnitude > 0.04f)
                     {
                         u.RequestNewPath(currentTargetPos);
                     }

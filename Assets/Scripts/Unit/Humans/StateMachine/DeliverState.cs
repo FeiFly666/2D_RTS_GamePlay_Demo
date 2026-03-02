@@ -27,7 +27,8 @@ public class DeliverState :IUnitState
 
         u.target = nearestBase;
         u.targetID = nearestBase.uniqueID;
-        u.anim.SetBool("Move", true);
+        if(!u.anim.GetBool("Move"))
+            u.anim.SetBool("Move", true);
 
         Node targetNode = TilemapManager.Instance.GetClosestInteractableNode(u.target.gameObject, u.transform.position, u.gameObject);
         if (targetNode == null) return;
@@ -38,7 +39,8 @@ public class DeliverState :IUnitState
 
         if (dis > 1f)
         {
-            if (u.ai.GetPathFinalNode() == null || u.ai.GetPathFinalNode().GetNodePosition() != targetPos)
+            //if (u.ai.GetPathFinalNode() == null || u.ai.GetPathFinalNode().GetNodePosition() != targetPos)
+            if(!u.ai.IsPathVaild())
                 u.MoveToDestinationFrame(targetPos);
         }
         else

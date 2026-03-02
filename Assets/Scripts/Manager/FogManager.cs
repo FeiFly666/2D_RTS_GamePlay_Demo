@@ -17,6 +17,8 @@ public class FogManager : MonoSingleton<FogManager>
 
     private Dictionary<int, Vector2Int[]> circularOffsetsCache = new Dictionary<int, Vector2Int[]>();
 
+    private HashSet<Vector3Int> tilesToClear = new HashSet<Vector3Int>();
+
     void Start()
     {
         GetPathFinding();
@@ -74,10 +76,11 @@ public class FogManager : MonoSingleton<FogManager>
     }
     private void Update()
     {
-        if(Time.time - updateTime > updateFrequency)
+        if(Time.time - updateTime > updateFrequency && GameManager.Instance.isNeedFog)
         {
             updateTime = Time.time;
             BatchRevealFog();
+            tilesToClear.Clear();
         }
     }
     private void BatchRevealFog()
@@ -88,8 +91,6 @@ public class FogManager : MonoSingleton<FogManager>
 
     public void RevealFogInRadius()
     {
-        HashSet<Vector3Int> tilesToClear = new HashSet<Vector3Int>();
-
         var units = GameManager.Instance.liveHumanUnits;
 
         foreach(var unit in units)

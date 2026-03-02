@@ -105,17 +105,4 @@ public class FactionAI : MonoBehaviour
         }
     }
 
-    public int GetWorkerNum()
-    {
-        return faction.workers.Count;
-    }
-    public int GetCollectWorkerNum()
-    {
-        int count = 0;
-        foreach(var worker in  faction.workers)
-        {
-            if(worker.ResourceAreaID !=-1) count++;
-        }
-        return count;
-    }
 }

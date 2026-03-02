@@ -6,6 +6,7 @@ using UnityEngine.Tilemaps;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 using static CommonUtils;
 using UnityEditor.PackageManager.Requests;
+using UnityEditor.Experimental.GraphView;
 
 public class TilemapManager : MonoSingleton<TilemapManager>
 {
@@ -218,6 +219,11 @@ public class TilemapManager : MonoSingleton<TilemapManager>
             Tm.SetTile(pos, null);
         }
     }
+
+    private Queue<Node> queue = new Queue<Node>();
+    private HashSet<Node> visited = new HashSet<Node>();
+    private List<Node> candidates = new List<Node>();
+    //private Queue<Node> nextQueue = new Queue<Node>();
     //BFS搜索
     public Node FindNearestAvailableNode(Vector3 targetWorldPos, GameObject requester, bool checkNeighbors)
     {
@@ -230,8 +236,12 @@ public class TilemapManager : MonoSingleton<TilemapManager>
         if (requesterNode == null) return null;
         int allowedAreaID = requesterNode.AreaID;
 
-        Queue<Node> queue = new Queue<Node>();
-        HashSet<Node> visited = new HashSet<Node>();
+        this.queue.Clear();
+        visited.Clear();
+
+        Queue<Node> queue = this.queue;
+/*        Queue<Node> queue = new Queue<Node>();
+        HashSet<Node> visited = new HashSet<Node>();*/
 
         queue.Enqueue(centerNode);
         visited.Add(centerNode);
@@ -242,10 +252,13 @@ public class TilemapManager : MonoSingleton<TilemapManager>
 
         while (queue.Count > 0)
         {
-            List<Node> candidates = new List<Node>();
-            Queue<Node> nextQueue = new Queue<Node>();
+            // List<Node> candidates = new List<Node>();
+            // Queue<Node> nextQueue = new Queue<Node>();
+            int layerNum = queue.Count;
+            candidates.Clear();
+            //nextQueue.Clear();
 
-            while (queue.Count > 0)
+            for(int i = 0; i < layerNum; i++)
             {
                 Node currentNode = queue.Dequeue();
 
@@ -264,12 +277,42 @@ public class TilemapManager : MonoSingleton<TilemapManager>
                     }
                     candidates.Add(currentNode);
                 }
-                foreach (Node neighbor in GetAllNeighbors(currentNode))
+                /*foreach (Node neighbor in GetAllNeighbors(currentNode))
                 {
                     if (!visited.Contains(neighbor))
                     {
                         visited.Add(neighbor);
                         nextQueue.Enqueue(neighbor);
+                    }
+                }*/
+                for (int x = -1; x <= 1; x++)
+                {
+                    for (int y = -1; y <= 1; y++)
+                    {
+                        if (x == 0 && y == 0) continue;
+                        int newX = currentNode.GridX + x;
+                        int newY = currentNode.GridY + y;
+                        if (newX >= 0 && newX < PathFinding.grid.GetLength(0) && newY >= 0 && newY < PathFinding.grid.GetLength(1))
+                        {
+                            if (Mathf.Abs(x) == 1 && Mathf.Abs(y) == 1)
+                            {
+                                bool canWalkHorizontal = PathFinding.grid[currentNode.GridX + x, currentNode.GridY].IsWalkable;
+                                bool canWalkVertical = PathFinding.grid[currentNode.GridX, currentNode.GridY + y].IsWalkable;
+
+                                if (!canWalkHorizontal || !canWalkVertical)
+                                {
+                                    continue;
+                                }
+                            }
+
+                            Node neighbor = FindNode(newX, newY);
+                            if (!visited.Contains(neighbor))
+                            {
+                                visited.Add(neighbor);
+                                //nextQueue.Enqueue(neighbor);
+                                queue.Enqueue(neighbor);
+                            }
+                        }
                     }
                 }
             }
@@ -307,7 +350,11 @@ public class TilemapManager : MonoSingleton<TilemapManager>
                 if (bestNode != null)
                     return bestNode; // 返回这一层里最适合单位的格子
             }
-            queue = nextQueue;
+            //var temp = queue;
+            //queue = nextQueue;
+/*            nextQueue = temp;
+            nextQueue.Clear();*/
+            //queue = nextQueue;
         }
         return null;
     }

@@ -126,7 +126,7 @@ public class AITactical
         }
 
         return resourceUnit;
-/*        return GameManager.Instance.resources
+       /*return GameManager.Instance.resources
             .Where(r =>  r.resourceLeftNum > 0)
             .OrderBy(r => (r.transform.position - origin).sqrMagnitude)
             .FirstOrDefault();*/

@@ -8,7 +8,7 @@ public class AIEconomy
 
     BuildingAction requestBuilding;
 
-    private float buildCooldown = 3f;
+    private float buildCooldown = 5f;
     private float cooldownStart = 0f;
 
     public AIEconomy(FactionAI AI)

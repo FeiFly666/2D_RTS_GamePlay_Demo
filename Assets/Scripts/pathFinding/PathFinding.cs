@@ -11,7 +11,7 @@ public class PathFinding
     public Node[,] grid => Grid;
 
     public int MainWeight = 14;
-    public int SecondaryWeight = 11;
+    public int SecondaryWeight = 10;
 
     public int resolutionScale = 2;
     

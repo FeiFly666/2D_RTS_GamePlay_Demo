@@ -27,7 +27,7 @@ public abstract class HumanUnit : Unit
 
     public bool isRemote;
     public AI ai;
-    public Animator anim => GetComponentInChildren<Animator>();
+    public Animator anim;
 
     [Header("¼ì²â¼ä¸ô")]
     [SerializeField] public float checkFrequency = 0.2f;
@@ -64,6 +64,7 @@ public abstract class HumanUnit : Unit
     {
         base.Awake();
         ai = GetComponent<AI>();
+        anim = GetComponentInChildren<Animator>();
         stateMachine = new UnitStateMachine(this);
         InitBaseBehaviors();
         InitData();
