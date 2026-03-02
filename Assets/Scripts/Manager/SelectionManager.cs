@@ -305,7 +305,7 @@ public class SelectionManager : MonoSingleton<SelectionManager>
             targetPos = targetNode.GetNodePosition();
 
         bool commandAvailable = true;
-        Debug.Log($"{isEnemy} {isAlly} {isResource}");
+        //Debug.Log($"{isEnemy} {isAlly} {isResource}");
         switch(role)
         {
             case UnitRole.Melee:

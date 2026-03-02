@@ -8,6 +8,7 @@ public class FactionAI : MonoBehaviour
     public UnitSide unitSide;
 
     public Vector3 basePosition;
+
     public List<BuildingAction> actionList;
     public Dictionary<BuildingType, List<BuildingAction>> buildingMap = new Dictionary<BuildingType, List<BuildingAction>>();
 
@@ -23,6 +24,10 @@ public class FactionAI : MonoBehaviour
     public AITactical tacitical;
 
     private bool isInit = false;
+
+    public bool prepareForAttack = false;
+    public bool attack = false;
+    public int nextAttackNum = 20;
 
     [SerializeField] private float executeFrequency = 0.5f;
     private float executeTimer;

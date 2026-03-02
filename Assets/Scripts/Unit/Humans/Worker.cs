@@ -51,6 +51,7 @@ public class Worker : HumanUnit
             currentWorkBuilidng = null;
 
             target = null;
+            targetID = -1;
         }
         if(currentResource != null)
         {

@@ -157,7 +157,7 @@ public class AI : MonoBehaviour
         if (isSearchingPark) return;
         isSearchingPark = true;
 
-        Debug.Log("目标位置被占用啦，找一下最近的可用格子....");
+        //Debug.Log("目标位置被占用啦，找一下最近的可用格子....");
 
         Node bestNode = TilemapManager.Instance.FindNearestAvailableNode(FinalTargetPosition, this.gameObject, needSpace);
         if (bestNode != null && bestNode != TargetNode)
@@ -239,6 +239,12 @@ public class AI : MonoBehaviour
         else
         {
             isForcingMoving = true;
+            unit.isForcingTarget = false;
+        }
+
+        if(unit.unitSide != GameManager.Instance.playerSide)
+        {
+            isForcingMoving = false;
             unit.isForcingTarget = false;
         }
 

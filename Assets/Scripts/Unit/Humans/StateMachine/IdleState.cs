@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using static HumanBehaviourInterface;
-using static UnityEngine.GraphicsBuffer;
 
 public class IdleState : IUnitState
 {
@@ -15,7 +13,7 @@ public class IdleState : IUnitState
     public void Enter()
     {
         //u.ai.ClearPath();
-        if(u.faction.side != GameManager.Instance.playerSide)
+        if(u.faction.side != GameManager.Instance.playerSide && !u.isBuildingUnit)
         {
             if(u.role != UnitRole.Worker)
             {
@@ -70,7 +68,7 @@ public class IdleState : IUnitState
         {
             u.targetID = u.target.uniqueID;
             u.TransitionTo(UnitStateType.Move);
-            u.lastTargetInDetectionTime += Time.time;
+            u.lastTargetInDetectionTime = Time.time;
         }
         else
         {
@@ -86,7 +84,7 @@ public class IdleState : IUnitState
     }
     public void Exit()
     {
-        if (u.faction.side != GameManager.Instance.playerSide)
+        if (u.faction.side != GameManager.Instance.playerSide && !u.isBuildingUnit)
         {
             if (u.role != UnitRole.Worker)
             {

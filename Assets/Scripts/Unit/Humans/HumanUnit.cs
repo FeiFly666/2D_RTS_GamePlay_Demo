@@ -274,6 +274,7 @@ public abstract class HumanUnit : Unit
         MoveToDestinationFrame(pos);
     }
     public void TransitionTo(UnitStateType newState) => stateMachine.Change(newState);
+    public void SetHomePosition(Vector3 pos) => HomePosition = pos;
     public Vector3 GetLastDetectPosition()
     {
         Vector3 res = m_LastPositon;

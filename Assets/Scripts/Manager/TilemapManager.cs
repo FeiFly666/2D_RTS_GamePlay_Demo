@@ -77,7 +77,7 @@ public class TilemapManager : MonoSingleton<TilemapManager>
     }
     public void NotifyingBuildingChanged(Bounds buildingBounds)
     {
-        Debug.Log($"建筑建造，网格更新 更新范围：{buildingBounds.min.x} - {buildingBounds.max.x}  {buildingBounds.min.y} - {buildingBounds.max.y}");
+        //Debug.Log($"建筑建造，网格更新 更新范围：{buildingBounds.min.x} - {buildingBounds.max.x}  {buildingBounds.min.y} - {buildingBounds.max.y}");
         StartCoroutine(UpdateNodesInArea(buildingBounds));
         foreach (var unit in GameManager.Instance.liveHumanUnits)
         {

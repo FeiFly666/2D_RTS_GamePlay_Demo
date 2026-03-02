@@ -38,6 +38,8 @@ public class WorkState :IUnitState
             u.AnimationFinishTrigger3();
 
             u.target = null;
+            u.targetID = -1;
+
             u.currentWorkBuilidng = null;
 
             u.ai.ClearPath();
@@ -83,6 +85,7 @@ public class WorkState :IUnitState
             if (newSlot == null)
             {
                 u.target = null;
+                u.targetID = -1;
                 u.ai.ClearPath();
                 u.TransitionTo(UnitStateType.Idle);
                 return;

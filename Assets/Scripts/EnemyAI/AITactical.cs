@@ -2,10 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
+using UnityEngine.UIElements;
+[System.Serializable]
 public class AITactical
 {
     private FactionAI AI;
+
+    private UnitGroup attackGroup;
+    public List<HumanUnit> groupMembers = new List<HumanUnit>();
     public AITactical(FactionAI AI)
     {
         this.AI = AI;
@@ -14,6 +18,10 @@ public class AITactical
     {
         ManageWorkers();
         ManageSoldiers();
+        if(AI.prepareForAttack || AI.attack)
+        {
+            ManageWar();
+        }
     }
     private void ManageWorkers()
     {
@@ -68,6 +76,161 @@ public class AITactical
             return;
         }
     }
+    private void ManageWar()
+    {
+        //ai判断可以开始组队
+        if(AI.prepareForAttack)
+        {
+            if (attackGroup == null)
+            {
+                attackGroup = new UnitGroup();
+                groupMembers.Clear();
+            }
+
+            for (int i = groupMembers.Count - 1; i >= 0; i--)
+            {
+                HumanUnit soldier = groupMembers[i];
+
+                if (soldier == null || soldier.isDead)
+                {
+                    groupMembers.RemoveAt(i);
+                    continue;
+                }
+            }
+
+            if (attackGroup.members.Count < AI.nextAttackNum)
+            {
+                var idleCombatants = AI.faction.IdleNoWorkerHumans;
+
+                if (idleCombatants.Count == 0) return;
+                int i = Random.Range(0, idleCombatants.Count);
+
+                if (!idleCombatants[i].isBuildingUnit && !idleCombatants[i].HasRegisterTarget && !attackGroup.members.Contains(idleCombatants[i]))
+                {
+                    attackGroup.AddNewMember(idleCombatants[i]);
+                    if (attackGroup.leader == null)
+                        attackGroup.leader = idleCombatants[i];
+                    groupMembers.Add(idleCombatants[i]);
+                }
+            }
+
+        }
+        //组队完成开始进攻
+        if(attackGroup.members.Count == AI.nextAttackNum && !AI.attack)
+        {
+            AI.attack = true;
+
+            FactionData playerFaction = GameManager.Instance.factions[(int)GameManager.Instance.playerSide];
+
+            BuildingUnit targetBuilding = playerFaction.buildings[Random.Range(0, playerFaction.buildings.Count)];
+            Node targetNode = TilemapManager.Instance.FindNearestAvailableNode(targetBuilding.transform.position, attackGroup.leader.gameObject, false);
+
+            Vector3 targetPos = targetNode.GetNodePosition();
+
+            attackGroup.FormGroupMoving(targetPos, targetBuilding);
+
+            //为下一次进攻做准备
+            AI.prepareForAttack = false;
+            AI.nextAttackNum = Random.Range(15, 35);
+        }
+
+        //进攻
+        if(AI.attack)
+        {
+            //Debug.LogError(1);
+            for (int i = groupMembers.Count - 1; i >= 0; i--)
+            {
+                HumanUnit soldier = groupMembers[i];
+
+                if (soldier == null || soldier.isDead)
+                {
+                    groupMembers.RemoveAt(i);
+                    continue;
+                }
+            }
+
+            if (groupMembers.Count == 0)
+            {
+                attackGroup = null;
+                AI.attack = false;
+                return;
+            }
+
+            FactionData playerFaction = GameManager.Instance.factions[(int)GameManager.Instance.playerSide];
+
+            /*if(attackGroup.targetID == -1)
+            {
+                BuildingUnit targetBuilding = playerFaction.buildings[Random.Range(0, playerFaction.buildings.Count)];
+
+                Node targetNode = TilemapManager.Instance.FindNearestAvailableNode(targetBuilding.transform.position, attackGroup.leader.gameObject, false);
+
+                if (targetNode == null) Debug.LogError(2);
+
+                if (targetNode == null)
+                    return;
+
+                Vector3 targetPos = targetNode.GetNodePosition();
+
+                attackGroup.FormGroupMoving(targetPos, targetBuilding);
+            }*/
+
+            //Debug.LogError(2);
+            for (int i = groupMembers.Count - 1; i >= 0; i--)
+            {
+                HumanUnit soldier = groupMembers[i];
+
+                soldier.SetHomePosition(soldier.transform.position);
+
+                //Debug.LogError(3);
+                if (!soldier.ai.IsUnitInGroup && soldier.target == null)
+                {
+                    // 给他一个指令：根据进攻重心再次索敌
+                    RedetectNewTarget(soldier, playerFaction);
+                }
+            }
+
+        }
+    }
+    private void RedetectNewTarget(HumanUnit u, FactionData playerFaction)
+    {
+        //Debug.LogError(1);
+        u.isReturningHome = false;
+        //先自主索敌（躲避human更新时间差）
+        Unit betterTarget = u.targetSelector?.SetNewTarget(u);
+        if (betterTarget != null)
+        {
+            u.target = betterTarget;
+            u.targetID = betterTarget.uniqueID;
+            u.lastTargetInDetectionTime = Time.time;
+
+            u.TransitionTo(UnitStateType.Move);
+            return;
+        }
+
+        Unit minBuilding = null;
+        int targetID = -1;
+        float minDis = Mathf.Infinity;
+
+        foreach(var building in playerFaction.buildings)
+        {
+            float dis = (building.transform.position - u.transform.position).sqrMagnitude;
+            if (dis < minDis)
+            {
+                if (!u.targetSelector.IsTargetReachable(u, building)) continue;
+                minBuilding = building;
+                targetID = building.uniqueID;
+                minDis = dis;
+            }
+        }
+        if(minBuilding != null )
+        {
+            u.target = minBuilding;
+            u.targetID = targetID;
+            u.lastTargetInDetectionTime = Time.time;
+
+            u.TransitionTo(UnitStateType.Move);
+        }
+    }
     private void ManageSoldiers()
     {
         var idleCombatants = AI.faction.IdleNoWorkerHumans;
@@ -82,7 +245,7 @@ public class AITactical
 
         if (mine.CanInside)
         {
-            if (!idleCombatants[i].isBuildingUnit)
+            if (!idleCombatants[i].isBuildingUnit && !idleCombatants[i].HasRegisterTarget && !attackGroup.members.Contains(idleCombatants[i]))
             {
                 idleCombatants[i].SetClickTarget(mine);
             }

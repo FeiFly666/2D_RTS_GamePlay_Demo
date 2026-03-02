@@ -53,6 +53,11 @@ public class AIStrategy
             }
         }
 
+        //ÊÇ·ñ½ø¹¥
+        if(AI.faction.IdleNoWorkerHumans.Count > AI.nextAttackNum && !AI.attack)
+        {
+            AI.prepareForAttack = true;
+        }
     }
     private bool NeedEmergencyBuilding(FactionData data)
     {

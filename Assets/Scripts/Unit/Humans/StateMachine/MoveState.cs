@@ -140,6 +140,8 @@ public class MoveState : IUnitState
     }
     private void UpdateChasingTimeOut()
     {
+        if (u.target is not HumanUnit) return;
+
         if(u.IsTargetDetected(u.target)|| u.isForcingTarget) u.lastTargetInDetectionTime = Time.time;
 
         if(Time.time - u.lastTargetInDetectionTime >= 5f)
