@@ -12,6 +12,8 @@ public class UIManager : MonoSingleton<UIManager>
     [SerializeField] private UITopBar TopBar;
     [SerializeField] private GameObject UIMiniMap;
     [SerializeField] private Text buyNotify;
+    [SerializeField] public GameObject gameWin;
+    [SerializeField] public GameObject gameLose;
 
     private void Start()
     {

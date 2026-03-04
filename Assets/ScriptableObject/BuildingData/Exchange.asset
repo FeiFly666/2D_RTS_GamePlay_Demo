@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Exchange
   m_EditorClassIdentifier: 
   StructurePrefab: {fileID: 0}
-  PeopleAddNum: 0
+  PeopleAddNum: 5
   BuildingName: "\u4EA4\u6613\u6240"
   BuildingDescription: "\u5C06\u77FF\u77F3\u4EA4\u6362\u6210\u6728\u6750\uFF085\uFF1A1\uFF09"
   GoldCost: 800

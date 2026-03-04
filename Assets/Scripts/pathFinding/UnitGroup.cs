@@ -91,7 +91,7 @@ public class UnitGroup
 
         if (target != null && target is not HumanUnit)
         {
-            Node bestNode = TilemapManager.Instance.GetClosestInteractableNode(target.gameObject, leader.transform.position, leader.gameObject);
+            Node bestNode = TilemapManager.Instance.GetClosestInteractableNode(target, leader.transform.position, leader.gameObject);
             if(bestNode != null)
             {
                 targetPos = bestNode.GetNodePosition();
@@ -111,8 +111,9 @@ public class UnitGroup
                 {
                     isResume = false;
                 }*/
-                if (!success || leader == null || leader.isDead || members == null || members.Count == 0)
+                if (!success)
                 {
+                    foreach (var member in members) member.ai.isWaitingPath = false;
                     return;
                 }
                 sharedPath = path;
@@ -176,7 +177,7 @@ public class UnitGroup
 
         for (int i = 1; i < Mathf.Min(sharedPath.Count,20); i++)
         {
-            if (!TilemapManager.Instance.CheckBlockBetween2Nodes(member.transform.position, sharedPath[i].GetNodePosition()))
+            if (!TilemapManager.Instance.IsNoBlockBetween2Nodes(member.transform.position, sharedPath[i].GetNodePosition()))
             {
                 continue;
             }

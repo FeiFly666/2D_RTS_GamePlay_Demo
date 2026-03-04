@@ -276,7 +276,7 @@ public class SelectionManager : MonoSingleton<SelectionManager>
                 if ((group.leader.transform.position - unit.transform.position).sqrMagnitude < 25)
                 {
                     //TODO:查看unit和leader间是否隔墙然进行操作
-                    if (TilemapManager.Instance.CheckBlockBetween2Nodes(group.leader.transform.position, unitPos))
+                    if (TilemapManager.Instance.IsNoBlockBetween2Nodes(group.leader.transform.position, unitPos))
                     {
                         group.AddNewMember(human);
                         findCloseGroup = true;
@@ -297,7 +297,7 @@ public class SelectionManager : MonoSingleton<SelectionManager>
         Node targetNode = TilemapManager.Instance.FindNode(mousePos);
         if(target is not HumanUnit && target != null)
         {
-            targetNode = TilemapManager.Instance.GetClosestInteractableNode(target.gameObject, group.leader.transform.position, group.leader.gameObject);
+            targetNode = TilemapManager.Instance.GetClosestInteractableNode(target, group.leader.transform.position, group.leader.gameObject);
         }
 
         Vector2 targetPos = new Vector2(0, 0);
@@ -371,7 +371,7 @@ public class SelectionManager : MonoSingleton<SelectionManager>
         Node targetNode = TilemapManager.Instance.FindNode(mousePos);
         if (target is not HumanUnit && target != null)
         {
-            targetNode = TilemapManager.Instance.GetClosestInteractableNode(target.gameObject, unit.transform.position, unit.gameObject);
+            targetNode = TilemapManager.Instance.GetClosestInteractableNode(target, unit.transform.position, unit.gameObject);
         }
 
         Vector2 targetPos = new Vector2(0,0);

@@ -72,6 +72,8 @@ public class SaveManager : MonoSingleton<SaveManager>
 
         MyInputsystem.Instance.ChangeInputState(InputState.None);
 
+        GameManager.Instance.isPlaying = false;
+
         foreach (var human in GameManager.Instance.liveHumanUnits)
         {
             Destroy(human.gameObject);
@@ -190,5 +192,6 @@ public class SaveManager : MonoSingleton<SaveManager>
             if (human.ai.IsUnitInGroup) continue;
             human.ResumeLogic();
         }
+        GameManager.Instance.isPlaying = true;
     }
 }

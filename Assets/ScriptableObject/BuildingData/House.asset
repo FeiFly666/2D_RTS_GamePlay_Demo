@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: House
   m_EditorClassIdentifier: 
   StructurePrefab: {fileID: 0}
-  PeopleAddNum: 5
+  PeopleAddNum: 8
   BuildingName: "\u623F\u5B50"
   BuildingDescription: "\u589E\u52A0\u53EF\u5BB9\u7EB3\u4EBA\u53E3"
   GoldCost: 20

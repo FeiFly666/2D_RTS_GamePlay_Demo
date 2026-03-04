@@ -66,7 +66,8 @@ public class FactionData
     public bool CanAfford(int gold, int wood) => gold <= GoldNum && wood <= WoodNum;
     public bool HasPeopleSpace(int PopOc) => (currentPeopleNum +  PopOc) < TotalPeopleNum;
 
-    public Dictionary<BuildingType, int> BuildingTypeCount = new Dictionary<BuildingType, int>();
+    //public Dictionary<BuildingType, int> BuildingTypeCount = new Dictionary<BuildingType, int>();
+    public List<int> BuildingTypeCount = new List<int>();
 
     public System.Action OnDataUpdate;
 
@@ -78,46 +79,30 @@ public class FactionData
 
     private void InitBuildingTypeCountMap()
     {
-        BuildingTypeCount[BuildingType.Train] = 0;
-        BuildingTypeCount[BuildingType.Ranged] = 0;
-        BuildingTypeCount[BuildingType.Static] = 0;
-        BuildingTypeCount[BuildingType.Attack] = 0;
-        BuildingTypeCount[BuildingType.Goblin] = 0;
-        BuildingTypeCount[BuildingType.Collect] = 0;
-        BuildingTypeCount[BuildingType.Exchange] = 0;
-        BuildingTypeCount[BuildingType.House] = 0;
+
+        for (int i = 0; i <= 8; i++)
+        {
+            BuildingTypeCount.Add(0);
+        }
 
     }
     public void AddTypeBuildingNum(BuildingType type)
     {
-        if(!BuildingTypeCount.ContainsKey(type))
-        {
-            BuildingTypeCount[type] = 0;
-        }
-        BuildingTypeCount[type] += 1;
+        BuildingTypeCount[(int)type] += 1;
         OnDataUpdate?.Invoke();
     }
     public void DecreaseTypeBuildingNum(BuildingType type)
     {
-        BuildingTypeCount[type] -= 1;
+        BuildingTypeCount[(int)type] -= 1;
         OnDataUpdate?.Invoke();
+
     }
+
     public bool CanGenerate(BuildingType[] conditions)
     {
         foreach (BuildingType type in conditions)
         {
-            if(BuildingTypeCount.TryGetValue(type, out int count))
-            {
-                if(count <= 0)
-                {
-                    count = 0;
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
+            if (BuildingTypeCount[(int)type] <= 0) return false;
         }
         return true;
     }

@@ -5,8 +5,6 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 using static CommonUtils;
-using UnityEditor.PackageManager.Requests;
-using UnityEditor.Experimental.GraphView;
 
 public class TilemapManager : MonoSingleton<TilemapManager>
 {
@@ -29,8 +27,8 @@ public class TilemapManager : MonoSingleton<TilemapManager>
 
     public bool isLoading = false;
 
-    private bool isNeedRefresh = false;
-    private float nextRefreshTime;
+/*    private bool isNeedRefresh = false;
+    private float nextRefreshTime;*/
     private PathFinding PathFinding;
     public PathShare pathShare;
     private Dictionary<BuildingUnit, List<Vector2Int>> cachebuilidngArea = new Dictionary<BuildingUnit, List<Vector2Int>>();
@@ -46,7 +44,8 @@ public class TilemapManager : MonoSingleton<TilemapManager>
 
         GameObject go = new GameObject("PathFindingController");
         go.transform.parent = transform;
-        go.AddComponent<PathRequestController>();
+        PathRequestController controller = go.AddComponent<PathRequestController>();
+        controller.global = false;
 
     }
     public PathFinding GetPathFinding()
@@ -225,7 +224,7 @@ public class TilemapManager : MonoSingleton<TilemapManager>
     private List<Node> candidates = new List<Node>();
     //private Queue<Node> nextQueue = new Queue<Node>();
     //BFSËÑË÷
-    public Node FindNearestAvailableNode(Vector3 targetWorldPos, GameObject requester, bool checkNeighbors)
+    public Node FindNearestAvailableNode(Vector3 targetWorldPos, GameObject requester, bool checkNeighbors, float rangedBias = 0)
     {
         Node centerNode = PathFinding.FindNode(targetWorldPos);
 
@@ -233,7 +232,7 @@ public class TilemapManager : MonoSingleton<TilemapManager>
         if (IsNodeAndNeighborsFree(centerNode, requester, checkNeighbors)) return centerNode;
 
         Node requesterNode = PathFinding.FindNode(requester.transform.position);
-        if (requesterNode == null) return null;
+        if (requesterNode == null || requester == null) return null;
         int allowedAreaID = requesterNode.AreaID;
 
         this.queue.Clear();
@@ -266,13 +265,13 @@ public class TilemapManager : MonoSingleton<TilemapManager>
                 {
                     if (!currentNode.IsWalkable) { continue; }
                 }
-                if (currentNode.IsWalkable && currentNode.AreaID == allowedAreaID && IsNodeAndNeighborsFree(currentNode, requester, checkNeighbors))
+                if (currentNode.IsWalkable /*&& currentNode.AreaID == allowedAreaID*/ && IsNodeAndNeighborsFree(currentNode, requester, checkNeighbors))
                 {
                     if (!checkNeighbors)
                     {
                         float attackRange = human.attackRadius;
 
-                        if (!IsInRange(currentNode.GetNodePosition(), targetWorldPos, attackRange))
+                        if (!IsInRange(currentNode.GetNodePosition(), targetWorldPos, attackRange + rangedBias))
                             continue;
                     }
                     candidates.Add(currentNode);
@@ -294,7 +293,7 @@ public class TilemapManager : MonoSingleton<TilemapManager>
                         int newY = currentNode.GridY + y;
                         if (newX >= 0 && newX < PathFinding.grid.GetLength(0) && newY >= 0 && newY < PathFinding.grid.GetLength(1))
                         {
-                            if (Mathf.Abs(x) == 1 && Mathf.Abs(y) == 1)
+                            if(checkNeighbors && Mathf.Abs(x) == 1 && Mathf.Abs(y) == 1)
                             {
                                 bool canWalkHorizontal = PathFinding.grid[currentNode.GridX + x, currentNode.GridY].IsWalkable;
                                 bool canWalkVertical = PathFinding.grid[currentNode.GridX, currentNode.GridY + y].IsWalkable;
@@ -408,7 +407,7 @@ public class TilemapManager : MonoSingleton<TilemapManager>
         return PathFinding.cellSize;
     }
 
-    public bool CheckBlockBetween2Nodes(Vector2 positionA, Vector2 positionB)
+    public bool IsNoBlockBetween2Nodes(Vector2 positionA, Vector2 positionB)
     {
         Node nodeA = FindNode(positionA);
         Node nodeB = Instance.FindNode(positionB);
@@ -457,20 +456,29 @@ public class TilemapManager : MonoSingleton<TilemapManager>
         return true;
     }
 
-    public Node GetClosestInteractableNode(GameObject target, Vector3 requesterPos, GameObject requester)
+    public Node GetClosestInteractableNode(Unit target, Vector3 requesterPos, GameObject requester)
     {
-        Collider2D col = target.GetComponent<Collider2D>();
-
         Vector3 searchOrigin;
-        if (col != null)
+
+        if(target is not HumanUnit)
         {
-            searchOrigin = col.ClosestPoint(requesterPos);
+            /* BoxCollider2D col = target.GetComponent<BoxCollider2D>();
+
+             searchOrigin = col.ClosestPoint(requesterPos);*/
+
+
+            BoxCollider2D col = target.GetComponent<BoxCollider2D>();
+            Bounds b = col.bounds;
+
+           
+            searchOrigin = ClosestPoint(requesterPos, b);
+
         }
         else
         {
             searchOrigin = target.transform.position;
         }
-        return FindNearestAvailableNode(searchOrigin, requester, false);
+        return FindNearestAvailableNode(searchOrigin, requester, false, 15000);//Ô­À´ÊÇfalse
     }
     public bool CanPlaceBuilding(Vector3Int position, UnitSide side)
     {

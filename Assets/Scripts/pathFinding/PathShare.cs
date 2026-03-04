@@ -49,7 +49,7 @@ public class PathShare
 
         if ((requester.transform.position - record.sourcePosition).sqrMagnitude < 4f)
         {
-            if (TilemapManager.Instance.CheckBlockBetween2Nodes(requester.transform.position, record.sourcePosition))
+            if (TilemapManager.Instance.IsNoBlockBetween2Nodes(requester.transform.position, record.sourcePosition))
             {
                 index = GetAnIndex(requester, record.path);
                 return record.path;
@@ -66,7 +66,7 @@ public class PathShare
 
         for (int i = 1; i < Mathf.Min(sharedPath.Count, 20); i++)
         {
-            if (!TilemapManager.Instance.CheckBlockBetween2Nodes(member.transform.position, sharedPath[i].GetNodePosition()))
+            if (!TilemapManager.Instance.IsNoBlockBetween2Nodes(member.transform.position, sharedPath[i].GetNodePosition()))
             {
                 continue;
             }

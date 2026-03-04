@@ -30,7 +30,7 @@ public class DeliverState :IUnitState
         if(!u.anim.GetBool("Move"))
             u.anim.SetBool("Move", true);
 
-        Node targetNode = TilemapManager.Instance.GetClosestInteractableNode(u.target.gameObject, u.transform.position, u.gameObject);
+        Node targetNode = TilemapManager.Instance.GetClosestInteractableNode(u.target, u.transform.position, u.gameObject);
         if (targetNode == null) return;
 
         Vector3 targetPos = targetNode.GetNodePosition();

@@ -23,14 +23,21 @@ public class FactionAI : MonoBehaviour
     public AIEconomy economy;
     public AITactical tacitical;
 
-    private bool isInit = false;
+    [SerializeField]private bool isInit = false;
 
+    public int attackTimes = 0;
     public bool prepareForAttack = false;
     public bool attack = false;
     public int nextAttackNum = 20;
 
+    public int maxBuildingNum = 100;
+    public int maxAttackBuildingNum = 12;
+
     [SerializeField] private float executeFrequency = 0.5f;
     private float executeTimer;
+
+    [SerializeField] private float requestBuildingChangeTime = 25f;
+    private float rBChangeTimer;
     private void Awake()
     {
         strategy = new AIStrategy(this);
@@ -97,7 +104,26 @@ public class FactionAI : MonoBehaviour
             InitAI();
             return;
         }
+        if(!GameManager.Instance.isPlaying)
+        {
+            return;
+        }
         executeTimer += Time.deltaTime;
+
+        if(strategy.requestBuilding != null)
+        {
+            rBChangeTimer += Time.deltaTime;
+            if(rBChangeTimer > requestBuildingChangeTime)
+            {
+                rBChangeTimer = 0;
+                strategy.requestBuilding = null;
+            }
+        }
+        else
+        {
+            rBChangeTimer = 0;
+        }
+
         if(executeTimer>= executeFrequency)
         {
             executeTimer = 0;

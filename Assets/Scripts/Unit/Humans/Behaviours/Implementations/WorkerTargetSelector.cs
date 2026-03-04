@@ -152,7 +152,7 @@ public class WorkerTargetSelector : ITargetSelector
         }
         else
         {
-            endNode = TilemapManager.Instance.GetClosestInteractableNode(targetUnit.gameObject, self.transform.position, self.gameObject);
+            endNode = TilemapManager.Instance.GetClosestInteractableNode(targetUnit, self.transform.position, self.gameObject);
         }
 
         if (startNode == null || endNode == null) return false;

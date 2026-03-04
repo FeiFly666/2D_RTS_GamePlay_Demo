@@ -51,7 +51,8 @@ public class AI : MonoBehaviour
         {
             FinalTargetPosition = transform.position;
         }
-        groupFormationOffset = new Vector2(Random.Range(-0.15f, 0.15f), Random.Range(-0.15f, 0.15f));
+        //groupFormationOffset = new Vector2(Random.Range(-0.15f, 0.15f), Random.Range(-0.15f, 0.15f));
+        groupFormationOffset = new Vector2(0, 0);
     }
 
     private void Update()

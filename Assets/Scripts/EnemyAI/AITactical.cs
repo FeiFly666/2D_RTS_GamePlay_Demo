@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,25 +55,28 @@ public class AITactical
     }
     private void AssignTaskToWorker(Worker worker,int chopNum)
     {
-        GoldMine mine = GetAvailableGoldMines();
-        if(chopNum == 0)
+        if(worker == null) return;
+        var ntree = GetNearestTree(worker.transform.position);
+
+        if (chopNum == 0)
         {
-            var ntree = GetNearestTree(worker.transform.position);
             if (ntree != null)
             {
                 worker.SetClickTarget(ntree);
                 return;
             }
         }
+
+        GoldMine mine = GetAvailableGoldMines();
         if (mine != null)
         {
             worker.SetClickTarget(mine);
             return;
         }
-        var tree = GetNearestTree(worker.transform.position);
-        if (tree != null)
+
+        if (ntree != null)
         {
-            worker.SetClickTarget(tree);
+            worker.SetClickTarget(ntree);
             return;
         }
     }
@@ -123,15 +127,20 @@ public class AITactical
             FactionData playerFaction = GameManager.Instance.factions[(int)GameManager.Instance.playerSide];
 
             BuildingUnit targetBuilding = playerFaction.buildings[Random.Range(0, playerFaction.buildings.Count)];
+
             Node targetNode = TilemapManager.Instance.FindNearestAvailableNode(targetBuilding.transform.position, attackGroup.leader.gameObject, false);
 
             Vector3 targetPos = targetNode.GetNodePosition();
 
             attackGroup.FormGroupMoving(targetPos, targetBuilding);
 
+            AI.attackTimes++;
+
             //为下一次进攻做准备
             AI.prepareForAttack = false;
-            AI.nextAttackNum = Random.Range(15, 35);
+            AI.nextAttackNum = Random.Range(15 + 5 * Mathf.Max(AI.attackTimes - 3 , 0), 35 + 10 * AI.attackTimes);
+
+            AI.nextAttackNum = Mathf.Min(120, AI.nextAttackNum);
         }
 
         //进攻
@@ -243,10 +252,17 @@ public class AITactical
         //防抖，一个士兵找到就退出
         int i = Random.Range(0, idleCombatants.Count);
 
+        if (idleCombatants[i] == null) return;
+
         if (mine.CanInside)
         {
-            if (!idleCombatants[i].isBuildingUnit && !idleCombatants[i].HasRegisterTarget && !attackGroup.members.Contains(idleCombatants[i]))
+            if (!idleCombatants[i].isBuildingUnit && !idleCombatants[i].HasRegisterTarget)
             {
+                if(attackGroup != null)
+                {
+                    if (attackGroup.members.Contains(idleCombatants[i]))
+                        return;
+                }
                 idleCombatants[i].SetClickTarget(mine);
             }
         }
@@ -279,6 +295,8 @@ public class AITactical
 
         foreach(var tree in GameManager.Instance.resources)
         {
+            if (tree.resourceLeftNum == 0) continue;
+
             float dis = (origin - tree.transform.position).sqrMagnitude;
 
             if(dis < minDis)

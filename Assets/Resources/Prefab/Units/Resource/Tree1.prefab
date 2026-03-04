@@ -135,7 +135,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Actions: []
   uniqueID: 0
-  unitType: 0
+  unitType: 2
   unitSide: 4
   detectPosition: {x: 0, y: 0, z: 0}
   sortingYOffset: 0
@@ -230,7 +230,6 @@ GameObject:
   - component: {fileID: 5090522651797288693}
   - component: {fileID: 1415747480057820996}
   - component: {fileID: 7463004540698651215}
-  - component: {fileID: 8292593817021187346}
   m_Layer: 17
   m_Name: Animator
   m_TagString: Untagged
@@ -326,18 +325,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &8292593817021187346
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4682572189035410768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 039f139843f43524ca9cb1da414d46a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6781666129617678594
 GameObject:
   m_ObjectHideFlags: 0

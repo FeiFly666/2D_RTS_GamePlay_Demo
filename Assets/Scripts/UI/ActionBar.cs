@@ -54,7 +54,7 @@ public class ActionBar : MonoBehaviour
 
         button.InitButton(buildingData, icon, action, interactable);
 
-        button.transform.parent = buttonRoot;
+        button.transform.SetParent(buttonRoot);
 
     }
 

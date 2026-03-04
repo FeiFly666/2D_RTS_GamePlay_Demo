@@ -20,7 +20,7 @@ MonoBehaviour:
   DetectRadius: 11.5
   AttackRadius: 10
   TrainingTime: 12
-  FullHP: 120
+  FullHP: 80
   Attack: 15
   Armor: 2
   CritChance: 30

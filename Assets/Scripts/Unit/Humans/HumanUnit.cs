@@ -269,8 +269,12 @@ public abstract class HumanUnit : Unit
         lastEnemyPos = pos;
         if (target is not HumanUnit)
         {
-            pos = TilemapManager.Instance.GetClosestInteractableNode(target.gameObject, this.transform.position, this.gameObject).GetNodePosition();
+            Node targetNode = TilemapManager.Instance.GetClosestInteractableNode(target, this.transform.position, this.gameObject);
+            if (targetNode == null) return;
+            pos = targetNode.GetNodePosition();
+            lastEnemyPos = pos;
         }
+
         MoveToDestinationFrame(pos);
     }
     public void TransitionTo(UnitStateType newState) => stateMachine.Change(newState);
@@ -420,8 +424,10 @@ public abstract class HumanUnit : Unit
         if (enemy is not HumanUnit)
         {
             Collider2D col = enemy.GetComponent<Collider2D>();
+            Bounds b = col.bounds;
             if (col != null)
-                enemyPosition = col.ClosestPoint(this.detectPosition);
+                //enemyPosition = col.ClosestPoint(this.detectPosition);
+                enemyPosition = ClosestPoint(this.detectPosition, b);
             else
                 enemyPosition = enemy.transform.position;
         }
@@ -434,11 +440,17 @@ public abstract class HumanUnit : Unit
     {
         Node currentNode = TilemapManager.Instance.FindNode(this.transform.position);
         Node targetNode = TilemapManager.Instance.FindNode(target.transform.position);
+
+
         if (this.target is not HumanUnit)
         {
-            targetNode = TilemapManager.Instance.GetClosestInteractableNode(target.gameObject, this.transform.position, this.gameObject);
+            targetNode = TilemapManager.Instance.GetClosestInteractableNode(target, this.transform.position, this.gameObject);
         }
-        return TilemapManager.Instance.CheckBlockBetween2Nodes(currentNode.GetNodePosition(), targetNode.GetNodePosition());
+
+        if (currentNode == null || targetNode == null)
+            return false;
+
+        return TilemapManager.Instance.IsNoBlockBetween2Nodes(currentNode.GetNodePosition(), targetNode.GetNodePosition());
     }
     public Vector3 GetTargetAimPoint(Unit target = null)
     {
@@ -451,7 +463,9 @@ public abstract class HumanUnit : Unit
             if (col != null)
             {
                 //Debug.Log(col.ClosestPoint(detectPosition));
-                return col.ClosestPoint(detectPosition);
+                //return col.ClosestPoint(detectPosition);
+                Bounds b = col.bounds;
+                return ClosestPoint(this.detectPosition, b);
 
             }
         }

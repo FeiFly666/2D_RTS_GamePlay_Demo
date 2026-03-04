@@ -101,6 +101,12 @@ public class MoveState : IUnitState
             {
                 if (u.ai.IsUnitInGroup)
                 {
+                    if(u.ai.currentGroup.leader == null || u.ai.currentGroup.leader.isDead)
+                    {
+                        u.ai.currentGroup.leader = u;
+                        u.ai.currentGroup.UpdateGroupChase();
+                        return;
+                    }
                     if (u.ai.currentGroup.leader == u)
                         u.ai.currentGroup.UpdateGroupChase();
                     return;
@@ -118,10 +124,12 @@ public class MoveState : IUnitState
                 }
 
                 Vector3 currentTargetPos = u.target.transform.position;
-/*                if(u.target is not HumanUnit)
-                {
-                    currentTargetPos = u.GetTargetAimPoint();
-                }*/
+                /*                if(u.target is not HumanUnit)
+                                {
+                                    currentTargetPos = u.GetTargetAimPoint();
+                                }*/
+                if (u == null || u.isDead) return;
+
                 if (u.ai.IsPathVaild())
                 {
                     if (u.target is not HumanUnit) return;

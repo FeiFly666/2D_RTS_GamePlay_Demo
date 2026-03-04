@@ -199,8 +199,6 @@ public class BuildingUnit : Unit
             unit.sr.enabled = false;
         }
 
-        this.buildingType = BuildingType.Static;
-
         if(this is TrainingBuilding t)
         {
             t.RemoveAllTrainingTask();
@@ -224,6 +222,7 @@ public class BuildingUnit : Unit
 
             ApplyArea(-1);
         }
+        this.buildingType = BuildingType.Static;
 
         GameManager.Instance.buildings.Remove(this);
 

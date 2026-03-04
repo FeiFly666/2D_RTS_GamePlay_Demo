@@ -23,7 +23,7 @@ public class AIEconomy
     }
     public void UpdateResourcesBlance()
     {
-        if (AI.faction.BuildingTypeCount[BuildingType.Collect] > 0)
+        if (AI.faction.BuildingTypeCount[(int)BuildingType.Collect] > 0)
         {
             if (AI.faction.GoldNum > 600 && AI.faction.GoldNum > AI.faction.WoodNum * 3)
             {
@@ -40,6 +40,7 @@ public class AIEconomy
         if (Time.time - cooldownStart < buildCooldown) return;
 
         requestBuilding = AI.strategy.requestBuilding;
+
 
         if (!AI.faction.CanAfford(requestBuilding.goldCost, requestBuilding.woodCost)) return;
 
@@ -77,7 +78,7 @@ public class AIEconomy
         queue.Enqueue(startCell);
         visited.Add(startCell);
 
-        int scanLimit = 1500;
+        int scanLimit = 3000;
         int scanCount = 0;
 
         while (queue.Count > 0 && scanLimit > scanCount)

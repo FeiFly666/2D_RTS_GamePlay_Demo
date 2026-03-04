@@ -5,16 +5,24 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-public class PoolManager : MonoSingleton<PoolManager>
+public class PoolManager : Singleton<PoolManager>
 {
     private Dictionary<string, object> pools = new Dictionary<string, object>();
 
     public void CreatePool<T>(string key, T prefab, int size, Transform transform) where T : Component
     {
-        if (pools.ContainsKey(key)) return;
+        //if (pools.ContainsKey(key) && pools[key] != null) return;
 
         ObjectPool<T> pool = new ObjectPool<T>(prefab, size, transform);
-        pools.Add(key, pool);
+
+        if (pools.ContainsKey(key))
+        {
+            pools[key] = pool;
+        }
+        else
+        {
+            pools.Add(key, pool);
+        }
     }
 
     public T Spawn<T>(string key) where T : Component
@@ -39,7 +47,7 @@ public class PoolManager : MonoSingleton<PoolManager>
     }
     public void ReturnAllToPool<T>(string key) where T : Component
     {
-        T[] actives = FindObjectsOfType<T>();
+        T[] actives = GameObject.FindObjectsOfType<T>();
         foreach (var obj in actives)
         {
             Despawn(key, obj);

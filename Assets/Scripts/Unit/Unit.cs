@@ -18,7 +18,8 @@ public enum UnitState
 public enum UnitType
 {
     unit,
-    building
+    building,
+    resource
 }
 public enum UnitSide
 {
@@ -159,7 +160,11 @@ public class Unit : MonoBehaviour
         GameManager.Instance.UnregisterSideUnit(this);
     }
 
-    public void DestroyUnit() => Destroy(this.gameObject);
+    public virtual void DestroyUnit()
+    {
+        //PoolManager.Instance.Despawn(this.);
+        Destroy(this.gameObject);
+    }
 
     private void OnDrawGizmosSelected()
     {

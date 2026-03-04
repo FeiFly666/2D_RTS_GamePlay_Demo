@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoSingleton<GameManager>
@@ -11,6 +13,8 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField]public Arrow arrowPrefab;
     public static int[] EnemyMasks = new int[5];
 
+
+    public bool isPlaying = false;
     public bool isNeedFog = false;
 
     private int availableID = 0;
@@ -40,15 +44,19 @@ public class GameManager : MonoSingleton<GameManager>
         InitEnemyLayers();
 
         InitFactions();
+
+        isNeedFog = LevelOption.Instance.isNeedFog;
+        ;
     }
     private void Start()
     {
-        PoolManager.Instance.CreatePool("Arrow", arrowPrefab, 300,this.transform);
+        //UnitSpawnManager.Instance.InitAllUnitPools();
+        PoolManager.Instance.CreatePool("Arrow", arrowPrefab, 1000,this.transform);
         factions[(int)playerSide].AddGold(0);
 
 
         InitFactionAI();
-
+        isPlaying = true;
     }
 
     private void Update()
@@ -100,6 +108,48 @@ public class GameManager : MonoSingleton<GameManager>
 
         }
     }
+
+    public void FactionDestroy(UnitSide side)
+    {
+        FactionData faction = factions[(int)side];
+
+        foreach (var human in faction.humans.ToList())
+        {
+            if(human != null && human.stats != null)
+                human.stats.DecreaseHP(null, 1000000);
+        }
+
+        if (side == playerSide)
+        {
+            UIManager.Instance.gameLose.SetActive(true);
+            isPlaying = false;
+            return;
+        }
+
+        FactionAI factionAI = null;
+        foreach(var ai in ais)
+        {
+            if(ai != null)
+            {
+                if(ai.unitSide == side)
+                {
+                    factionAI = ai;
+                    break;
+                }
+            }
+        }
+
+        Destroy(factionAI.gameObject);
+        ais.Remove(factionAI);
+
+        if(ais.Count == 0)
+        {
+            UIManager.Instance.gameWin.SetActive(true);
+            isPlaying = false;
+        }
+
+    }
+
     public void RegisterSideUnit(Unit unit)
     {
         if (factions.Count < sideNum)
@@ -167,6 +217,14 @@ public class GameManager : MonoSingleton<GameManager>
                 factions[(int)unit.unitSide].trainings.Remove(train);
             if (building is GoldMine gold)
                 factions[(int)unit.unitSide].goldMines.Remove(gold);
+
+            if(isPlaying)
+            {
+                if (factions[(int)unit.unitSide].buildings.Count <= 0)
+                {
+                    FactionDestroy(unit.unitSide);
+                }
+            }
         }
         else if(unit is ResourceUnit resource)
         {
@@ -217,6 +275,25 @@ public class GameManager : MonoSingleton<GameManager>
     {
         this.availableID = newID;
     }
+
+    public void BackToMenu()
+    {
+        StartCoroutine(LoadScene());
+    }
+    IEnumerator LoadScene()
+    {
+        AsyncOperation op = SceneManager.LoadSceneAsync("Menu");
+        while (!op.isDone)
+        {
+            yield return null;
+        }
+    }
+
+    public void Exit()
+    {
+        Application.Quit();
+    }
+
     public void SaveData()
     {
         SaveManager.Instance.SaveGame();

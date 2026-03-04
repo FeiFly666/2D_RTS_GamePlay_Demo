@@ -5060,7 +5060,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Actions: []
   uniqueID: 0
-  unitType: 0
+  unitType: 1
   unitSide: 0
   detectPosition: {x: 0, y: 0, z: 0}
   sortingYOffset: -0.5

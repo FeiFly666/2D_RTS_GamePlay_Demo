@@ -9,7 +9,7 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         get
         {
-            if (instance == null)
+            if (instance == null || instance.Equals(null))
             {
                 instance =(T)FindObjectOfType<T>();
             }
