@@ -24,7 +24,7 @@ public class MeleeTargetSelector : ITargetSelector
             }
         }
 
-        int num = Physics2D.OverlapCircleNonAlloc(self.detectPosition, self.dectectRadius, scanBuffer, GameManager.EnemyMasks[(int)self.unitSide]);
+        int num = Physics2D.OverlapCircleNonAlloc(self.detectPosition, self.detectRadius, scanBuffer, GameManager.EnemyMasks[(int)self.unitSide]);
         
         Unit closestEnemy = null;
         float closestEnemyDistance = Mathf.Infinity;

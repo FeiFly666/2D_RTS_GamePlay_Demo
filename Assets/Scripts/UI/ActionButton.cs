@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class ActionButton : MonoBehaviour,IPoolable
 {
-    private Button button => GetComponent<Button>();
+    [SerializeField ]private Button button;
     [SerializeField] private Image buttonIcon;
     [SerializeField] private UIDescriptionBaseData unitData;
 

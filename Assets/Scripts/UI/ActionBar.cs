@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 public class ActionBar : MonoBehaviour
 {
-    private Image img => GetComponent<Image>();
     [SerializeField] private GameObject actionButtonPPrefab;
 
     [SerializeField]private List<ActionButton> actionButtons = new List<ActionButton>();

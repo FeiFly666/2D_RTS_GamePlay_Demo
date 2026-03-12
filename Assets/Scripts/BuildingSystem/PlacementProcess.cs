@@ -11,7 +11,8 @@ public class PlacementProcess
 
     private Vector3Int[] highlightArea;
 
-    [SerializeField] private Sprite highlightTile;
+    private Sprite highlightTileSprite;
+    private Tile highlightTile;
 
     public BuildingAction buildingAction => BuildingAction;
 
@@ -24,7 +25,10 @@ public class PlacementProcess
 
         BuildingAction = action;
 
-        highlightTile = Resources.Load<Sprite>("Image/highlightTile");
+        highlightTileSprite = Resources.Load<Sprite>("Image/highlightTile");
+        highlightTile = ScriptableObject.CreateInstance<Tile>();
+
+        highlightTile.sprite = highlightTileSprite;
 
         highlightArea = new Vector3Int[] { };
 
@@ -49,10 +53,8 @@ public class PlacementProcess
 
         foreach(var position in highlightArea)
         {
-            var tile = ScriptableObject.CreateInstance<Tile>();
-            tile.sprite = highlightTile;
 
-            TilemapManager.Instance.PlacementTilemap.SetTile(position,tile);
+            TilemapManager.Instance.PlacementTilemap.SetTile(position,highlightTile);
 
             TilemapManager.Instance.PlacementTilemap.SetTileFlags(position, TileFlags.None); //‘ –Ì–ﬁ∏ƒÕﬂ∆¨ Ù–‘
 

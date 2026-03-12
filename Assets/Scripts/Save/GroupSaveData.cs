@@ -20,6 +20,7 @@ public class GroupSaveData
     }
     public GroupSaveData(UnitGroup group)
     {
+        if (group.leader == null) return;
         this.ID = group.uniqueID;
         this.leaderID = group.leader.uniqueID;
         foreach (var member in group.members)

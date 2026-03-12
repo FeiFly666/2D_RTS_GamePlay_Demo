@@ -32,10 +32,10 @@ public class PathRequestController : MonoSingleton<PathRequestController>
 
     private void Update()
     {
-        TryProcessBatch();
+        TryProcessRequest();
     }
 
-    private void TryProcessBatch()
+    private void TryProcessRequest()
     {
         int countThisFrame = 0;
 
@@ -74,15 +74,6 @@ public class PathRequestController : MonoSingleton<PathRequestController>
         }
 
         requestList.Add(new PathRequest(start, end, callback, requester));*/
-
-
-        if(currentRequest != null && currentRequest.requester == requester)
-        {
-            currentRequest.startPosition = start;
-            currentRequest.endPosition = end;
-            currentRequest.callback = callback;
-            return;
-        }
 
         //ШЅжи
         if(requester != null && requestMap.TryGetValue(requester, out var existingRequest))

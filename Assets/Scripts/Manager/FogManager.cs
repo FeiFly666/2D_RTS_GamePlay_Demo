@@ -103,7 +103,7 @@ public class FogManager : MonoSingleton<FogManager>
 
             if (centerNode == null) continue;
 
-            int r = Mathf.CeilToInt(unit.dectectRadius / TilemapManager.Instance.GetNodeSize().x);
+            int r = Mathf.CeilToInt(unit.detectRadius / TilemapManager.Instance.GetNodeSize().x);
 
             Vector2Int[] offsets = GetCircularOffsets(r);
             foreach (var offset in offsets)

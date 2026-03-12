@@ -62,7 +62,6 @@ public class FactionData
             OnDataUpdate?.Invoke();
         }
     }
-
     public bool CanAfford(int gold, int wood) => gold <= GoldNum && wood <= WoodNum;
     public bool HasPeopleSpace(int PopOc) => (currentPeopleNum +  PopOc) < TotalPeopleNum;
 

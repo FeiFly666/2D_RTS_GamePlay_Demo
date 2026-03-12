@@ -13,6 +13,7 @@ public class SaveGameRoot
     public string currentLevelName;//µØÍ¼Ãû³Æ
 
     public List<FactionSaveData> factions = new List<FactionSaveData>();
+    public List<FactionAISaveData> factionAis = new List<FactionAISaveData>();
     public List<UnitSaveData> allHumans = new List<UnitSaveData>();
     public List<BuildingSaveData> allBuildings = new List<BuildingSaveData>();
     public List<GroupSaveData> allGroups = new List<GroupSaveData>();

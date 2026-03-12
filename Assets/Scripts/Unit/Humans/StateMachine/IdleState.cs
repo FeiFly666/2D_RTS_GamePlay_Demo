@@ -13,12 +13,14 @@ public class IdleState : IUnitState
     public void Enter()
     {
         //u.ai.ClearPath();
-        if(u.faction.side != GameManager.Instance.playerSide && !u.isBuildingUnit)
+        if (!u.isBuildingUnit)
         {
-            if(u.role != UnitRole.Worker)
+            if (u.role != UnitRole.Worker)
             {
                 if (!u.faction.IdleNoWorkerHumans.Contains(u))
+                {
                     u.faction.IdleNoWorkerHumans.Add(u);
+                }
             }
             else
             {
@@ -84,7 +86,7 @@ public class IdleState : IUnitState
     }
     public void Exit()
     {
-        if (u.faction.side != GameManager.Instance.playerSide && !u.isBuildingUnit)
+        if ( !u.isBuildingUnit)
         {
             if (u.role != UnitRole.Worker)
             {

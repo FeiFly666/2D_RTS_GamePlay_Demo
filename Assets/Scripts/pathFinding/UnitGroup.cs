@@ -241,7 +241,7 @@ public class UnitGroup
         {
             return;
         }
-        Debug.Log("正在群体追击！！！！");
+        //Debug.Log("正在群体追击！！！！");
         //FormGroupTarget(targetUnit);
         if (Time.time - lastChaseUpdateTime > chaseUpdateFrequency)
         {

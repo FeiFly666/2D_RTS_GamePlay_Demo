@@ -67,14 +67,14 @@ public class Unit : MonoBehaviour
         sg = GetComponent<UnityEngine.Rendering.SortingGroup>();
         sr = GetComponentInChildren<SpriteRenderer>();
         stats = GetComponent<UnitStats>();
-
-        uniqueID = GameManager.Instance.GetAnID();
+        if(GameManager.Instance != null)
+            uniqueID = GameManager.Instance.GetAnID();
 
         UpdateSortingGroup();
     }
     protected virtual void Start()
     {
-
+        if (GameManager.Instance == null) return;
         this.gameObject.layer = LayerMask.NameToLayer("Side" + (int)unitSide);
 
         if (unitType == UnitType.building)
@@ -82,7 +82,6 @@ public class Unit : MonoBehaviour
             this.detectPosition = transform.position;
             this.detectPosition.y += 1;
         }
-
         GameManager.Instance.RegisterSideUnit(this);
 
         if(this is not ResourceUnit)
@@ -99,10 +98,6 @@ public class Unit : MonoBehaviour
     protected virtual void Update()
     {
         //UpdateBehaviour();
-
-    }
-    protected virtual void FixedUpdate()
-    {
 
     }
 
@@ -150,7 +145,11 @@ public class Unit : MonoBehaviour
     public virtual void Death()
     {
         isDead = true;
+
+        OnDeselected?.Invoke();
         OnUnitDead?.Invoke();
+
+        SelectionManager.Instance.ActiveUnitDeath(this);
 
         if(HpBar != null)
         {

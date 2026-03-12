@@ -36,7 +36,7 @@ public abstract class HumanUnit : Unit
     public float pathFoundTimer = 0f;
 
     [Header("¼ì²â¾àÀë")]
-    [SerializeField] public float dectectRadius;
+    [SerializeField] public float detectRadius;
     [SerializeField] public float attackRadius;
     [SerializeField] public bool isAOE = false;
 
@@ -73,6 +73,7 @@ public abstract class HumanUnit : Unit
     protected override void Start()
     {
         base.Start();
+        if(stateMachine == null) stateMachine = new UnitStateMachine(this);
         //stateMachine.Change(new IdleState(this));
 
         faction = GameManager.Instance.factions[(int)unitSide];
@@ -112,7 +113,7 @@ public abstract class HumanUnit : Unit
 
     protected void InitData()
     {
-        this.dectectRadius = this.data.detectRadius;
+        this.detectRadius = this.data.detectRadius;
         this.attackRadius = this.data.attackRadius;
         this.stats.FullHP = this.data.fullHP;
         this.stats.Attack = this.data.attack;
@@ -434,7 +435,7 @@ public abstract class HumanUnit : Unit
 
         //var distance = Vector2.Distance(enemyPosition, detectPosition);
 
-        return IsInRange(enemyPosition, detectPosition, dectectRadius);
+        return IsInRange(enemyPosition, detectPosition, detectRadius);
     }
     public bool IsTargetNoBlock()
     {
@@ -489,7 +490,7 @@ public abstract class HumanUnit : Unit
     {
         Gizmos.color = Color.white;
 
-        Gizmos.DrawWireSphere(detectPosition, dectectRadius);
+        Gizmos.DrawWireSphere(detectPosition, detectRadius);
 
         Gizmos.color = Color.red;
 
@@ -581,6 +582,8 @@ public abstract class HumanUnit : Unit
         }
 
         this.isNeedInitPosition = false;
+
+        faction = GameManager.Instance.factions[(int)unitSide];
     }
     public void ResumeLogic()
     {
@@ -625,7 +628,7 @@ public abstract class HumanUnit : Unit
             }
             return;
         }
-        if (lastPathRequestTargetPos != new Vector3(-1500, -1500, -1500))
+        if (lastPathRequestTargetPos != new Vector3(-1500, -1500, -1500) && (this.transform.position - lastPathRequestTargetPos).sqrMagnitude > 0.16f)
         {
             if (!IsForcingMoving)
                 MoveToDestinationFrame(lastPathRequestTargetPos);
@@ -634,7 +637,6 @@ public abstract class HumanUnit : Unit
             TransitionTo(UnitStateType.Move);
             return;
         }
-
         ai.ClearPath();
         TransitionTo(UnitStateType.Idle);
     }

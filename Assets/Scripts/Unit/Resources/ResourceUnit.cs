@@ -55,6 +55,7 @@ public class ResourceUnit : Unit
     protected override void Start()
     {
         base.Start();
+        if (GameManager.Instance == null) return;
         if(!GameManager.Instance.resources.Contains(this))
         {
             GameManager.Instance.resources.Add(this);

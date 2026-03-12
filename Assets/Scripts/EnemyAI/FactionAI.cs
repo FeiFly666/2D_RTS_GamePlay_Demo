@@ -30,8 +30,8 @@ public class FactionAI : MonoBehaviour
     public bool attack = false;
     public int nextAttackNum = 20;
 
-    public int maxBuildingNum = 100;
-    public int maxAttackBuildingNum = 12;
+    public int maxBuildingNum = 80;
+    public int maxAttackBuildingNum = 25;
 
     [SerializeField] private float executeFrequency = 0.5f;
     private float executeTimer;
@@ -52,6 +52,8 @@ public class FactionAI : MonoBehaviour
     public void InitAI()
     {
         faction = GameManager.Instance.factions[(int)unitSide];
+
+        faction.OnDataUpdate += OnTotalPeopleChanged;
 
         BuildingUnit basement = faction.buildings.Find(b => b.buildingType == BuildingType.Static);
 
@@ -133,6 +135,47 @@ public class FactionAI : MonoBehaviour
             economy.UpdateLogic();
             production.UpdateLogic();
             tacitical.UpdateLogic();
+        }
+    }
+    public void OnTotalPeopleChanged()
+    {
+        nextAttackNum = Mathf.Min(faction.TotalPeopleNum - 10, nextAttackNum);
+    }
+    public void UnRegistAction()
+    {
+        faction.OnDataUpdate -= OnTotalPeopleChanged;
+    }
+    public FactionAISaveData ToSaveData()
+    {
+        return new FactionAISaveData(this);
+    }
+
+    public void LoadData(FactionAISaveData data)
+    {
+        faction = GameManager.Instance.factions[(int)data.side];
+        this.attackTimes = data.attackTimes;
+        this.nextAttackNum = data.nextAttackNum;
+
+        foreach(var member in data.groupMembers)
+        {
+            HumanUnit unit = GameManager.Instance.liveHumanUnits.Find(u => u.uniqueID == member);
+            
+            if(unit != null)
+            {
+                this.tacitical.groupMembers.Add(unit);
+            }
+        }
+        if (tacitical.groupMembers.Count > 0 && tacitical.attackGroup == null)
+        {
+            tacitical.ResumeAttackGroup();
+            if (tacitical.attackGroup.members.Count >= nextAttackNum || data.attack)
+            {
+                attack = true;
+            }
+            else
+            {
+                prepareForAttack = true;
+            }
         }
     }
 

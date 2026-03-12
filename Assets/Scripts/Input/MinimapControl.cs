@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
@@ -54,6 +55,10 @@ namespace Assets.Scripts.Input
 
             StartCoroutine(UpdateMinmap());
             //InvokeRepeating(nameof(UpdateMinimap), 0, 0.08f); //每秒更新10~20次
+        }
+        private void OnEnable()
+        {
+            StartCoroutine(UpdateMinmap());
         }
         IEnumerator UpdateMinmap()
         {

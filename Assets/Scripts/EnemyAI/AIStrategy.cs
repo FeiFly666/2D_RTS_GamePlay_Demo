@@ -34,7 +34,7 @@ public class AIStrategy
         }
 
         //Ó¦¼±ÐÍÑµÁ·
-        if (data.BuildingTypeCount[(int)BuildingType.Train] >=1)
+        if (data.BuildingTypeCount[(int)BuildingType.Train] > 0)
         {
             if(NeedEmergencyTraining(data)) { return; }
         }
@@ -126,7 +126,7 @@ public class AIStrategy
                 }
             }
 
-            if (data.BuildingTypeCount[(int)BuildingType.Ranged] > 0 && data.BuildingTypeCount[(int)BuildingType.Ranged] < AI.maxAttackBuildingNum)
+            if (data.BuildingTypeCount[(int)BuildingType.Ranged] > 0 && data.BuildingTypeCount[(int)BuildingType.Attack] < AI.maxAttackBuildingNum)
             {
                 BuildingAction tower = AI.buildingMap[BuildingType.Attack][0];
 

@@ -9,7 +9,7 @@ public class AITactical
 {
     private FactionAI AI;
 
-    private UnitGroup attackGroup;
+    public UnitGroup attackGroup;
     public List<HumanUnit> groupMembers = new List<HumanUnit>();
     public AITactical(FactionAI AI)
     {
@@ -39,17 +39,19 @@ public class AITactical
 
         if (needToWorkNum == 0) return;
 
+        int chopTreeNum = 0;
+
+        foreach (var worker in allWorkers)
+        {
+            if (worker.ResourceAreaID != -1)
+            {
+                chopTreeNum++;
+                break;
+            }
+        }
+
         for (int i = 0; i < needToWorkNum; i++)
         {
-            int chopTreeNum = 0;
-            foreach (var worker in allWorkers)
-            {
-                if (worker.ResourceAreaID != -1)
-                {
-                    chopTreeNum++;
-                    break;
-                }
-            }
             AssignTaskToWorker(idleWorkers[i],chopTreeNum);
         }
     }
@@ -119,6 +121,7 @@ public class AITactical
             }
 
         }
+        if (attackGroup == null) return;
         //组队完成开始进攻
         if(attackGroup.members.Count == AI.nextAttackNum && !AI.attack)
         {
@@ -140,7 +143,7 @@ public class AITactical
             AI.prepareForAttack = false;
             AI.nextAttackNum = Random.Range(15 + 5 * Mathf.Max(AI.attackTimes - 3 , 0), 35 + 10 * AI.attackTimes);
 
-            AI.nextAttackNum = Mathf.Min(120, AI.nextAttackNum);
+            AI.nextAttackNum = Mathf.Min(AI.faction.TotalPeopleNum - 10, AI.nextAttackNum);
         }
 
         //进攻
@@ -199,6 +202,18 @@ public class AITactical
             }
 
         }
+    }
+    public void ResumeAttackGroup()
+    {
+        attackGroup = new UnitGroup();
+        foreach(var unit in groupMembers)
+        {
+            if (unit == null || unit.isDead) continue;
+            attackGroup.AddNewMember(unit);
+            if (attackGroup.leader == null)
+                attackGroup.leader = unit;
+        }
+        if (attackGroup.members.Count == 0) return;
     }
     private void RedetectNewTarget(HumanUnit u, FactionData playerFaction)
     {
@@ -282,7 +297,14 @@ public class AITactical
         {
             if(m.buildingState == BuildingState.ConstructionFinished && m.humanInsideData.Count < m.maxUnitNum)
             {
-                return m;
+                if(AI.faction.currentPeopleNum > 20)
+                {
+                    return m;
+                }
+                else if(m.humanInsideData.Count < 1)
+                {
+                    return m;
+                }
             }
         }
         return null;

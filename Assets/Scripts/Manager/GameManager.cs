@@ -71,8 +71,12 @@ public class GameManager : MonoSingleton<GameManager>
         if (factions.Count > 0)
         {
             UIManager.Instance.LogOutFactionDataDisplay();
+            foreach(var ai in ais)
+            {
+                ai.UnRegistAction();
+            }
         }
-      
+
         factions.Clear();
         for (int i = 0; i < sideNum; i++)
         {
@@ -81,7 +85,7 @@ public class GameManager : MonoSingleton<GameManager>
         }
         UIManager.Instance.RegisterFactionDataDisplay();
     }
-    public void InitFactionAI()
+    public void InitFactionAI(bool isLoad = false,List<FactionAISaveData>datas = null)
     {
         if (ais.Count > 0)
         {
@@ -106,6 +110,20 @@ public class GameManager : MonoSingleton<GameManager>
                 ais.Add(factionAI);
             }
 
+        }
+        if(isLoad)
+        {
+            foreach(var data in datas)
+            {
+                foreach(var ai in ais)
+                {
+                    if(ai.unitSide == data.side)
+                    {
+                        ai.LoadData(data); 
+                        break;
+                    }
+                }
+            }
         }
     }
 

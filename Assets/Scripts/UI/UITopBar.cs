@@ -16,7 +16,7 @@ public class UITopBar : MonoBehaviour
 
         GoldNum.text = faction.GoldNum.ToString();
 
-        CurrentPeople.text = $"{faction.currentPeopleNum} + / + {faction.TotalPeopleNum}";
+        CurrentPeople.text = $"{faction.currentPeopleNum} / {faction.TotalPeopleNum}";
     }
 
 }

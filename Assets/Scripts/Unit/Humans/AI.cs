@@ -85,7 +85,7 @@ public class AI : MonoBehaviour
 
         if(!newNode.IsWalkable)
         {
-            Debug.Log(gameObject.name + " 卧槽！路不能走了，重新寻路...");
+            //Debug.Log(gameObject.name + " 卧槽！路不能走了，重新寻路...");
             if(currentGroup == null)
             {
                 ReRouteToNearestOpenSlot();
@@ -176,7 +176,7 @@ public class AI : MonoBehaviour
         }
         else
         {
-            Debug.Log("目标位置附近也无法到达了，停下....");
+            //Debug.Log("目标位置附近也无法到达了，停下....");
 
             FinalTargetPosition = this.transform.position;
             unit.lastPathRequestTargetPos = this.transform.position;

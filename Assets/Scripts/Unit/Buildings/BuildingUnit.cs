@@ -182,7 +182,7 @@ public class BuildingUnit : Unit
             spawnUnits.Add(humanUnit);
             humanUnit.sg.sortingOrder = sortOrder + 2;
             humanUnit.attackRadius *= 1.4f;
-            humanUnit.dectectRadius = humanUnit.attackRadius;
+            humanUnit.detectRadius = humanUnit.attackRadius;
         }
 
     }
@@ -343,6 +343,7 @@ public class BuildingUnit : Unit
         {
             g.ResumeInsideUnits(data.goldMinUnits);
         }
+        faction = GameManager.Instance.factions[(int)unitSide];
     }
 
     public void ResumeProcess(BuildingSaveData data)

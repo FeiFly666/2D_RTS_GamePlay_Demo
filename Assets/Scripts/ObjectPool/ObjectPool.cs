@@ -60,7 +60,7 @@ namespace Assets.Scripts.ObjectPool
         {
             if (stack.Contains(obj))
             {
-                Debug.LogWarning($"物体{obj.name}已在池子中,禁止重复Release");
+                //Debug.LogWarning($"物体{obj.name}已在池子中,禁止重复Release");
                 return;
             }
 

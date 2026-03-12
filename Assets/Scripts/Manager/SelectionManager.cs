@@ -60,17 +60,23 @@ public class SelectionManager : MonoSingleton<SelectionManager>
         }
         return false;
     }
+
+    private static Collider2D[] selectSlot = new Collider2D[1000];
     public void TrySelectMutipleUnits(Vector2 start, Vector2 end)
     {
         ClearActiveUnit();
-        Collider2D[] colliders = Physics2D.OverlapAreaAll(start, end);
-        foreach(var col in colliders)
+       // Collider2D[] colliders = Physics2D.OverlapAreaAll(start, end);
+
+        int num = Physics2D.OverlapAreaNonAlloc(start,end, selectSlot);
+
+        for(int i = 0; i<num;i++)
         {
+            Collider2D col = selectSlot[i];
             Unit unit = col.GetComponent<Unit>();
-            if(unit is HumanUnit human && unit.unitSide == GameManager.Instance.playerSide)
+            if (unit is HumanUnit human && unit.unitSide == GameManager.Instance.playerSide)
             {
                 if (human.isBuildingUnit) continue;
-                if(!ActiveUnits.Contains(unit))
+                if (!ActiveUnits.Contains(unit))
                 {
                     ActiveUnits.Add(unit);
                     unit.OnSelected?.Invoke();
@@ -455,6 +461,20 @@ public class SelectionManager : MonoSingleton<SelectionManager>
         MyInputsystem.Instance.ChangeInputState(InputState.None);
         UIManager.Instance.actionBar.CloseActionBar();
         VisualManager.Instance.ClearAll();
+    }
+
+    public void ActiveUnitDeath(Unit unit)
+    {
+        if(ActiveUnits.Contains(unit))
+        {
+            ActiveUnits.Remove(unit);
+        }
+        if(ActiveUnits.Count == 0)
+        {
+            MyInputsystem.Instance.ChangeInputState(InputState.None);
+            UIManager.Instance.actionBar.CloseActionBar();
+            VisualManager.Instance.ClearAll();
+        }
     }
 
     private static Collider2D[] slot = new Collider2D[20];

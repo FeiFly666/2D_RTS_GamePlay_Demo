@@ -34,6 +34,11 @@ public class SaveManager : MonoSingleton<SaveManager>
         {
             root.factions.Add(faction.ToSaveData());
         }
+        
+        foreach(var ai in GameManager.Instance.ais)
+        {
+            root.factionAis.Add(ai.ToSaveData());
+        }
 
         foreach(var human in GameManager.Instance.liveHumanUnits)
         {
@@ -131,6 +136,8 @@ public class SaveManager : MonoSingleton<SaveManager>
             ResourceUnit resource = UnitFactory.CreatResource(data, spawnPoint);
 
             resource.LoadData(resourceData);
+
+            //GameManager.Instance.RegisterSideUnit(resource);
         }
 
         foreach (var buildingData in root.allBuildings)
@@ -140,8 +147,10 @@ public class SaveManager : MonoSingleton<SaveManager>
             Vector3 spawnPos = new Vector3(buildingData.position.x, buildingData.position.y, buildingData.position.z);
 
             BuildingUnit building = UnitFactory.CreateBuilding(data, spawnPos);
+
             building.LoadData(buildingData);
-            
+
+            //GameManager.Instance.RegisterSideUnit(building);
         }
 
         foreach (var humanData in root.allHumans)
@@ -155,6 +164,8 @@ public class SaveManager : MonoSingleton<SaveManager>
             human.isNeedInitPosition = false;
 
             human.LoadData(humanData);
+
+            //GameManager.Instance.RegisterSideUnit(human);
 
         }
 
@@ -177,8 +188,6 @@ public class SaveManager : MonoSingleton<SaveManager>
 
         TilemapManager.Instance.UpdateAllNodes();
 
-        GameManager.Instance.InitFactionAI();
-
         //开始赋予灵魂
         //小队移动唤醒
         foreach (var group in GameManager.Instance.groups.ToList())
@@ -190,8 +199,10 @@ public class SaveManager : MonoSingleton<SaveManager>
         foreach (var human in GameManager.Instance.liveHumanUnits.ToList())
         {
             if (human.ai.IsUnitInGroup) continue;
-            human.ResumeLogic();
+            if(!GameManager.Instance.groups.Contains(human.ai.currentGroup))
+                 human.ResumeLogic();
         }
+        GameManager.Instance.InitFactionAI(true, root.factionAis);
         GameManager.Instance.isPlaying = true;
     }
 }
