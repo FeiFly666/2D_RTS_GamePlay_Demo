@@ -15,4 +15,4 @@ MonoBehaviour:
   Icon: {fileID: 0}
   ID: 5edabafe-ae84-4ef0-843d-6bf9abbdd203
   ResourcePrefab: {fileID: 4344702121397614677, guid: bbec6db1896e4f04a839e521313c9d4a, type: 3}
-  MaxResourceNum: 45
+  MaxResourceNum: 64

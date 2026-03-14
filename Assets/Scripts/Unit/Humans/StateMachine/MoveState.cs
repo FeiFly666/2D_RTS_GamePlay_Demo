@@ -68,7 +68,7 @@ public class MoveState : IUnitState
             }
             if (u.combatBehaviour.CanAttack(u, u.target))
             {
-                if(u.role != UnitRole.Ranged || u.target.transform.position.y - u.transform.position.y > 2)
+                if(u.role != UnitRole.Ranged || !u.isBuildingUnit && u.target.transform.position.y - u.transform.position.y > 2)
                 {
                     if (!u.IsTargetNoBlock())
                     {

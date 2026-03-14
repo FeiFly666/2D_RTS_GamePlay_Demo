@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 446a286638c36d043ae179430cf1868b, type: 3}
+  m_Name: Worker_Yellow
+  m_EditorClassIdentifier: 
+  Icon: {fileID: 2069039092, guid: 23f92ec85cad8ed499800d939c7ace57, type: 3}
+  ID: 57ad4f9f-eacb-429e-9a5c-464b72b591fd
+  HumanSprite: {fileID: 2069039092, guid: 23f92ec85cad8ed499800d939c7ace57, type: 3}
+  HumanPrefab: {fileID: 7151498401538103997, guid: 423ff3bbf19536441aa7158419ba5fc8, type: 3}
+  HumanData: {fileID: 11400000, guid: b77a42914f613d14ba507ff731670035, type: 2}

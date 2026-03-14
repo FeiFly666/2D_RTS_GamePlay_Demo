@@ -20,6 +20,8 @@ public class SaveGameRoot
     public List<ResourceSaveData> allResources = new List<ResourceSaveData>();
     public byte[] fogData;
 
+    public LevelOptionSaveData levelOption;
+
     public int nextAvailableID;// GameManager全局 ID 计数器
 
 

@@ -75,7 +75,6 @@ public class FactionData
         this.side = side;
         InitBuildingTypeCountMap();
     }
-
     private void InitBuildingTypeCountMap()
     {
 
@@ -205,6 +204,25 @@ public class FactionData
             }
         }
         return nearestBase;
+    }
+    public bool IsAnyBuildingInConstruction()
+    {
+        foreach(var b in buildings)
+        {
+            if(b.buildingState == BuildingState.InConstruction) return true;
+        }
+        return false;
+    }
+    public BuildingUnit GetOneBuildingInConstruction()
+    {
+        foreach( var b in buildings)
+        {
+            if(b.buildingState == BuildingState.InConstruction)
+            {
+                return b;
+            }
+        }
+        return null;
     }
     public FactionSaveData ToSaveData()
     {

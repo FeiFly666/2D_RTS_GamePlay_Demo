@@ -62,6 +62,8 @@ public class SaveManager : MonoSingleton<SaveManager>
 
         root.fogData = TilemapManager.Instance.SaveCheckStatus();
 
+        root.levelOption = LevelOption.Instance.ToSaveData();
+
         var json = JsonConvert.SerializeObject(root,Formatting.Indented);
 
         File.WriteAllText(SavePath, json);
@@ -116,9 +118,12 @@ public class SaveManager : MonoSingleton<SaveManager>
         GameManager.Instance.buildings.Clear();
         GameManager.Instance.groups.Clear();
         GameManager.Instance.resources.Clear();
+        GameManager.Instance.areaResources.Clear();
 
         
         SaveGameRoot root = JsonConvert.DeserializeObject<SaveGameRoot>(json);
+
+        LevelOption.Instance.LoadData(root.levelOption);
 
         GameManager.Instance.InitFactions();
 
@@ -136,7 +141,10 @@ public class SaveManager : MonoSingleton<SaveManager>
             ResourceUnit resource = UnitFactory.CreatResource(data, spawnPoint);
 
             resource.LoadData(resourceData);
-
+            if(resourceData.leftResourceNum <= 0)
+            {
+                GameManager.Instance.RegisterSideUnit(resource);
+            }
             //GameManager.Instance.RegisterSideUnit(resource);
         }
 
@@ -185,11 +193,16 @@ public class SaveManager : MonoSingleton<SaveManager>
             FogManager.Instance.GetPathFinding();
             FogManager.Instance.InitFOW();
         }
+        else
+        {
+            FogManager.Instance.ClearFog();
+        }
 
         TilemapManager.Instance.UpdateAllNodes();
 
         //开始赋予灵魂
         //小队移动唤醒
+        GameManager.Instance.InitFactionAI(true, root.factionAis);
         foreach (var group in GameManager.Instance.groups.ToList())
         {
             group.ResumeLogic();
@@ -199,10 +212,9 @@ public class SaveManager : MonoSingleton<SaveManager>
         foreach (var human in GameManager.Instance.liveHumanUnits.ToList())
         {
             if (human.ai.IsUnitInGroup) continue;
-            if(!GameManager.Instance.groups.Contains(human.ai.currentGroup))
-                 human.ResumeLogic();
+            //if(!GameManager.Instance.groups.Contains(human.ai.currentGroup))
+            human.ResumeLogic();
         }
-        GameManager.Instance.InitFactionAI(true, root.factionAis);
         GameManager.Instance.isPlaying = true;
     }
 }

@@ -105,6 +105,7 @@ public class Unit : MonoBehaviour
     {
         if (sg == null || this is HumanUnit human && human.isBuildingUnit) return;
         if (this is BuildingUnit) return;
+        if (this is ResourceUnit) return;
         UpdateSortingGroup();
         //UpdateZAxisSort();
     }

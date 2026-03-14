@@ -11,6 +11,8 @@ public class AITactical
 
     public UnitGroup attackGroup;
     public List<HumanUnit> groupMembers = new List<HumanUnit>();
+
+    public UnitSide lastTargetSide;
     public AITactical(FactionAI AI)
     {
         this.AI = AI;
@@ -19,7 +21,7 @@ public class AITactical
     {
         ManageWorkers();
         ManageSoldiers();
-        if(AI.prepareForAttack || AI.attack)
+        if (AI.prepareForAttack || AI.attack)
         {
             ManageWar();
         }
@@ -32,12 +34,12 @@ public class AITactical
 
         int needToWorkNum = Mathf.Max(idleWorkers.Count - 2, 0);
 
-        if (allWorkers.Count <= 4)
+        if (allWorkers.Count <= 5)
         {
             needToWorkNum = Mathf.Max(idleWorkers.Count - 1, 0);
         }
 
-        if (needToWorkNum == 0) return;
+        //if (needToWorkNum == 0) return;
 
         int chopTreeNum = 0;
 
@@ -52,13 +54,55 @@ public class AITactical
 
         for (int i = 0; i < needToWorkNum; i++)
         {
-            AssignTaskToWorker(idleWorkers[i],chopTreeNum);
+            if (idleWorkers.Count <= 0) break;
+            AssignTaskToWorker(idleWorkers[i], chopTreeNum);
+        }
+        if (AI.faction.IsAnyBuildingInConstruction())//有建筑建造、有工人在修建筑，让工人先去建造建筑
+        {
+            BuildingUnit building = AI.faction.GetOneBuildingInConstruction();
+            if (building.GetBuildingProcess()?.IsEmpty == false)
+            {
+                return;
+            }
+            int n = allWorkers.Count <= 5 ? 1 : 2;
+            int findNum = 0;
+
+            bool hasHealWorker = false;
+            foreach (var worker in allWorkers)
+            {
+                if (worker.target == null) continue;
+                if (worker.target.unitSide == worker.unitSide && worker.target is BuildingUnit b && b.stats.currentHP != b.stats.FullHP)
+                {
+                    worker.target = building;
+                    worker.targetID = building.uniqueID;
+                    findNum++;
+                    hasHealWorker = true;
+                    if (findNum >= n)
+                    {
+                        break;
+                    }
+                }
+            }
+            if (!hasHealWorker)
+            {
+                foreach (var worker in allWorkers)
+                {
+                    worker.TransitionTo(UnitStateType.Idle);
+                    worker.target = building;
+                    worker.targetID = building.uniqueID;
+                    findNum++;
+                    if (findNum >= n)
+                    {
+                        break;
+                    }
+                }
+            }
         }
     }
-    private void AssignTaskToWorker(Worker worker,int chopNum)
+    private void AssignTaskToWorker(Worker worker, int chopNum)
     {
-        if(worker == null) return;
-        var ntree = GetNearestTree(worker.transform.position);
+        if (worker == null) return;
+        var ntree = GetNearestTree(worker);
 
         if (chopNum == 0)
         {
@@ -85,7 +129,7 @@ public class AITactical
     private void ManageWar()
     {
         //ai判断可以开始组队
-        if(AI.prepareForAttack)
+        if (AI.prepareForAttack)
         {
             if (attackGroup == null)
             {
@@ -123,13 +167,13 @@ public class AITactical
         }
         if (attackGroup == null) return;
         //组队完成开始进攻
-        if(attackGroup.members.Count == AI.nextAttackNum && !AI.attack)
+        if (attackGroup.members.Count == AI.nextAttackNum && !AI.attack)
         {
             AI.attack = true;
 
-            FactionData playerFaction = GameManager.Instance.factions[(int)GameManager.Instance.playerSide];
+            FactionData targetFaction = GameManager.Instance.factions[(int)AI.targetSide];
 
-            BuildingUnit targetBuilding = playerFaction.buildings[Random.Range(0, playerFaction.buildings.Count)];
+            BuildingUnit targetBuilding = targetFaction.buildings[Random.Range(0, targetFaction.buildings.Count)];
 
             Node targetNode = TilemapManager.Instance.FindNearestAvailableNode(targetBuilding.transform.position, attackGroup.leader.gameObject, false);
 
@@ -141,13 +185,16 @@ public class AITactical
 
             //为下一次进攻做准备
             AI.prepareForAttack = false;
-            AI.nextAttackNum = Random.Range(15 + 5 * Mathf.Max(AI.attackTimes - 3 , 0), 35 + 10 * AI.attackTimes);
-
-            AI.nextAttackNum = Mathf.Min(AI.faction.TotalPeopleNum - 10, AI.nextAttackNum);
+            lastTargetSide = AI.targetSide;
+            RandomNextAttackNum();
+            if (LevelOption.Instance.enemyMode == EnemyMode.Free)
+            {
+                RandomTargetSide();
+            }
         }
 
         //进攻
-        if(AI.attack)
+        if (AI.attack)
         {
             //Debug.LogError(1);
             for (int i = groupMembers.Count - 1; i >= 0; i--)
@@ -168,7 +215,7 @@ public class AITactical
                 return;
             }
 
-            FactionData playerFaction = GameManager.Instance.factions[(int)GameManager.Instance.playerSide];
+            FactionData targetFaction = GameManager.Instance.factions[(int)lastTargetSide];
 
             /*if(attackGroup.targetID == -1)
             {
@@ -197,25 +244,69 @@ public class AITactical
                 if (!soldier.ai.IsUnitInGroup && soldier.target == null)
                 {
                     // 给他一个指令：根据进攻重心再次索敌
-                    RedetectNewTarget(soldier, playerFaction);
+                    RedetectNewTarget(soldier, targetFaction);
                 }
             }
 
         }
     }
+    public void RandomNextAttackNum()
+    {
+        AI.nextAttackNum = Random.Range(15, 35 + 10 * AI.attackTimes);
+        AI.nextAttackNum = Mathf.Min(200, AI.nextAttackNum);
+
+        if (AI.faction.BuildingTypeCount[(int)BuildingType.Static] < 1)
+            AI.nextAttackNum = Mathf.Min(AI.faction.TotalPeopleNum - 10, AI.nextAttackNum);
+    }
+    public void RandomTargetSide()
+    {
+        int targetSide = Random.Range(0, GameManager.Instance.sideNum);
+        if ((UnitSide)targetSide == AI.unitSide || GameManager.Instance.factions[targetSide].buildings.Count <= 0)
+        {
+            targetSide = (int)GameManager.Instance.playerSide;
+        }
+
+        AI.targetSide = (UnitSide)targetSide;
+    }
     public void ResumeAttackGroup()
     {
         attackGroup = new UnitGroup();
-        foreach(var unit in groupMembers)
+
+        foreach (var unit in groupMembers)
         {
             if (unit == null || unit.isDead) continue;
             attackGroup.AddNewMember(unit);
             if (attackGroup.leader == null)
                 attackGroup.leader = unit;
         }
-        if (attackGroup.members.Count == 0) return;
     }
-    private void RedetectNewTarget(HumanUnit u, FactionData playerFaction)
+    public void ResumeGroupMoving(BuildingUnit targetBuilding)
+    {
+        bool needGroupMove = true;
+/*        foreach (var unit in groupMembers)
+        {
+            if (unit.target != null && unit.IsTargetDetected(unit.target))
+            {
+                Debug.Log(unit.uniqueID);
+                needGroupMove = false;
+                break;
+            }
+        }*/
+        if (attackGroup.members.Count == 0) return;
+        if (AI.attack)
+        {
+            if (needGroupMove)
+            {
+
+                Node targetNode = TilemapManager.Instance.FindNearestAvailableNode(targetBuilding.transform.position, attackGroup.leader.gameObject, false);
+
+                Vector3 targetPos = targetNode.GetNodePosition();
+
+                attackGroup.FormGroupMoving(targetPos, targetBuilding);
+            }
+        }
+    }
+    private void RedetectNewTarget(HumanUnit u, FactionData targetFaction)
     {
         //Debug.LogError(1);
         u.isReturningHome = false;
@@ -235,7 +326,7 @@ public class AITactical
         int targetID = -1;
         float minDis = Mathf.Infinity;
 
-        foreach(var building in playerFaction.buildings)
+        foreach(var building in targetFaction.buildings)
         {
             float dis = (building.transform.position - u.transform.position).sqrMagnitude;
             if (dis < minDis)
@@ -290,6 +381,27 @@ public class AITactical
             }
         }*/
     }
+    public void OnBuildingHurt(Unit unit)
+    {
+        var idleCombatants = AI.faction.IdleNoWorkerHumans;
+        if(idleCombatants.Count == 0) { return; }
+
+        if (unit == null) return;
+
+        int j = Random.Range(0, idleCombatants.Count);
+
+        if(j >= idleCombatants.Count) return;
+
+        if (!idleCombatants[j].isBuildingUnit && !idleCombatants[j].HasRegisterTarget)
+        {
+            if (attackGroup != null)
+            {
+                if (attackGroup.members.Contains(idleCombatants[j]))
+                    return;
+            }
+            idleCombatants[j].SetClickTarget(unit);
+        }
+    }
 
     private GoldMine GetAvailableGoldMines()
     {
@@ -310,11 +422,10 @@ public class AITactical
         return null;
     }
 
-    private ResourceUnit GetNearestTree(Vector3 origin)
+    private ResourceUnit GetNearestTree(Worker worker)
     {
+        /*ResourceUnit resourceUnit = null;
         float minDis = Mathf.Infinity;
-        ResourceUnit resourceUnit = null;
-
         foreach(var tree in GameManager.Instance.resources)
         {
             if (tree.resourceLeftNum == 0) continue;
@@ -326,12 +437,50 @@ public class AITactical
                 minDis = dis;
                 resourceUnit = tree;
             }
+        }*/
+
+        Vector3 origin = worker.transform.position;
+        int closestArea = -1;
+        float minDis = Mathf.Infinity;
+        foreach (var kv in GameManager.Instance.areaResources)
+        {
+            int AreaID = kv.Key;
+            if (kv.Value.Count == 0)
+                continue;
+
+            int idx = Random.Range(0, kv.Value.Count);
+
+            ResourceUnit unit = kv.Value[idx];
+
+            if (unit == null || unit.resourceLeftNum == 0) continue;
+
+            float dis = (origin - unit.transform.position).sqrMagnitude;
+
+            if (dis < minDis)
+            {
+                minDis = dis;
+                closestArea = AreaID;
+            }
+        }
+        ResourceUnit closestUnit = null;
+        minDis = Mathf.Infinity;
+        if(closestArea == -1)
+            return closestUnit;
+
+        foreach(var r in GameManager.Instance.areaResources[closestArea])
+        {
+            if (r.resourceLeftNum <= 0 || r == null) continue;
+            if(!r.CanAddWorker) continue;
+            if (!worker.targetSelector.IsTargetReachable(worker, r)) continue;
+            float dis = (origin - r.transform.position).sqrMagnitude;
+
+            if (dis < minDis)
+            {
+                minDis = dis;
+                closestUnit = r;
+            }
         }
 
-        return resourceUnit;
-       /*return GameManager.Instance.resources
-            .Where(r =>  r.resourceLeftNum > 0)
-            .OrderBy(r => (r.transform.position - origin).sqrMagnitude)
-            .FirstOrDefault();*/
+        return closestUnit;
     }
 }

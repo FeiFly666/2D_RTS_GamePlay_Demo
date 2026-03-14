@@ -14,6 +14,7 @@ public class UnitStats : MonoBehaviour
 
     public float currentHP;
     public System.Action OnHealthChanged;
+    public System.Action<Unit> OnHurtByUnits;
 
     private void Start()
     {
@@ -45,6 +46,10 @@ public class UnitStats : MonoBehaviour
     {
         currentHP -= damage;
         OnHealthChanged?.Invoke();
+        if(attacker != null && attacker.unit != null)
+        {
+            OnHurtByUnits?.Invoke(attacker.unit);
+        }
 
         if (currentHP <= 0 && !unit.isDead)
         {

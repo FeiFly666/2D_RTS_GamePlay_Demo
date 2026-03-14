@@ -134,7 +134,7 @@ public class MyInputsystem : Common.Singleton<MyInputsystem>
 
         // ≤‚ ‘”√
 
-        if (!SelectionManager.Instance.TrySelectNewUnit(mousePos,true))
+        if (!SelectionManager.Instance.TrySelectNewUnit(mousePos))
         {
             SelectionManager.Instance.ClearActiveUnit();
         }

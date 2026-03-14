@@ -55,6 +55,7 @@ public class AIStrategy
         }
 
         //ÊÇ·ñ½ø¹¥
+        if (!AI.CanAttack) return;
         if(AI.faction.IdleNoWorkerHumans.Count > AI.nextAttackNum && !AI.attack)
         {
             AI.prepareForAttack = true;

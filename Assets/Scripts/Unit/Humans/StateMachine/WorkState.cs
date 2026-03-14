@@ -74,6 +74,17 @@ public class WorkState :IUnitState
             u.TransitionTo(UnitStateType.Deliver);
             return;
         }
+        if(resource != null)
+        {
+            if(!resource.ContainsUnit(u) && !resource.CanAddWorker || resource.resourceLeftNum <=0)
+            {
+                u.target = null;
+                u.targetID = -1;
+                u.ai.ClearPath();
+                u.TransitionTo(UnitStateType.Idle);
+                return;
+            }
+        }
         if (u.currentResource != resource)
         {
             u.OnExitWorkState();

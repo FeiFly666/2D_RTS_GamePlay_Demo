@@ -11,10 +11,14 @@ public class FactionAISaveData
     public int nextAttackNum;
 
     public List<int> groupMembers = new List<int>();
+    public int groupTargetID;
 
     public bool prepareForAttack;
 
     public bool attack;
+
+    public UnitSide targetSide;
+    public UnitSide lastTargetSide;
 
     public FactionAISaveData()
     {
@@ -32,5 +36,16 @@ public class FactionAISaveData
         {
             groupMembers.Add(unit.uniqueID);
         }
+
+        if(ai.tacitical.attackGroup != null)
+        {
+            if(ai.tacitical.attackGroup.targetID != -1)
+            {
+                groupTargetID = ai.tacitical.attackGroup.targetID;
+            }
+        }
+
+        this.targetSide = ai.targetSide;
+        this.lastTargetSide = ai.tacitical.lastTargetSide;
     }
 }

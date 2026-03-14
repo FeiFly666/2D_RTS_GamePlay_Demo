@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 446a286638c36d043ae179430cf1868b, type: 3}
+  m_Name: Warrior_Yellow
+  m_EditorClassIdentifier: 
+  Icon: {fileID: -339447862, guid: 7895b958f3739824ea2c34f1355e1cc1, type: 3}
+  ID: d35ff1f2-3aaa-4b49-a1f4-132bb1f6baae
+  HumanSprite: {fileID: -339447862, guid: 7895b958f3739824ea2c34f1355e1cc1, type: 3}
+  HumanPrefab: {fileID: 8618891281559960072, guid: c78c48ca4e5430646801b1185c4ea05b, type: 3}
+  HumanData: {fileID: 11400000, guid: f69a4c8fcf7939342a91428c6adf3cd2, type: 2}

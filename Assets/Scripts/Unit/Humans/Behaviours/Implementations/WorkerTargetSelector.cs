@@ -36,8 +36,9 @@ public class WorkerTargetSelector : ITargetSelector
             //找可用的同资源区域的资源
             foreach (var currentResource in areaResources)
             {
-                if (currentResource == null || !IsTargetReachable(self, currentResource)) continue;
+                if (currentResource == null) continue;
                 if (!currentResource.CanAddWorker) continue;
+                if (currentResource.resourceLeftNum <= 0) continue; 
 
                 if (!IsTargetReachable(self, currentResource)) continue;
 

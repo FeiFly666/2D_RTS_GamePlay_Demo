@@ -66,7 +66,6 @@ public class ResourceUnit : Unit
     }
     protected override void Update()
     {
-        base.Update();
         if (!isPlaying) return;
         timer += Time.deltaTime;
         if (timer >= 1f / frameRate)
@@ -117,6 +116,11 @@ public class ResourceUnit : Unit
         }
     }
     public bool CanAddWorker => workerToSlot.Count < maxWorkerNum;
+    public bool ContainsUnit(Worker worker)
+    {
+        if (workerToSlot.ContainsKey(worker)) return true;
+        return false;
+    }
     public Node RequestSlot(HumanUnit unit)
     {
         if (workerToSlot.ContainsKey(unit)) return workerToSlot[unit];

@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class GameManager : MonoSingleton<GameManager>
 {
     public UnitSide playerSide = UnitSide.A;
+    public EnemyMode currentEnemyMode;
     public int sideNum;
     [SerializeField]public Arrow arrowPrefab;
     public static int[] EnemyMasks = new int[5];
@@ -45,7 +46,6 @@ public class GameManager : MonoSingleton<GameManager>
 
         InitFactions();
 
-        isNeedFog = LevelOption.Instance.isNeedFog;
         ;
     }
     private void Start()
@@ -56,18 +56,20 @@ public class GameManager : MonoSingleton<GameManager>
 
 
         InitFactionAI();
+
         isPlaying = true;
     }
 
     private void Update()
     {
         MyInputsystem.Instance.UpdateMouseInput();
-
-        
     }
 
     public void InitFactions()
     {
+        isNeedFog = LevelOption.Instance.isNeedFog;
+        currentEnemyMode = LevelOption.Instance.enemyMode;
+
         if (factions.Count > 0)
         {
             UIManager.Instance.LogOutFactionDataDisplay();
@@ -83,6 +85,7 @@ public class GameManager : MonoSingleton<GameManager>
             factions.Add(new FactionData((UnitSide)i));
 
         }
+
         UIManager.Instance.RegisterFactionDataDisplay();
     }
     public void InitFactionAI(bool isLoad = false,List<FactionAISaveData>datas = null)
@@ -125,6 +128,21 @@ public class GameManager : MonoSingleton<GameManager>
                 }
             }
         }
+        if (LevelOption.Instance.enemyNum < sideNum - 1)
+        {
+            int n = sideNum - 1 - LevelOption.Instance.enemyNum;
+            for (int i = ais.Count - 1; i >= 0; i--)
+            {
+                int j = Random.Range(0, i + 1);
+                FactionAI temp = ais[j];
+                ais[j] = ais[i];
+                ais[i] = temp;
+            }
+            for (int i = 0; i < n; i++)
+            {
+                FactionDestroy(ais[i].unitSide);
+            }
+        }
     }
 
     public void FactionDestroy(UnitSide side)
@@ -135,6 +153,11 @@ public class GameManager : MonoSingleton<GameManager>
         {
             if(human != null && human.stats != null)
                 human.stats.DecreaseHP(null, 1000000);
+        }
+        foreach(var building in faction.buildings.ToList())
+        {
+            if (building != null && building.stats != null)
+                building.stats.DecreaseHP(null, 1000000);
         }
 
         if (side == playerSide)
@@ -185,7 +208,7 @@ public class GameManager : MonoSingleton<GameManager>
             {
                 factions[(int)unit.unitSide].humans.Add(human);
                 if (human is Worker worker) factions[(int)unit.unitSide].workers.Add(worker);
-                human.gameObject.transform.parent = HumanRoot;
+                human.gameObject.transform.SetParent(HumanRoot);
             }
             
         }
@@ -203,7 +226,22 @@ public class GameManager : MonoSingleton<GameManager>
             if(building is GoldMine gold)
                 factions[(int)unit.unitSide].goldMines.Add(gold);
 
-            building.gameObject.transform.parent = BuildingRoot;
+            building.gameObject.transform.SetParent(BuildingRoot);
+            if(unit.unitSide != playerSide)
+            {
+                FactionAI ai = null;
+                foreach(var a in ais)
+                {
+                    if(a.unitSide == unit.unitSide)
+                    {
+                        ai = a; break;
+                    }
+                }
+                if(ai != null)
+                {
+                    building.stats.OnHurtByUnits += ai.tacitical.OnBuildingHurt;
+                }
+            }
 
         }
         else if(unit is ResourceUnit resource)
@@ -213,7 +251,7 @@ public class GameManager : MonoSingleton<GameManager>
                 areaResources[resource.resourceAreaID] = new List<ResourceUnit>();
             }
             areaResources[resource.resourceAreaID].Add(resource);
-            resource.gameObject.transform.parent = ResourceRoot;
+            resource.gameObject.transform.SetParent(ResourceRoot);
         }
     }
     public void UnregisterSideUnit(Unit unit)
@@ -235,8 +273,23 @@ public class GameManager : MonoSingleton<GameManager>
                 factions[(int)unit.unitSide].trainings.Remove(train);
             if (building is GoldMine gold)
                 factions[(int)unit.unitSide].goldMines.Remove(gold);
+            if (unit.unitSide != playerSide)
+            {
+                FactionAI ai = null;
+                foreach (var a in ais)
+                {
+                    if (a.unitSide == unit.unitSide)
+                    {
+                        ai = a; break;
+                    }
+                }
+                if (ai != null)
+                {
+                    building.stats.OnHurtByUnits -= ai.tacitical.OnBuildingHurt;
+                }
+            }
 
-            if(isPlaying)
+            if (isPlaying)
             {
                 if (factions[(int)unit.unitSide].buildings.Count <= 0)
                 {
@@ -246,7 +299,10 @@ public class GameManager : MonoSingleton<GameManager>
         }
         else if(unit is ResourceUnit resource)
         {
-            areaResources[resource.resourceAreaID].Remove(resource);
+            if (areaResources.ContainsKey(resource.resourceAreaID))
+            {
+                areaResources[resource.resourceAreaID].Remove(resource);
+            }
         }
     }
 

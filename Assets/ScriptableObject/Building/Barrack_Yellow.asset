@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7c47958a4ea4bc4589e0886d60aad86, type: 3}
+  m_Name: Barrack_Yellow
+  m_EditorClassIdentifier: 
+  Icon: {fileID: 21300000, guid: 1afe493e049254cfc884ffa58152ca50, type: 3}
+  ID: b3127112-8d45-4583-9761-96eba3edb51f
+  FoundationSprite: {fileID: 21300000, guid: 280941e1e5f52574f812ae718f49766e, type: 3}
+  CompleteSprite: {fileID: 21300000, guid: 1afe493e049254cfc884ffa58152ca50, type: 3}
+  DestroyedSprite: {fileID: 21300000, guid: af0d019cbb7723d499cc7f0637b38cad, type: 3}
+  StructurePrefab: {fileID: 5482659316545254631, guid: efb013b887c1d5d42b7cf1db62405138, type: 3}
+  buildingDataOS: {fileID: 11400000, guid: ef99b22de16eab24dba71e32cfc3be4b, type: 2}

@@ -72,6 +72,10 @@ public class FogManager : MonoSingleton<FogManager>
         ExecuteUpdate(toHide, blackTile);
         ExecuteUpdate(toShow);
     }
+    public void ClearFog()
+    {
+        fogMap.ClearAllTiles();
+    }
     private void Update()
     {
         if(Time.time - updateTime > updateFrequency && GameManager.Instance.isNeedFog)

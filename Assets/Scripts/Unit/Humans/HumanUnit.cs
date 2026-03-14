@@ -187,6 +187,7 @@ public abstract class HumanUnit : Unit
             HandleTargetDeath();
             return;
         }
+        
         stateMachine?.Update();
     }
 

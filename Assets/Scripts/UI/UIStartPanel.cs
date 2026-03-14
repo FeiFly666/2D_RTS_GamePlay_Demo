@@ -21,6 +21,18 @@ public class UIStartPanel : MonoBehaviour
     {
         changePanel.gameObject.SetActive(!changePanel.gameObject.activeSelf);
         changePanel.ChangeButtonColor();
+        changePanel.ChangeEnemyNum(LevelOption.Instance.enemyNum);
+        changePanel.ChangeEnemeyMode();
+    }
+    public void ChangeEnemyNum(int num)
+    {
+        LevelOption.Instance.enemyNum = num;
+        changePanel.ChangeEnemyNum(num);
+    }
+    public void ChangeEnenmyMode(int num)
+    {
+        LevelOption.Instance.enemyMode = (EnemyMode)num;
+        changePanel.ChangeEnemeyMode();
     }
 
     public void ChangeNeedFog()

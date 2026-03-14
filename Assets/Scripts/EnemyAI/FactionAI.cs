@@ -24,7 +24,8 @@ public class FactionAI : MonoBehaviour
     public AITactical tacitical;
 
     [SerializeField]private bool isInit = false;
-
+    [SerializeField] private bool isLoad = false;
+    public UnitSide targetSide;
     public int attackTimes = 0;
     public bool prepareForAttack = false;
     public bool attack = false;
@@ -38,6 +39,8 @@ public class FactionAI : MonoBehaviour
 
     [SerializeField] private float requestBuildingChangeTime = 25f;
     private float rBChangeTimer;
+
+    public bool CanAttack = true;
     private void Awake()
     {
         strategy = new AIStrategy(this);
@@ -68,6 +71,16 @@ public class FactionAI : MonoBehaviour
         InitHumanMap(humanAction);
 
         executeTimer = -0.5f;
+
+        if(!isLoad)
+        {
+            if (LevelOption.Instance.enemyMode == EnemyMode.Free)
+            {
+                tacitical.RandomTargetSide();
+            }
+            tacitical.RandomNextAttackNum();
+        }
+        isLoad = true;
 
         isInit = true;
     }
@@ -156,10 +169,15 @@ public class FactionAI : MonoBehaviour
         this.attackTimes = data.attackTimes;
         this.nextAttackNum = data.nextAttackNum;
 
+        this.targetSide = data.targetSide;
+        this.tacitical.lastTargetSide = data.lastTargetSide;
+
+        int targetID = data.groupTargetID;
+
         foreach(var member in data.groupMembers)
         {
             HumanUnit unit = GameManager.Instance.liveHumanUnits.Find(u => u.uniqueID == member);
-            
+
             if(unit != null)
             {
                 this.tacitical.groupMembers.Add(unit);
@@ -171,12 +189,19 @@ public class FactionAI : MonoBehaviour
             if (tacitical.attackGroup.members.Count >= nextAttackNum || data.attack)
             {
                 attack = true;
+                BuildingUnit targetBuilding = GameManager.Instance.buildings.Find(u => u.uniqueID == targetID);
+                if(targetBuilding != null)
+                {
+                    tacitical.ResumeGroupMoving(targetBuilding);
+                }
             }
             else
             {
                 prepareForAttack = true;
             }
         }
+
+        isLoad = true;
     }
 
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 public class IdleState : IUnitState
@@ -46,6 +47,10 @@ public class IdleState : IUnitState
                 u.TransitionTo(UnitStateType.Attack);
             }
             return;
+        }
+        if (TilemapManager.Instance.FindNode(u.transform.position)?.IsWalkable == false)//卡死，自刎归天
+        {
+            u.stats.DecreaseHP(null, 1000000);
         }
 
         if (u.isForcingTarget && u.target != null)

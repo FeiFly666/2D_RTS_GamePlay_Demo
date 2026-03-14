@@ -17,6 +17,7 @@ public static class UnitFactory
 
         if (!GameManager.Instance.buildings.Contains(building))
             GameManager.Instance.buildings.Add(building);
+        
 
         building.InitFoundation();
 

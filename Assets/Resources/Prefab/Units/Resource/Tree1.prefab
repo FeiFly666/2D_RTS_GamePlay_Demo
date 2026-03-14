@@ -148,7 +148,7 @@ MonoBehaviour:
   isDead: 0
   anim: {fileID: 0}
   resourceAreaID: 0
-  fullResourceNum: 100
+  fullResourceNum: 160
   maxWorkerNum: 2
   idleSprites:
   - {fileID: 6215267202064938543, guid: c5a6a054a96fc4546851fdd38f73c8bb, type: 3}

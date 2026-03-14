@@ -32,10 +32,14 @@ public class MeleeTargetSelector : ITargetSelector
         BuildingUnit closestStaticEnemyBuilding = null;
         float closestStaticBuildingDistance = Mathf.Infinity;
 
+        bool isCooperateAI = self.unitSide != GameManager.Instance.playerSide && LevelOption.Instance.enemyMode == EnemyMode.TargetPlayer;
+
         for (int i = 0; i < num; i++)
         {
             Unit unit = scanBuffer[i].GetComponent<Unit>();
             if (unit == null || unit.isDead || unit.unitSide == self.unitSide ) continue;
+
+            if(isCooperateAI &&  unit.unitSide != GameManager.Instance.playerSide) { continue; }
 
             if (unit is ResourceUnit) continue;
 

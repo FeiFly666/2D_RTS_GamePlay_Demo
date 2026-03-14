@@ -9,6 +9,7 @@ public class BuildingProcess
     private float MaxValue;
 
     public bool IsComplete => process >= MaxValue;
+    public bool IsEmpty => workers.Count == 0;
 
     private HashSet<Worker> workers = new HashSet<Worker>();
 
@@ -28,6 +29,7 @@ public class BuildingProcess
 
         this.Complete = OnComplete;
     }
+    
     public void AddWorker(Worker unit)
     {
        if( workers.Add(unit))
