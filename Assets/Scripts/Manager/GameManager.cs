@@ -63,6 +63,11 @@ public class GameManager : MonoSingleton<GameManager>
     private void Update()
     {
         MyInputsystem.Instance.UpdateMouseInput();
+
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            StartCoroutine(LoadScene());
+        }
     }
 
     public void InitFactions()
